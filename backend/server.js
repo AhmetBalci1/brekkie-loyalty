@@ -43,30 +43,7 @@ pool.query(`
    SCAN LOG TABLE
 ========================= */
 
-pool.query(`
-  CREATE TABLE IF NOT EXISTS scan_logs (
 
-    id SERIAL PRIMARY KEY,
-
-    user_id INTEGER REFERENCES users(id),
-
-    reward_earned BOOLEAN DEFAULT false,
-
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )
-`)
-.then(() => {
-
-  console.log(
-    "scan_logs table ready"
-  );
-
-})
-.catch((err) => {
-
-  console.log(err);
-
-});
 
 /* =========================
    ROOT
