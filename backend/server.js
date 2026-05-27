@@ -8,6 +8,36 @@ const jwt = require("jsonwebtoken");
 const app = express();
 
 app.use(express.json());
+pool.query(`
+  CREATE TABLE IF NOT EXISTS users (
+
+    id SERIAL PRIMARY KEY,
+
+    name TEXT,
+
+    email TEXT UNIQUE,
+
+    password TEXT,
+
+    qr_code TEXT,
+
+    coffee_count INTEGER DEFAULT 0,
+
+    free_coffee INTEGER DEFAULT 0
+  )
+`)
+.then(() => {
+
+  console.log(
+    "users table ready"
+  );
+
+})
+.catch((err) => {
+
+  console.log(err);
+
+});
 
 /* =========================
    SCAN LOG TABLE
