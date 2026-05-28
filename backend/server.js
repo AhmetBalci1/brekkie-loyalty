@@ -31,6 +31,30 @@ pool.query(`
   console.log(
     "users table ready"
   );
+  pool.query(`
+  CREATE TABLE IF NOT EXISTS scan_logs (
+
+    id SERIAL PRIMARY KEY,
+
+    user_id INTEGER,
+
+    reward_earned BOOLEAN DEFAULT false,
+
+    created_at TIMESTAMP DEFAULT NOW()
+  )
+`)
+.then(() => {
+
+  console.log(
+    "scan_logs table ready"
+  );
+
+})
+.catch((err) => {
+
+  console.log(err);
+
+});
 
 })
 .catch((err) => {
