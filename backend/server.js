@@ -890,6 +890,40 @@ pool.query(`
   console.log(err);
 
 });
+
+pool.query(`
+  ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS reset_token TEXT
+`)
+.then(() => {
+
+  console.log(
+    "reset_token column ready"
+  );
+
+})
+.catch((err) => {
+
+  console.log(err);
+
+});
+
+pool.query(`
+  ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMP
+`)
+.then(() => {
+
+  console.log(
+    "reset_token_expires column ready"
+  );
+
+})
+.catch((err) => {
+
+  console.log(err);
+
+});
 pool.query(`
   ALTER TABLE users
 
