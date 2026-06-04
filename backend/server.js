@@ -581,11 +581,14 @@ app.get("/analytics", async (req, res) => {
 
   try {
 
-    const usersResult =
-      await pool.query(
-        "SELECT COUNT(*) FROM users"
-      );
-
+    const todayCustomersResult =
+  await pool.query(
+    `
+    SELECT COUNT(*)
+    FROM users
+    WHERE DATE(created_at) = CURRENT_DATE
+    `
+  );
     const scansResult =
       await pool.query(
         `SELECT COUNT(*)
@@ -662,7 +665,7 @@ app.get("/analytics", async (req, res) => {
 
         customers:
           Number(
-            usersResult.rows[0].count
+            todayCustomersResult.rows[0].count
           ),
       },
 
@@ -740,6 +743,23 @@ pool.query(`
 
   console.log(
     "password column ready"
+  );
+
+})
+.catch((err) => {
+
+  console.log(err);
+
+});
+pool.query(`
+  ALTER TABLE users
+
+  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()
+`)
+.then(() => {
+
+  console.log(
+    "created_at column ready"
   );
 
 })
