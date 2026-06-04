@@ -811,23 +811,19 @@ app.post("/forgot-password", async (req, res) => {
       subject:
         "Brekkie Club Şifre Sıfırlama",
 
-      htmlContent: `
-        <h2>Şifre Sıfırlama</h2>
+   htmlContent: `
+  <h2>Brekkie Club</h2>
 
-        <p>
-          Şifrenizi sıfırlamak için
-          aşağıdaki bağlantıya tıklayın:
-        </p>
+  <p>
+    Şifre sıfırlama kodunuz:
+  </p>
 
-       <a href="mobile://reset-password?token=${token}">
-          Şifremi Sıfırla
-        </a>
+  <h1>${token}</h1>
 
-        <p>
-          Bu bağlantı 30 dakika
-          geçerlidir.
-        </p>
-      `,
+  <p>
+    Bu kod 30 dakika geçerlidir.
+  </p>
+`,
     });
 
     return res.json({
