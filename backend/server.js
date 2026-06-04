@@ -744,26 +744,38 @@ app.get("/qr/:code", async (req, res) => {
 });
 
 app.post("/forgot-password", async (req, res) => {
-  try{
-    const {email} = req.body;
-    const user = 
-      await pool.query(`
-        SELECT * FROM users WHERE email = $1
+
+  try {
+
+    const { email } = req.body;
+
+    const user =
+      await pool.query(
+        `
+        SELECT *
+        FROM users
+        WHERE email = $1
         `,
         [email]
       );
+
     if (
       user.rows.length === 0
     ) {
+
       return res.status(404).json({
-        error: "User not found"
+        error: "User not found",
       });
     }
-    const token = crypto.randomBytes(32).toString("hex");
 
-    const expires = 
+    const token =
+      crypto.randomBytes(32)
+      .toString("hex");
+
+    const expires =
       new Date(
-        Date.now() + 1000 * 60 * 30
+        Date.now() +
+        1000 * 60 * 30
       );
 
     await pool.query(
@@ -772,7 +784,7 @@ app.post("/forgot-password", async (req, res) => {
 
       SET
       reset_token = $1,
-      reset_token_expires =$2
+      reset_token_expires = $2
 
       WHERE email = $3
       `,
@@ -783,12 +795,47 @@ app.post("/forgot-password", async (req, res) => {
       ]
     );
 
+    await emailApi.sendTransacEmail({
+
+      sender: {
+        name: "Brekkie Club",
+        email: "blcahmet.016@gmail.com",
+      },
+
+      to: [
+        {
+          email,
+        },
+      ],
+
+      subject:
+        "Brekkie Club Şifre Sıfırlama",
+
+      htmlContent: `
+        <h2>Şifre Sıfırlama</h2>
+
+        <p>
+          Şifrenizi sıfırlamak için
+          aşağıdaki bağlantıya tıklayın:
+        </p>
+
+        <a href="https://brekkie.app/reset-password?token=${token}">
+          Şifremi Sıfırla
+        </a>
+
+        <p>
+          Bu bağlantı 30 dakika
+          geçerlidir.
+        </p>
+      `,
+    });
+
     return res.json({
       success: true,
-      token,
-
     });
-  } catch (error){
+
+  } catch (error) {
+
     console.log(error);
 
     return res.status(500).json({
