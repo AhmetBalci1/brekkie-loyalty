@@ -942,19 +942,7 @@ pool.query(`
 
 });
 
-pool.query(`
-  ALTER TABLE users
 
-  ADD COLUMN UF NOT EXISTS reset_token TEXT
-  `)
-  .catch(console.log);
-
-pool.query(`
-  ALTER TABLE users
-
-  ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMP
-  `)
-  .catch(console.log)
 app.listen(
   5000,
   "0.0.0.0",
