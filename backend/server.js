@@ -1,3 +1,6 @@
+require("dotenv").config();
+const SibApiV3Sdk= require("sib-api-v3-sdk");
+const crypto = require("crypto");
 const express = require("express");
 const pool = require("./config/db");
 const QRCode = require("qrcode");
@@ -8,6 +11,15 @@ const jwt = require("jsonwebtoken");
 const app = express();
 
 app.use(express.json());
+
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+
+defaultClient.authentications[
+  "api-key"
+].apiKey = process.env.BREVO_API_KEY;
+
+const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
+
 pool.query(`
   CREATE TABLE IF NOT EXISTS users (
 
@@ -731,6 +743,86 @@ app.get("/qr/:code", async (req, res) => {
   }
 });
 
+app.post("/forgot-password", async (req, res) => {
+  try{
+    const {email} = req.body;
+    const user = 
+      await pool.query(`
+        SELECT * FROM users WHERE email = $1
+        `,
+        [email]
+      );
+    if (
+      user.rows.length === 0
+    ) {
+      return res.status(404).json({
+        error: "User not found"
+      });
+    }
+    const token = crypto.randomBytes(32).toString("hex");
+
+    const expires = 
+      new Date(
+        Date.now() + 1000 * 60 * 30
+      );
+
+    await pool.query(
+      `
+      UPDATE users
+
+      SET
+      reset_token = $1,
+      reset_token_expires =$2
+
+      WHERE email = $3
+      `,
+      [
+        token,
+        expires,
+        email,
+      ]
+    );
+
+    return res.json({
+      success: true,
+      token,
+
+    });
+  } catch (error){
+    console.log(error);
+
+    return res.status(500).json({
+      error: "Server error",
+    });
+  }
+});
+
+app.get("/test-forgot", async (req, res) => {
+
+  const response =
+    await fetch(
+      "https://brekkie-api.onrender.com/forgot-password",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+          email:
+            "kendi_mail_adresin",
+        }),
+      }
+    );
+
+  const result =
+    await response.json();
+
+  res.json(result);
+});
+
 /* =========================
    SERVER
 ========================= */
@@ -768,6 +860,20 @@ pool.query(`
   console.log(err);
 
 });
+
+pool.query(`
+  ALTER TABLE users
+
+  ADD COLUMN UF NOT EXISTS reset_token TEXT
+  `)
+  .catch(console.log);
+
+pool.query(`
+  ALTER TABLE users
+
+  ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMP
+  `)
+  .catch(console.log)
 app.listen(
   5000,
   "0.0.0.0",
