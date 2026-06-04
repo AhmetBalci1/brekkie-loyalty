@@ -819,7 +819,7 @@ app.post("/forgot-password", async (req, res) => {
           aşağıdaki bağlantıya tıklayın:
         </p>
 
-        <a href="https://brekkie.app/reset-password?token=${token}">
+       <a href="mobile://reset-password?token=${token}">
           Şifremi Sıfırla
         </a>
 
@@ -940,6 +940,77 @@ pool.query(`
 
   console.log(err);
 
+});
+app.post("/reset-password", async (req, res) => {
+
+  try {
+
+    const {
+      token,
+      password,
+    } = req.body;
+
+    const user =
+      await pool.query(
+        `
+        SELECT *
+        FROM users
+
+        WHERE
+        reset_token = $1
+
+        AND
+        reset_token_expires > NOW()
+        `,
+        [token]
+      );
+
+    if (
+      user.rows.length === 0
+    ) {
+
+      return res.status(400).json({
+        error:
+          "Invalid or expired token",
+      });
+    }
+
+    const hashedPassword =
+      await bcrypt.hash(
+        password,
+        10
+      );
+
+    await pool.query(
+      `
+      UPDATE users
+
+      SET
+      password = $1,
+      reset_token = NULL,
+      reset_token_expires = NULL
+
+      WHERE id = $2
+      `,
+      [
+        hashedPassword,
+        user.rows[0].id,
+      ]
+    );
+
+    return res.json({
+      success: true,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    return res.status(500).json({
+      error:
+        "Server error",
+    });
+  }
 });
 
 
