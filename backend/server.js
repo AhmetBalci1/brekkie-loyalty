@@ -866,6 +866,40 @@ app.get("/test-forgot", async (req, res) => {
   res.json(result);
 });
 
+app.get("/recent-scans", async (req, res) => {
+
+  try {
+
+    const result =
+      await pool.query(`
+        SELECT
+          scan_logs.id,
+          users.name,
+          scan_logs.reward_earned,
+          scan_logs.created_at
+
+        FROM scan_logs
+
+        JOIN users
+        ON users.id = scan_logs.user_id
+
+        ORDER BY scan_logs.id DESC
+
+        LIMIT 20
+      `);
+
+    res.json(result.rows);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      error: "Server error",
+    });
+  }
+});
+
 /* =========================
    SERVER
 ========================= */
