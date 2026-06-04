@@ -588,7 +588,9 @@ app.get("/analytics", async (req, res) => {
 
     const scansResult =
       await pool.query(
-        "SELECT COUNT(*) FROM scan_logs"
+        `SELECT COUNT(*)
+        FROM scan_logs
+        WHERE DATE(created_at) = CURRENT_DATE`
       );
 
     const rewardsResult =
@@ -599,6 +601,8 @@ app.get("/analytics", async (req, res) => {
         FROM scan_logs
 
         WHERE reward_earned = true
+
+        AND DATE(created_at) = CURRENT_DATE
         `
       );
 
