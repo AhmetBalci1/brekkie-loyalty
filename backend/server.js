@@ -885,7 +885,7 @@ app.get("/recent-scans", async (req, res) => {
 
         ORDER BY scan_logs.id DESC
 
-        LIMIT 20
+        LIMIT 3
       `);
 
     res.json(result.rows);
