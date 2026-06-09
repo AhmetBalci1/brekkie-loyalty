@@ -620,6 +620,13 @@ app.get("/analytics", async (req, res) => {
         AND DATE(created_at) = CURRENT_DATE
         `
       );
+      const usersResult =
+  await pool.query(
+    `
+    SELECT COUNT(*)
+    FROM users
+    `
+  );
 
     const topCustomerResult =
       await pool.query(
