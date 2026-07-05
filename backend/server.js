@@ -1,4 +1,7 @@
 require("dotenv").config();
+const { Expo } = require("expo-server-sdk");
+
+const expo = new Expo();
 const SibApiV3Sdk= require("sib-api-v3-sdk");
 const crypto = require("crypto");
 const express = require("express");
@@ -978,6 +981,23 @@ pool.query(`
   console.log(err);
 
 });
+pool.query(`
+  ALTER TABLE users
+
+  ADD COLUMN IF NOT EXISTS push_token TEXT
+`)
+.then(() => {
+
+  console.log(
+    "push_token column ready"
+  );
+
+})
+.catch((err) => {
+
+  console.log(err);
+
+});
 app.post("/reset-password", async (req, res) => {
 
   try {
@@ -1048,6 +1068,108 @@ app.post("/reset-password", async (req, res) => {
         "Server error",
     });
   }
+});
+app.post("/users/push-token", async (req, res) => {
+
+  try {
+
+    const {
+      userId,
+      pushToken,
+    } = req.body;
+
+    await pool.query(
+      `
+      UPDATE users
+
+      SET push_token = $1
+
+      WHERE id = $2
+      `,
+      [
+        pushToken,
+        userId,
+      ]
+    );
+
+    res.json({
+      success: true,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      error:
+        "Push token kaydedilemedi",
+    });
+
+  }
+
+});
+app.post("/notifications/test", async (req, res) => {
+
+  try {
+
+    const { userId } = req.body;
+
+    const result = await pool.query(
+      `
+      SELECT push_token
+      FROM users
+      WHERE id = $1
+      `,
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Kullanıcı bulunamadı",
+      });
+    }
+
+    const pushToken = result.rows[0].push_token;
+
+    if (!Expo.isExpoPushToken(pushToken)) {
+      return res.status(400).json({
+        error: "Geçersiz Push Token",
+      });
+    }
+
+    const messages = [
+      {
+        to: pushToken,
+        sound: "default",
+        title: "☕ Brekkie",
+        body: "Tebrikler! İlk Push Notification başarıyla çalıştı. 🎉",
+        data: {
+          screen: "home",
+        },
+      },
+    ];
+
+    const chunks =
+      expo.chunkPushNotifications(messages);
+
+    for (const chunk of chunks) {
+      await expo.sendPushNotificationsAsync(chunk);
+    }
+
+    res.json({
+      success: true,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      error: "Bildirim gönderilemedi",
+    });
+
+  }
+
 });
 
 
