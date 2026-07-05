@@ -76,7 +76,7 @@ export default function SplashScreen() {
         } else {
 
           router.replace(
-            "/login" as any
+            "/" as any
           );
         }
 
@@ -109,7 +109,7 @@ export default function SplashScreen() {
 
         <Image
           source={require(
-            "../assets/images/brekkie-logo.jpg"
+            "../assets/images/brekkie-logo.png"
           )}
 
           style={styles.logo}

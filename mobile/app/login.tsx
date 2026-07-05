@@ -8,6 +8,10 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  ImageBackground,
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,7 +38,7 @@ useState(false);
 setErrorMessage("");
     try {
  const response = await fetch(
-  "http://192.168.1.195:5000/login",
+  "https://brekkie-api.onrender.com/login",
   {
     method: "POST",
 
@@ -96,10 +100,34 @@ setErrorMessage(
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
+  <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={
+      Platform.OS === "ios"
+        ? "padding"
+        : "height"
+    }
+  >
+
+    <ImageBackground
+      source={require("../assets/images/brekkie-foto1.jpg")}
+      style={styles.background}
+      resizeMode="cover"
+    >
+
+      <View style={styles.overlay}>
+
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps="handled"
+        >
+
+      <View style={styles.container}>
+        <View style={styles.card}>
         <Image
-          source={require("../assets/images/brekkie-logo.jpg")}
+          source={require("../assets/images/brekkie-logo.png")}
           style={styles.logo}
         />
 
@@ -165,6 +193,7 @@ setErrorMessage(
   </Text>
 
 )}
+
         </TouchableOpacity>
         {errorMessage !== "" && (
 
@@ -195,15 +224,38 @@ setErrorMessage(
 
   </View>
 )}
+   <TouchableOpacity
+  onPress={() =>
+    router.push("/forgot-password" as any)
+  }
+>
+  <Text
+    style={{
+      color: "#d4af37",
+      marginTop: 15,
+      textAlign: "center",
+      fontWeight: "700",
+    }}
+  >
+    Şifremi Unuttum?
+  </Text>
+</TouchableOpacity>
+           </View>
+          </View>
+        </ScrollView>
+
       </View>
-    </View>
+
+    </ImageBackground>
+
+  </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5efe6",
+    
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -211,7 +263,9 @@ const styles = StyleSheet.create({
 
   card: {
     width: "100%",
-    backgroundColor: "#004225",
+    backgroundColor: "rgba(0,66,37,0.82)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.15)",
     borderRadius: 35,
     padding: 28,
     alignItems: "center",
@@ -387,5 +441,13 @@ successText: {
   color: "#d4af37",
 
   fontSize: 15,
+},
+background: {
+  flex: 1,
+},
+
+overlay: {
+  flex: 1,
+  backgroundColor: "rgba(0,0,0,0.35)",
 },
 });

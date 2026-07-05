@@ -2,7 +2,6 @@ import { Tabs } from "expo-router";
 import { Ionicons }
 from "@expo/vector-icons";
 export default function TabLayout() {
-
   return (
 
     <Tabs
@@ -14,7 +13,10 @@ export default function TabLayout() {
 
           borderTopWidth: 0,
 
-          height: 85,
+          height: 75,
+
+          borderTopColor:"rgba(212,175,55,0.15",
+          borderWidth: 1,
 
           paddingBottom: 12,
 
@@ -31,6 +33,7 @@ export default function TabLayout() {
 
       <Tabs.Screen
         name="index"
+        
 
         options={{
           title: "Home",
@@ -47,9 +50,7 @@ export default function TabLayout() {
           ),
         }}
       />
-
-     
-
     </Tabs>
+    
   );
 }

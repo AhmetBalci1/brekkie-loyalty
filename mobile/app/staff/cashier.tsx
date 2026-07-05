@@ -1,200 +1,357 @@
 import { router } from "expo-router";
-import { useState } from "react";
-import { useLocalSearchParams }
-from "expo-router";
+import { useState, useEffect } from "react";
+import { useLocalSearchParams } from "expo-router";
+
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from "react-native";
-import {
-  useEffect,
-} from "react";
 
 import AsyncStorage
 from "@react-native-async-storage/async-storage";
 
 export default function CashierScreen() {
-   const [authorized,
-setAuthorized] =
-useState(false);
-useEffect(() => {
 
-  const checkStaff =
-    async () => {
+  const [authorized,
+    setAuthorized] =
+    useState(false);
 
-    const isStaff =
-      await AsyncStorage.getItem(
-        "staff"
-      );
+  const [rewardUsed,
+    setRewardUsed] =
+    useState(false);
 
-    if (!isStaff) {
+  const [analytics, setAnalytics] = useState<any>(null);
 
-      router.replace(
-        "/" as any
-      );
+  useEffect(() => {
 
-      return;
-    }
+    const checkStaff =
+      async () => {
 
-    setAuthorized(true);
-  };
+      const isStaff =
+        await AsyncStorage.getItem(
+          "staff"
+        );
 
-  checkStaff();
+      if (!isStaff) {
+
+        router.replace(
+          "/" as any
+        );
+
+        return;
+      }
+
+      setAuthorized(true);
+    };
+
+    checkStaff();
+  
+
+    const fetchAnalytics = async () => {
+      try {
+        const response = 
+          await fetch(
+            "https://brekkie-api.onrender.com/analytics"
+          );
+        const data = 
+          await response.json();
+        
+        setAnalytics(data);
+      
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchAnalytics();
+
+  }, []);
+
+  const {
+    userId,
+    customerName,
+    coffeeCount,
+    freeCoffee,
+    loyaltyLevel,
+  } = useLocalSearchParams();
+
+  const [history,setHistory] = useState<any[]>([]);
+
+  useEffect(() => {
+
+  fetch(
+    "https://brekkie-api.onrender.com/recent-scans"
+  )
+    .then((res) => res.json())
+    .then((data) => {
+
+      setHistory(data);
+
+    })
+    .catch((err) => {
+
+      console.log(err);
+
+    });
 
 }, []);
-  
-const {
-  customerName,
-  coffeeCount,
-  freeCoffee,
-  loyaltyLevel,
-} = useLocalSearchParams();
 
+  if (!authorized) {
 
-const [history] = useState([
-  {
-    id: 1,
-    name: "Ahmet",
-    action: "+1 Coffee ☕",
-  },
+    return null;
+  }
 
-  {
-    id: 2,
-    name: "Zeynep",
-    action: "Reward Earned 🎉",
-  },
-
-  {
-    id: 3,
-    name: "Can",
-    action: "+1 Coffee ☕",
-  },
-]);
-
-if (!authorized) {
-
-  return null;
-}
-    
   return (
-    <View style={styles.container}>
+
+    <ScrollView 
+      style={styles.container}
+      contentContainerStyle={{
+        alignItems: "center",
+        paddingBottom: 40,
+      }}
+      showsVerticalScrollIndicator={false}
+      >
+
       <Text style={styles.title}>
-        CASHIER MODE ☕
+        BREKKIE POS ☕
       </Text>
 
       <Text style={styles.subtitle}>
         Müşteri QR kodunu okutun
       </Text>
+
       <View style={styles.statsRow}>
 
-  <View style={styles.statCard}>
-    <Text style={styles.statNumber}>
-      42
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>
+            {analytics?.scans || 0}
+          </Text>
+
+          <Text style={styles.statLabel}>
+           ☕ Scans
+          </Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>
+            {analytics?.rewards || 0}
+          </Text>
+
+          <Text style={styles.statLabel}>
+            🎁 Ödüller
+          </Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>
+            {analytics?.users || 0}
+          </Text>
+
+          <Text style={styles.statLabel}>
+            👥 Müşteriler
+          </Text>
+        </View>
+
+      </View>
+
+      <View style={styles.liveCard}>
+
+        <Text style={styles.liveTitle}>
+          SON MÜŞTERİ☕
+        </Text>
+
+{customerName ? (
+  <>
+
+ <Text style={styles.customerName}>
+  {customerName}
+</Text>
+
+<Text style={styles.customerLevel}>
+  👑 {loyaltyLevel}
+</Text>
+
+<View style={styles.customerStatsRow}>
+
+  <View style={styles.customerStatCard}>
+    <Text style={styles.customerStatNumber}>
+      {coffeeCount}
     </Text>
 
-    <Text style={styles.statLabel}>
-      Scan
+    <Text style={styles.customerStatLabel}>
+      ☕ Kahve
     </Text>
   </View>
 
-  <View style={styles.statCard}>
-    <Text style={styles.statNumber}>
-      6
+  <View style={styles.customerStatCard}>
+    <Text style={styles.customerStatNumber}>
+      {freeCoffee}
     </Text>
 
-    <Text style={styles.statLabel}>
-      Reward
-    </Text>
-  </View>
-
-  <View style={styles.statCard}>
-    <Text style={styles.statNumber}>
-      18
-    </Text>
-
-    <Text style={styles.statLabel}>
-      Customer
+    <Text style={styles.customerStatLabel}>
+      🎁 Ödül
     </Text>
   </View>
 
 </View>
-      <View style={styles.liveCard}>
-  <Text style={styles.liveTitle}>
-    LIVE POS
+
+  </>
+) : (
+
+  <Text style={styles.liveText}>
+    Henüz okutma yapılmadı ☕
   </Text>
 
-  <View style={styles.historyCard}>
+)}
+
+        
+
+      </View>
+          <View style={styles.historyCard}>
 
   <Text style={styles.historyTitle}>
     SON İŞLEMLER
   </Text>
 
-  {history.map((item) => (
+  <ScrollView
+    style={{ maxHeight: 180 }}
+    showsVerticalScrollIndicator={false}
+    nestedScrollEnabled={true}
+  >
 
-    <View
-      key={item.id}
-      style={styles.historyItem}
-    >
+    {history.map((item: any) => (
 
-      <Text style={styles.historyName}>
-        {item.name}
-      </Text>
+      <View
+        key={item.id}
+        style={styles.historyItem}
+      >
 
-      <Text style={styles.historyAction}>
-        {item.action}
-      </Text>
+        <Text style={styles.historyName}>
+          {item.name}
+        </Text>
 
-    </View>
-  ))}
+        <Text style={styles.historyAction}>
+          {item.reward_earned
+            ? "Reward Kullanıldı 🎁"
+            : "+1 Coffee ☕"}
+        </Text>
+
+      </View>
+
+    ))}
+
+  </ScrollView>
 
 </View>
 
-<Text style={styles.liveText}>
+      {Number(freeCoffee) > 0 &&
+        !rewardUsed && (
 
-  {customerName
-    ? `${customerName}
+        <TouchableOpacity
 
-${loyaltyLevel}
+          style={styles.rewardButton}
 
-☕ ${coffeeCount} kahve
+          onPress={async () => {
 
-🎁 ${freeCoffee} free coffee`
-    : "Henüz okutma yapılmadı ☕"}
+            try {
 
-</Text>
-</View>
+              const response =
+                await fetch(
+                  "https://brekkie-api.onrender.com/use-reward",
+                  {
+                    method: "POST",
+
+                    headers: {
+                      "Content-Type":
+                        "application/json",
+                    },
+
+                    body: JSON.stringify({
+                      userId:
+                        Number(userId),
+                    }),
+                  }
+                );
+
+              const result =
+                await response.json();
+
+              console.log(result);
+
+              setRewardUsed(true);
+
+            } catch (error) {
+
+              console.log(error);
+            }
+          }}
+        >
+
+          <Text
+            style={styles.rewardButtonText}
+          >
+            ÜCRETSİZ KAHVE KULLAN ☕
+          </Text>
+
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
         style={styles.scanButton}
+
         onPress={() =>
-            router.push({
-                pathname: "/scanner",
-                params: {
-                cashierMode: "true",
-        },
-    } as any)
+          router.push({
+            pathname: "/scanner",
+
+            params: {
+              cashierMode: "true",
+            },
+          } as any)
         }
       >
+
         <Text style={styles.scanButtonText}>
           QR Tara
         </Text>
+
       </TouchableOpacity>
-    </View>
+      <TouchableOpacity
+  style={styles.logoutButton}
+  onPress={async () => {
+
+    await AsyncStorage.removeItem(
+      "staff"
+    );
+
+    router.replace(
+      "/staff-login" as any
+    );
+  }}
+>
+  <Text style={styles.logoutText}>
+    Çıkış Yap
+  </Text>
+</TouchableOpacity>
+
+    </ScrollView>
+    
   );
+  
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
 
     backgroundColor: "#004225",
 
-    justifyContent: "center",
-    alignItems: "center",
 
     padding: 24,
+    
   },
 
   title: {
@@ -203,7 +360,7 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: "900",
 
-    marginBottom: 10,
+    marginTop: 20,
 
     letterSpacing: 2,
   },
@@ -213,167 +370,284 @@ const styles = StyleSheet.create({
 
     fontSize: 18,
 
-    marginBottom: 40,
+    marginBottom: 2,
   },
 
-  scanButton: {
-    backgroundColor: "#d4af37",
-
+  statsRow: {
     width: "100%",
+
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    marginBottom: 5,
+  },
+
+  statCard: {
+    flex: 1,
+
+    backgroundColor: "#0b5d38",
+
+    marginHorizontal: 4,
+
+    borderRadius: 20,
 
     paddingVertical: 20,
 
-    borderRadius: 24,
-
     alignItems: "center",
+
+    borderWidth: 1,
+
+    borderColor:
+      "rgba(212,175,55,0.2)",
   },
 
-  scanButtonText: {
-    color: "#2a1d17",
+  statNumber: {
+    color: "#d4af37",
 
-    fontSize: 22,
-    fontWeight: "bold",
+    fontSize: 20,
+
+    fontWeight: "900",
+
+    marginBottom: 1,
+  },
+
+  statLabel: {
+    color: "#fff4e3",
+
+    fontSize: 12,
+
+    fontWeight: "600",
   },
 
   liveCard: {
-  width: "100%",
+    width: "100%",
+    minHeight: 220,
+    backgroundColor: "#0b5d38",
 
-  backgroundColor: "#0b5d38",
+    borderRadius: 28,
 
-  borderRadius: 28,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
 
-  paddingVertical: 24,
-  paddingHorizontal: 20,
+    marginBottom: 7,
 
-  marginBottom: 30,
+    borderWidth: 1,
 
-  borderWidth: 1,
-  borderColor: "rgba(212,175,55,0.2)",
-},
+    borderColor:
+      "rgba(212,175,55,0.2)",
+  },
 
-liveTitle: {
-  color: "#d4af37",
+  liveTitle: {
+    color: "#d4af37",
 
-  fontSize: 18,
+    fontSize: 18,
+
+    fontWeight: "900",
+
+    marginBottom: 7,
+
+    letterSpacing: 1,
+  },
+
+  liveText: {
+    color: "#fff4e3",
+
+    fontSize: 15,
+
+    lineHeight: 18,
+  },
+  customerName: {
+  color: "#fff4e3",
+
+  fontSize: 28,
 
   fontWeight: "900",
 
   marginBottom: 8,
-
-  letterSpacing: 1,
 },
 
-liveText: {
-  color: "#fff4e3",
-
-  fontSize: 15,
-
-  lineHeight: 22,
-},
-
-statsRow: {
-  width: "100%",
-
-  flexDirection: "row",
-
-  justifyContent: "space-between",
-
-  marginBottom: 24,
-},
-
-statCard: {
-  flex: 1,
-
-  backgroundColor: "#0b5d38",
-
-  marginHorizontal: 4,
-
-  borderRadius: 20,
-
-  paddingVertical: 20,
-
-  alignItems: "center",
-
-  borderWidth: 1,
-
-  borderColor:
-    "rgba(212,175,55,0.2)",
-},
-
-statNumber: {
-  color: "#d4af37",
-
-  fontSize: 24,
-
-  fontWeight: "900",
-
-  marginBottom: 4,
-},
-
-statLabel: {
-  color: "#fff4e3",
-
-  fontSize: 13,
-
-  fontWeight: "600",
-},
-
-historyCard: {
-  width: "100%",
-
-  backgroundColor: "#0b5d38",
-
-  borderRadius: 28,
-
-  paddingVertical: 22,
-  paddingHorizontal: 20,
-
-  marginBottom: 26,
-
-  borderWidth: 1,
-
-  borderColor:
-    "rgba(212,175,55,0.2)",
-},
-
-historyTitle: {
+customerLevel: {
   color: "#d4af37",
 
   fontSize: 18,
 
-  fontWeight: "900",
+  fontWeight: "700",
 
-  marginBottom: 18,
-
-  letterSpacing: 1,
+  marginBottom: 20,
 },
 
-historyItem: {
+customerInfo: {
+  color: "#fff4e3",
+
+  fontSize: 16,
+
+  marginBottom: 8,
+},
+
+  historyCard: {
+    width: "100%",
+
+    backgroundColor: "#0b5d38",
+
+    borderRadius: 28,
+
+    paddingVertical: 22,
+    paddingHorizontal: 20,
+
+    marginBottom: 2,
+    
+    maxHeight: 260,
+
+    borderWidth: 1,
+
+    borderColor:
+      "rgba(212,175,55,0.2)",
+  },
+
+  historyTitle: {
+    color: "#d4af37",
+
+    fontSize: 18,
+
+    fontWeight: "900",
+
+    marginBottom: 1,
+
+    letterSpacing: 1,
+  },
+
+  historyItem: {
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    paddingVertical: 12,
+
+    borderBottomWidth: 1,
+
+    borderBottomColor:
+      "rgba(255,255,255,0.08)",
+  },
+
+  historyName: {
+    color: "#fff4e3",
+
+    fontSize: 15,
+
+    fontWeight: "700",
+  },
+
+  historyAction: {
+    color: "#d4af37",
+
+    fontSize: 14,
+
+    fontWeight: "600",
+  },
+
+  rewardButton: {
+
+    backgroundColor: "#d4af37",
+
+    width: "100%",
+
+    paddingVertical: 16,
+
+    borderRadius: 20,
+
+    alignItems: "center",
+
+    marginBottom: 5,
+  },
+
+  rewardButtonText: {
+
+    color: "#2a1d17",
+
+    fontSize: 16,
+
+    fontWeight: "900",
+  },
+
+  scanButton: {
+    fontSize: 30,
+
+    backgroundColor: "#d4af37",
+
+    width: "100%",
+
+    paddingVertical: 24,
+
+    borderRadius: 30,
+
+    alignItems: "center",
+    marginBottom: 9,
+  },
+
+  scanButtonText: {
+
+    color: "#2a1d17",
+
+    fontSize: 26,
+
+    fontWeight: "900",
+  },
+  logoutButton: {
+  width: "100%",
+  marginBottom: 5,
+
+  paddingVertical: 16,
+
+  borderRadius: 20,
+
+  backgroundColor: "#7a1f1f",
+
+  alignItems: "center",
+},
+
+logoutText: {
+  color: "#fff",
+
+  fontWeight: "800",
+
+  fontSize: 16,
+},
+customerStatsRow: {
   flexDirection: "row",
 
   justifyContent: "space-between",
 
-  paddingVertical: 12,
-
-  borderBottomWidth: 1,
-
-  borderBottomColor:
-    "rgba(255,255,255,0.08)",
+  marginTop: 12,
 },
 
-historyName: {
-  color: "#fff4e3",
+customerStatCard: {
+  flex: 1,
 
-  fontSize: 15,
+  backgroundColor: "rgba(212,175,55,0.18)",
 
-  fontWeight: "700",
+  paddingVertical: 16,
+
+  borderRadius: 16,
+
+  alignItems: "center",
+
+  marginHorizontal: 4,
 },
 
-historyAction: {
+customerStatNumber: {
   color: "#d4af37",
 
-  fontSize: 14,
+  fontSize: 26,
 
-  fontWeight: "600",
+  fontWeight: "900",
+},
+
+customerStatLabel: {
+  color: "#fff4e3",
+
+  fontSize: 13,
+
+  marginTop: 4,
 },
 });

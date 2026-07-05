@@ -12,20 +12,134 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ImageBackground,
+  RefreshControl,
 } from "react-native";
+import * as Device from "expo-device";
+
+import * as Notifications from "expo-notifications";
+
+import Constants from "expo-constants";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import QRCode from "react-native-qrcode-svg";
 
 import { router } from "expo-router";
+Notifications.setNotificationHandler({
+
+  handleNotification: async () => ({
+
+    shouldShowBanner: true,
+
+    shouldShowList: true,
+
+    shouldPlaySound: true,
+
+    shouldSetBadge: false,
+
+  }),
+
+});
+async function registerForPushNotificationsAsync() {
+
+  if (!Device.isDevice) {
+
+    alert("Gerçek bir cihaz kullanmalısın.");
+
+    return null;
+
+  }
+
+  const { status: existingStatus } =
+    await Notifications.getPermissionsAsync();
+
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== "granted") {
+
+    const { status } =
+      await Notifications.requestPermissionsAsync();
+
+    finalStatus = status;
+
+  }
+
+  if (finalStatus !== "granted") {
+
+    alert("Bildirim izni verilmedi.");
+
+    return null;
+
+  }
+
+  const projectId =
+    Constants.expoConfig?.extra?.eas?.projectId;
+
+  const token =
+    await Notifications.getExpoPushTokenAsync({
+
+      projectId,
+
+    });
+
+  console.log("Push Token:", token.data);
+  const savedUser =
+  await AsyncStorage.getItem("user");
+
+if (savedUser) {
+
+  const user =
+    JSON.parse(savedUser);
+
+  await fetch(
+    "https://brekkie-api.onrender.com/users/push-token",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
+
+      body: JSON.stringify({
+
+        userId: user.id,
+
+        pushToken: token.data,
+
+      }),
+
+    }
+  );
+
+  console.log(
+    "✅ Push Token kaydedildi."
+  );
+
+}
+
+  return token.data;
+
+}
 
 export default function HomeScreen() {
 
   const [user, setUser] =
     useState<any>(null);
+    const [loading, setLoading] =
+  useState(true);
 
+  const [refreshing,
+setRefreshing] =
+useState(false);
+useEffect(() => {
+
+  registerForPushNotificationsAsync();
+
+}, []);
 const loadUser = async () => {
+  
 
   try {
 
@@ -49,7 +163,7 @@ const loadUser = async () => {
     const response =
       await fetch(
         
-        `http://192.168.1.195:5000/users/${parsedUser.id}`
+        `https://brekkie-api.onrender.com/users/${parsedUser.id}`
         
       );
       console.log(parsedUser);
@@ -77,25 +191,45 @@ const loadUser = async () => {
 
     console.log(error);
   }
+  setLoading(false);
 };
 
   useFocusEffect(
   useCallback(() => {
 
     loadUser();
+      
+    
+  
 
   }, [])
 );
+  const onRefresh =
+       async () => {
+
+  setRefreshing(true);
+
+  await loadUser();
+
+  setRefreshing(false);
+};
   const [rewardUsedVisible,
   setRewardUsedVisible] =
   useState(false);
 
   if (!user) {
-    return (
-      <View style={styles.authContainer}>
-        <View style={styles.authCard}>
+  return (
+    <ImageBackground
+      source={require("../../assets/images/brekkie-foto2.jpg")}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+
+        <View style={styles.authContainer}>
+          <View style={styles.authCard}>
           <Image
-  source={require("../../assets/images/brekkie-logo.jpg")}
+  source={require("../../assets/images/brekkie-logo.png")}
   style={styles.logo}
 />
           <Text style={styles.title}>
@@ -160,9 +294,12 @@ const loadUser = async () => {
   </TouchableOpacity>
 
 </View>
+               </View>
         </View>
+
       </View>
-    );
+    </ImageBackground>
+  );
   }
 
   const totalCoffee =
@@ -187,20 +324,40 @@ const loadUser = async () => {
     loyaltyColor = "#50c878";
   }
 
+  if (loading) {
+
+  return null;
+}
   return (
 
+  <ImageBackground
+  source={require("../../assets/images/brekkie-foto1.jpg")}
+  style={styles.background}
+  resizeMode="cover"
+>
+
+<View style={styles.overlay}>
+
   <ScrollView
-    style={styles.container}
     contentContainerStyle={{
       padding: 20,
       paddingBottom: 40,
       alignItems: "center",
     }}
     showsVerticalScrollIndicator={false}
+    refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        tintColor="#d4af37" 
+        />
+    }
   >
+   
+  
       <View style={styles.topCard}>
         <Image
-  source={require("../../assets/images/brekkie-logo.jpg")}
+  source={require("../../assets/images/brekkie-logo.png")}
   style={styles.logo}
 />
 <View style={styles.titleWrapper}>
@@ -222,11 +379,16 @@ const loadUser = async () => {
   </Text>
 
 </View>
+ 
 
         <Text style={styles.welcome}>
           Hoş geldin, {user.name} ☕
         </Text>
-
+         <Text style={styles.totalCoffeeText}>
+      ☕ Toplam Kahve:
+      {user.coffee_count +
+       user.free_coffee * 10}
+</Text>
         <View
           style={[
             styles.levelBadge,
@@ -235,16 +397,37 @@ const loadUser = async () => {
                 loyaltyColor,
             },
           ]}
+          
         >
+
           <Text style={styles.levelText}>
             {loyaltyLevel}
           </Text>
         </View>
 
-        <Text style={styles.coffeeText}>
-          Kahve Sayısı:{" "}
-          {user.coffee_count}
-        </Text>
+        <View style={styles.statsRow}>
+
+  <View style={styles.smallStat}>
+    <Text style={styles.smallNumber}>
+      {user.coffee_count}
+    </Text>
+
+    <Text style={styles.smallLabel}>
+      ☕ Kahve
+    </Text>
+  </View>
+
+  <View style={styles.smallStat}>
+    <Text style={styles.smallNumber}>
+      {user.free_coffee}
+    </Text>
+
+    <Text style={styles.smallLabel}>
+      🎁 Ödül
+    </Text>
+  </View>
+
+</View>
 
         <View
           style={
@@ -275,71 +458,30 @@ const loadUser = async () => {
 
   <QRCode
     value={user.qr_code}
-    size={110}
+    size={180}
   />
 
 )}
         </View>
 
        <Text style={styles.qrCodeText}>
-  QR: {user?.qr_code || "QR Yok"}
+      Üyelik QR Kodunuz
+     </Text>
+     <Text style={styles.qrInfo}>
+  📱 Kasada bu QR kodu gösterin.
+  Her kahvede puan kazanın ☕
 </Text>
+
 
         
   <View style={styles.rewardCard}>
-{user.free_coffee > 0 && (
 
-<TouchableOpacity
-  style={styles.useRewardButton}
 
-  onPress={async () => {
-    console.log(user);
-
-    const response =
-      await fetch(
-        "http://192.168.1.195:5000/use-reward",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify({
-            userId: user.id,
-          }),
-        }
-      );
-
-    const updatedUser =
-      await response.json();
-      console.log(updatedUser);
-
-    setUser(updatedUser);
-
-    setRewardUsedVisible(true);
-
-    setTimeout(() => {
-
-      setRewardUsedVisible(false);
-
-    }, 2200);
-
-    await AsyncStorage.setItem(
-      "user",
-      JSON.stringify(updatedUser)
-    );
-  }}
->
-
-  <Text style={styles.useRewardText}>
-    Ücretsiz Kahveyi Kullan ☕
+  <Text style={styles.rewardTitle}>
+    🎁 Reward Balance
   </Text>
 
-</TouchableOpacity>
 
-)}
   {rewardUsedVisible && (
 
   <View style={styles.rewardUsedPopup}>
@@ -360,30 +502,16 @@ const loadUser = async () => {
   </View>
 )}
 
-    <Text style={styles.rewardCardText}>
+    <Text style={styles.rewardSubtitle}>
       {user.free_coffee} adet ücretsiz
-      kahveniz hazır
+      kahveniz hazır.
     </Text>
   
   </View>
         <View
           style={styles.buttonContainer}
         >
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              router.push(
-                "/scanner" as any
-              )
-            }
-          >
-            <Text
-              style={styles.buttonText}
-            >
-              QR Tara ☕
-            </Text>
-          </TouchableOpacity>
-
+          
     
           <TouchableOpacity
             style={styles.logoutButton}
@@ -413,6 +541,11 @@ const loadUser = async () => {
         </View>
       </View>
     </ScrollView>
+      
+
+</View>
+
+</ImageBackground>
   );
 }
 
@@ -428,7 +561,7 @@ const styles = StyleSheet.create({
   authContainer: {
     flex: 1,
 
-    backgroundColor: "#f5efe6",
+  
 
     justifyContent: "center",
     alignItems: "center",
@@ -437,9 +570,11 @@ const styles = StyleSheet.create({
   },
 
   authCard: {
-    width: "100%",
+     width: "100%",
+  backgroundColor: "rgba(0,66,37,0.82)",
 
-    backgroundColor: "#004225",
+  borderWidth: 1,
+  borderColor: "rgba(255,255,255,0.15)",
 
     borderRadius: 35,
 
@@ -452,7 +587,10 @@ const styles = StyleSheet.create({
  topCard: {
   width: "100%",
 
-  backgroundColor: "#004225",
+   backgroundColor: "rgba(0,66,37,0.85)",
+
+  borderWidth: 1,
+  borderColor: "rgba(255,255,255,0.15)",
 
   borderRadius: 35,
 
@@ -480,7 +618,10 @@ const styles = StyleSheet.create({
 bottomCard: {
   width: "100%",
 
-  backgroundColor: "#004225",
+   backgroundColor: "rgba(0,66,37,0.85)",
+
+  borderWidth: 1,
+  borderColor: "rgba(255,255,255,0.15)",
 
   borderRadius: 35,
 
@@ -794,10 +935,10 @@ rewardCardTitle: {
   letterSpacing: 1,
 },
 
-rewardCardText: {
+rewardSubtitle: {
   color: "#2a1d17",
 
-  fontSize: 15,
+  fontSize: 14,
 
 
   fontWeight: "600",
@@ -815,12 +956,12 @@ useRewardButton: {
   alignItems: "center",
 },
 
-useRewardText: {
+rewardTitle: {
   color: "#fff4e3",
 
-  fontSize: 15,
+  fontSize: 18,
 
-  fontWeight: "bold",
+  fontWeight: "800",
 },
 
 rewardUsedPopup: {
@@ -913,5 +1054,54 @@ staffButtonText: {
   fontSize: 16,
 
   fontWeight: "700",
+},
+background: {
+  flex: 1,
+},
+
+overlay: {
+  flex: 1,
+  backgroundColor: "rgba(0,0,0,0.30)",
+},
+statsRow: {
+  width: "100%",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  marginBottom: 15,
+},
+
+smallStat: {
+  width: "48%",
+  backgroundColor: "rgba(255,255,255,0.10)",
+  borderRadius: 20,
+  paddingVertical: 18,
+  alignItems: "center",
+},
+
+smallNumber: {
+  color: "#d4af37",
+  fontSize: 28,
+  fontWeight: "900",
+},
+
+smallLabel: {
+  color: "#fff4e3",
+  fontSize: 14,
+  fontWeight: "600",
+},
+totalCoffeeText: {
+  color: "#d4af37",
+  fontSize: 16,
+  fontWeight: "700",
+  marginTop: 12,
+  marginBottom: 10,
+},
+qrInfo: {
+  color: "#fff4e3",
+  textAlign: "center",
+  marginTop: 12,
+  marginBottom: 20,
+  fontSize: 14,
+  lineHeight: 22,
 },
 });

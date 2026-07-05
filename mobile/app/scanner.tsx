@@ -15,12 +15,16 @@ import {
   CameraView,
   useCameraPermissions,
 } from "expo-camera";
+import { useLocalSearchParams }
+from "expo-router";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
 
 export default function ScannerScreen() {
+  const { cashierMode } =
+  useLocalSearchParams();
 
   const [permission, requestPermission] =
     useCameraPermissions();
@@ -73,26 +77,36 @@ export default function ScannerScreen() {
 
   const handleBarcodeScanned =
     async ({ data }: any) => {
+      console.log("QR DETECTED");
 
-    if (scanned) return;
+   if (scanned) {
 
-    setScanned(true);
+  return;
+}
+
+setScanned(true);
+
+const scannedCode = data;
+
+if (!scannedCode) {
+
+  setScanned(false);
+
+  return;
+}
 
     try {
 
-      const savedUser =
-        await AsyncStorage.getItem(
-          "user"
-        );
-
-      const currentUser =
-        JSON.parse(
-          savedUser || "{}"
-        );
-
+     
+        console.log(
+  "SCANNED:",
+  scannedCode
+);
+console.log("FETCH START");
       const response =
+      
         await fetch(
-          "http://192.168.1.195:5000/scan",
+          "https://brekkie-api.onrender.com/scan",
           {
             method: "POST",
 
@@ -106,6 +120,7 @@ export default function ScannerScreen() {
             }),
           }
         );
+        console.log("FETCH END");
 
       const result =
         await response.json();
@@ -121,37 +136,33 @@ export default function ScannerScreen() {
         return;
       }
 
-      const updatedUser = {
+     const updatedUser = {
 
-        id:
-          result.id ||
-          currentUser.id,
+  id: result.id,
 
-        name:
-          result.name ||
-          currentUser.name,
+  name: result.name,
 
-        email:
-          result.email ||
-          currentUser.email,
+  email: result.email,
 
-        qr_code:
-          result.qr_code ||
-          currentUser.qr_code,
+  qr_code: result.qr_code,
 
-        coffee_count:
-          result.coffee_count,
+  coffee_count:
+    result.coffee_count,
 
-        free_coffee:
-          result.free_coffee,
-      };
+  free_coffee:
+    result.free_coffee,
+};
 
-      await AsyncStorage.setItem(
-        "user",
-        JSON.stringify(
-          updatedUser
-        )
-      );
+      if (cashierMode !== "true") {
+
+  await AsyncStorage.setItem(
+    "user",
+    JSON.stringify(
+      updatedUser
+    )
+  );
+
+}
 
       setCoffeeCount(
         result.coffee_count
@@ -190,10 +201,42 @@ export default function ScannerScreen() {
         setRewardVisible(true);
 
         setTimeout(() => {
+          router.dismissAll();
+if (cashierMode === "true") {
 
-          router.replace(
-            "/cashier" as any
-          );
+router.replace({
+pathname: "/staff/cashier",
+
+
+params: {
+
+  userId:
+    updatedUser.id,
+
+  customerName:
+    updatedUser.name,
+
+  coffeeCount:
+    result.coffee_count,
+
+  freeCoffee:
+    result.free_coffee,
+
+  loyaltyLevel:
+    level,
+},
+
+
+} as any);
+
+} else {
+
+router.navigate(
+"/(tabs)" as any
+);
+}
+
+
 
         }, 3500);
 
@@ -203,10 +246,43 @@ export default function ScannerScreen() {
       setSuccessVisible(true);
 
       setTimeout(() => {
+        router.dismissAll();
 
-        router.replace(
-          "/cashier" as any
-        );
+ if (cashierMode === "true") {
+
+router.replace({
+pathname: "/staff/cashier",
+
+
+params: {
+
+  userId:
+    updatedUser.id,
+
+  customerName:
+    updatedUser.name,
+
+  coffeeCount:
+    result.coffee_count,
+
+  freeCoffee:
+    result.free_coffee,
+
+  loyaltyLevel:
+    level,
+},
+
+
+} as any);
+
+} else {
+
+router.navigate(
+"/(tabs)" as any
+);
+}
+
+
 
       }, 1800);
 
@@ -228,10 +304,13 @@ export default function ScannerScreen() {
         }
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
-        }}
+          
+        }}    
         onBarcodeScanned={
-          handleBarcodeScanned
-        }
+  scanned
+    ? undefined
+    : handleBarcodeScanned
+}
       />
 
       <View style={styles.overlay}>

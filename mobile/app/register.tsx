@@ -9,6 +9,10 @@ import {
   StyleSheet,
   Alert,
   Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  ImageBackground,
 } from "react-native";
 
 export default function RegisterScreen() {
@@ -20,7 +24,7 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     try {
       const response = await fetch(
-        "http://192.168.1.195:5000/users",
+        "https://brekkie-api.onrender.com/users",
         {
           method: "POST",
           headers: {
@@ -53,11 +57,31 @@ export default function RegisterScreen() {
     }
   };
 
-  return (
-    <View style={styles.container}>
+ return (
+  <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={
+      Platform.OS === "ios"
+        ? "padding"
+        : "height"
+    }
+  >
+    <ImageBackground
+  source={require("../assets/images/brekkie-foto3.jpg")}
+  style={styles.background}
+  resizeMode="cover"
+>
+  <View style={styles.overlay}>
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.container}>
       <View style={styles.card}>
         <Image
-          source={require("../assets/images/brekkie-logo.jpg")}
+          source={require("../assets/images/brekkie-logo.png")}
           style={styles.logo}
         />
 
@@ -124,14 +148,20 @@ export default function RegisterScreen() {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
-  );
+      </View>
+    </ScrollView>
+
+  </View>
+
+</ImageBackground>
+
+</KeyboardAvoidingView>
+);
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5efe6",
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -139,7 +169,10 @@ const styles = StyleSheet.create({
 
   card: {
     width: "100%",
-    backgroundColor: "#004225",
+    backgroundColor: "rgba(0,66,37,0.82)",
+
+borderWidth: 1,
+borderColor: "rgba(255,255,255,0.15)",
     borderRadius: 35,
     padding: 28,
     alignItems: "center",
@@ -254,5 +287,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
- 
+ background: {
+  flex: 1,
+},
+
+overlay: {
+  flex: 1,
+  backgroundColor: "rgba(0,0,0,0.35)",
+},
 });

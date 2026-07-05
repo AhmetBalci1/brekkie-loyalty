@@ -3,6 +3,10 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  ImageBackground,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -24,13 +28,41 @@ const [username, setUsername] =
 const [password, setPassword] =
   useState("");
   return (
+ <KeyboardAvoidingView
+  style={{ flex: 1 }}
+  behavior={
+    Platform.OS === "ios"
+      ? "padding"
+      : "height"
+  }
+>
 
+<ImageBackground
+  source={require("../assets/images/brekkie-foto1.jpg")}
+  style={styles.background}
+  resizeMode="cover"
+>
 
-    <View style={styles.container}>
+<View style={styles.overlay}>
 
-      <Text style={styles.title}>
-        Çalışan Paneli 🧾
-      </Text>
+<ScrollView
+  contentContainerStyle={{
+    flexGrow: 1,
+  }}
+  keyboardShouldPersistTaps="handled"
+>
+
+<View style={styles.container}>
+
+      
+      <Text
+  style={{
+    color: "#d4af37",
+    marginBottom: 30,
+  }}
+>
+  Cashier & Admin Access
+</Text>
       <TextInput
   placeholder="Kullanıcı Adı"
 
@@ -80,7 +112,7 @@ const [password, setPassword] =
     "true"
   );
 
-  router.push(
+  router.replace(
     "/staff/cashier" as any
   );
 }}
@@ -113,7 +145,7 @@ const [password, setPassword] =
     "true"
   );
 
-  router.push(
+  router.replace(
     "/staff/admin" as any
   );
 }}
@@ -123,16 +155,22 @@ const [password, setPassword] =
         </Text>
       </TouchableOpacity>
 
-    </View>
-  );
+  </View>
+
+</ScrollView>
+
+</View>
+
+</ImageBackground>
+
+</KeyboardAvoidingView>
+);
 }
 
 const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-
-    backgroundColor: "#111",
 
     justifyContent: "center",
 
@@ -168,7 +206,7 @@ const styles = StyleSheet.create({
   adminButton: {
     width: "100%",
 
-    backgroundColor: "#444",
+    backgroundColor: "#004225",
 
     padding: 18,
 
@@ -188,7 +226,7 @@ const styles = StyleSheet.create({
 
   width: "100%",
 
-  backgroundColor: "#222",
+  backgroundColor: "rgba(0,66,37,0.75)",
 
   color: "white",
 
@@ -201,5 +239,13 @@ const styles = StyleSheet.create({
   borderWidth: 1,
 
   borderColor: "#444",
+},
+background: {
+  flex: 1,
+},
+
+overlay: {
+  flex: 1,
+  backgroundColor: "rgba(0,0,0,0.45)",
 },
 });

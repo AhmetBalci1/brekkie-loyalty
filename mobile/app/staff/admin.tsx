@@ -3,6 +3,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  TouchableOpacity
 } from "react-native";
 import {
   useEffect,
@@ -50,7 +51,7 @@ useEffect(() => {
 useEffect(() => {
 
   fetch(
-    "http://192.168.1.195:5000/analytics"
+    "https://brekkie-api.onrender.com/analytics"
   )
     .then((res) => res.json())
     .then((data) => {
@@ -82,11 +83,11 @@ if (!authorized) {
     >
 
       <Text style={styles.title}>
-        ADMIN DASHBOARD
+        BREKKIE YÖNETİCİ
       </Text>
 
       <Text style={styles.subtitle}>
-        Brekkie Analytics ☕
+        Business Overview ☕
       </Text>
 
       <View style={styles.statsRow}>
@@ -97,7 +98,7 @@ if (!authorized) {
         </Text>
 
           <Text style={styles.statLabel}>
-            Users
+            👥Kullanıcılar
           </Text>
         </View>
 
@@ -107,7 +108,7 @@ if (!authorized) {
           </Text>
 
           <Text style={styles.statLabel}>
-            Scans
+            ☕Scans
           </Text>
         </View>
 
@@ -121,17 +122,17 @@ if (!authorized) {
           </Text>
 
           <Text style={styles.statLabel}>
-            Rewards
+           🎁 Ödüller
           </Text>
         </View>
 
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>
-            ₺18K
+            ₺{analytics?.revenue || 0}
           </Text>
 
           <Text style={styles.statLabel}>
-            Revenue
+           💰 Hasılat
           </Text>
         </View>
 
@@ -140,7 +141,7 @@ if (!authorized) {
       <View style={styles.activityCard}>
 
         <Text style={styles.activityTitle}>
-          TOP CUSTOMER 👑
+          En iyi Üye 👑
         </Text>
 
         <Text style={styles.customerName}>
@@ -149,14 +150,17 @@ if (!authorized) {
         </Text>
 
         <Text style={styles.customerStats}>
-         {analytics?.topCustomer
-  ? `${
-      analytics.topCustomer
-        .coffee_count +
-      analytics.topCustomer
-        .free_coffee * 10
-    } Coffee`
-  : "No activity"}
+      <View style={{ marginTop: 12 }}>
+
+  <Text style={styles.customerStats}>
+    ☕ {analytics?.topCustomer?.coffee_count || 0} Kahveler
+  </Text>
+
+  <Text style={styles.customerStats}>
+    🎁 {analytics?.topCustomer?.free_coffee || 0} Ödüller
+  </Text>
+
+</View>
         </Text>
 
       </View>
@@ -164,24 +168,47 @@ if (!authorized) {
       <View style={styles.activityCard}>
 
         <Text style={styles.activityTitle}>
-          TODAY'S ACTIVITY
+          BUGÜNÜN AKTİVİTELERİ
         </Text>
+<Text style={styles.activityText}>
+  ☕ Günlük Taratılan Qr:
+  {analytics?.todayActivity?.scans || 0}
+</Text>
 
-        <Text style={styles.activityText}>
-          • 42 scans completed
-        </Text>
 
-        <Text style={styles.activityText}>
-          • 6 rewards redeemed
-        </Text>
 
-        <Text style={styles.activityText}>
-          • 18 active customers
-        </Text>
+<Text style={styles.activityText}>
+  🎁 Günlük Verilen Ödüller:
+  {analytics?.todayActivity?.rewards || 0}
+</Text>
 
+
+
+<Text style={styles.activityText}>
+  👥 Günlük Yeni Kullanıcı:
+  {analytics?.todayActivity?.users || 0}
+</Text>
       </View>
+      <TouchableOpacity
+  style={styles.logoutButton}
+  onPress={async () => {
+
+    await AsyncStorage.removeItem(
+      "staff"
+    );
+
+    router.replace(
+      "/staff-login" as any
+    );
+  }}
+>
+  <Text style={styles.logoutText}>
+    Çıkış Yap
+  </Text>
+</TouchableOpacity>
 
     </ScrollView>
+    
   );
 }
 
@@ -326,4 +353,23 @@ const styles = StyleSheet.create({
 
     lineHeight: 22,
   },
+  logoutButton: {
+  marginTop: 20,
+
+  backgroundColor: "#7a1f1f",
+
+  paddingVertical: 18,
+
+  borderRadius: 22,
+
+  alignItems: "center",
+},
+
+logoutText: {
+  color: "#fff",
+
+  fontSize: 16,
+
+  fontWeight: "900",
+},
 });
