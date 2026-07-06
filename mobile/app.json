@@ -21,6 +21,7 @@
         "foregroundImage": "./assets/images/brekkie-logo.png",
         "backgroundColor": "#004225"
       },
+      "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.brekkie.club"

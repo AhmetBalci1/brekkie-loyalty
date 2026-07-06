@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "721995786082",
+    "project_id": "brekkie-f5961",
+    "storage_bucket": "brekkie-f5961.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721995786082:android:ba706af9895d6b12762e3b",
+        "android_client_info": {
+          "package_name": "com.brekkie.club"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmQj_z4yUv3mungtHFe-16_1bU-DV1vA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

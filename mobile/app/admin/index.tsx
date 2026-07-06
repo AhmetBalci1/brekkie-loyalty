@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
+
 import {
   useEffect,
   useState,
@@ -14,6 +15,8 @@ from "@react-native-async-storage/async-storage";
 
 import { router }
 from "expo-router";
+import KPICard from "../components/admin/KPICard";
+import QuickActionCard from "../components/admin/QuickActionCard";
 
 export default function AdminScreen() {
    const [authorized,
@@ -82,62 +85,55 @@ if (!authorized) {
       showsVerticalScrollIndicator={false}
     >
 
-      <Text style={styles.title}>
-        BREKKIE YÖNETİCİ
-      </Text>
+      <View style={styles.header}>
 
+  <View>
+
+    <Text style={styles.greeting}>
+      ☀️ Günaydın
+    </Text>
+
+    <Text style={styles.title}>
+      Brekkie Manager
+    </Text>
+
+    <Text style={styles.subtitle}>
+      Today is looking great.
+    </Text>
+
+  </View>
+
+  <View style={styles.logoContainer}>
+    <Text style={styles.logo}>🦝</Text>
+  </View>
+
+</View>
       <Text style={styles.subtitle}>
         Business Overview ☕
       </Text>
+<View style={styles.statsRow}>
+  <KPICard
+    value={analytics?.users || 0}
+    label="👥 Kullanıcılar"
+  />
 
-      <View style={styles.statsRow}>
+  <KPICard
+    value={analytics?.scans || 0}
+    label="☕ Scans"
+  />
+</View>
 
-        <View style={styles.statCard}>
-         <Text style={styles.statNumber}>
-            {analytics?.users || 0}
-        </Text>
+<View style={styles.statsRow}>
+  <KPICard
+    value={analytics?.rewards || 0}
+    label="🎁 Ödüller"
+  />
 
-          <Text style={styles.statLabel}>
-            👥Kullanıcılar
-          </Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            {analytics?.scans || 0}
-          </Text>
-
-          <Text style={styles.statLabel}>
-            ☕Scans
-          </Text>
-        </View>
-
-      </View>
-
-      <View style={styles.statsRow}>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            {analytics?.rewards || 0}
-          </Text>
-
-          <Text style={styles.statLabel}>
-           🎁 Ödüller
-          </Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            ₺{analytics?.revenue || 0}
-          </Text>
-
-          <Text style={styles.statLabel}>
-           💰 Hasılat
-          </Text>
-        </View>
-
-      </View>
-
+  <KPICard
+    value={`₺${analytics?.revenue || 0}`}
+    label="💰 Hasılat"
+  />
+</View>
       <View style={styles.activityCard}>
 
         <Text style={styles.activityTitle}>
@@ -162,7 +158,37 @@ if (!authorized) {
 
 </View>
         </Text>
+<Text style={styles.sectionTitle}>
+Quick Actions
+</Text>
 
+<View style={styles.quickGrid}>
+
+  <QuickActionCard
+    icon="🔔"
+    title="Bildirimler"
+    onPress={() => router.push("/admin/notifications")}
+  />
+
+  <QuickActionCard
+    icon="👥"
+    title="Kullanıcılar"
+    onPress={() => router.push("/admin/members")}
+  />
+
+  <QuickActionCard
+    icon="🎁"
+    title="Kampanyalar"
+    onPress={() => router.push("/admin/campaigns")}
+  />
+
+  <QuickActionCard
+    icon="⚙️"
+    title="Ayarlar"
+    onPress={() => router.push("/admin/settings")}
+  />
+
+</View>
       </View>
 
       <View style={styles.activityCard}>
@@ -250,49 +276,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  statCard: {
-    width: "48%",
-
-    backgroundColor: "#004225",
-
-    borderRadius: 28,
-
-    paddingVertical: 28,
-
-    alignItems: "center",
-
-    shadowColor: "#000",
-
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-
-    shadowOpacity: 0.2,
-
-    shadowRadius: 12,
-
-    elevation: 8,
-  },
-
-  statNumber: {
-    color: "#d4af37",
-
-    fontSize: 32,
-
-    fontWeight: "900",
-
-    marginBottom: 8,
-  },
-
-  statLabel: {
-    color: "#fff4e3",
-
-    fontSize: 15,
-
-    fontWeight: "600",
-  },
-
   activityCard: {
     backgroundColor: "#004225",
 
@@ -372,4 +355,73 @@ logoutText: {
 
   fontWeight: "900",
 },
+header:{
+
+flexDirection:"row",
+
+justifyContent:"space-between",
+
+alignItems:"center",
+
+marginTop:20,
+
+marginBottom:28,
+
+},
+
+greeting:{
+
+fontSize:16,
+
+color:"#7A7A7A",
+
+marginBottom:6,
+
+},
+
+logoContainer:{
+
+width:64,
+
+height:64,
+
+backgroundColor:"#004225",
+
+borderRadius:20,
+
+justifyContent:"center",
+
+alignItems:"center",
+
+},
+
+logo:{
+
+fontSize:34,
+
+},
+sectionTitle:{
+
+fontSize:22,
+
+fontWeight:"800",
+
+color:"#004225",
+
+marginTop:30,
+
+marginBottom:18,
+
+},
+
+quickGrid:{
+
+flexDirection:"row",
+
+flexWrap:"wrap",
+
+justifyContent:"space-between",
+
+},
+
 });

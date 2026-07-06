@@ -146,7 +146,7 @@ const [password, setPassword] =
   );
 
   router.replace(
-    "/staff/admin" as any
+    "/admin" as any
   );
 }}
       >

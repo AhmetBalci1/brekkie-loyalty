@@ -74,7 +74,8 @@ async function registerForPushNotificationsAsync() {
   }
 
   const projectId =
-    Constants.expoConfig?.extra?.eas?.projectId;
+  Constants.easConfig?.projectId ??
+  Constants.expoConfig?.extra?.eas?.projectId;
 
   const token =
     await Notifications.getExpoPushTokenAsync({
@@ -478,7 +479,7 @@ const loadUser = async () => {
 
 
   <Text style={styles.rewardTitle}>
-    🎁 Reward Balance
+    🎁 Hediyeniz
   </Text>
 
 
