@@ -1071,6 +1071,7 @@ console.log("settings table ready");
 
 })
 .catch(console.log);
+
 pool.query(`
 INSERT INTO settings
 (id)
@@ -1083,6 +1084,27 @@ SELECT 1 FROM settings
 
 )
 `)
+.catch(console.log);
+pool.query(`
+CREATE TABLE IF NOT EXISTS audit_logs (
+
+id SERIAL PRIMARY KEY,
+
+user_role TEXT NOT NULL,
+
+action TEXT NOT NULL,
+
+description TEXT NOT NULL,
+
+created_at TIMESTAMP DEFAULT NOW()
+
+)
+`)
+.then(()=>{
+
+console.log("audit_logs table ready");
+
+})
 .catch(console.log);
 app.post("/reset-password", async (req, res) => {
 
@@ -1528,7 +1550,46 @@ app.post("/staff-login", async (req, res) => {
   }
 
 });
+async function createAuditLog(
 
+role,
+action,
+description
+
+){
+
+try{
+
+await pool.query(
+
+`
+INSERT INTO audit_logs
+(
+user_role,
+action,
+description
+)
+
+VALUES
+
+($1,$2,$3)
+`,
+
+[
+role,
+action,
+description
+]
+
+);
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}
 app.listen(
   5000,
   "0.0.0.0",
