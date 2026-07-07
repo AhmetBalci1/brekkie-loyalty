@@ -431,11 +431,21 @@ app.post("/scan", async (req, res) => {
 
     let newFreeCoffee =
       user.free_coffee;
+const settingsResult =
+  await pool.query(
+    `
+    SELECT loyalty_target
+    FROM settings
+    LIMIT 1
+    `
+  );
 
+const loyaltyTarget =
+  settingsResult.rows[0].loyalty_target;
     let rewardEarned =
       false;
 
-    if (newCoffeeCount >= 10) {
+    if (newCoffeeCount >= loyaltyTarget) {
 
       newCoffeeCount = 0;
 
