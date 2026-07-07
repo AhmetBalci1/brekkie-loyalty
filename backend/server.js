@@ -1032,6 +1032,48 @@ pool.query(`
   console.log(err);
 
 });
+pool.query(`
+CREATE TABLE IF NOT EXISTS settings (
+
+id SERIAL PRIMARY KEY,
+
+business_name TEXT DEFAULT 'Brekkie',
+
+loyalty_target INTEGER DEFAULT 10,
+
+reward_type TEXT DEFAULT 'free_coffee',
+
+cashier_username TEXT DEFAULT 'Cashier',
+
+cashier_password TEXT DEFAULT '1234',
+
+admin_username TEXT DEFAULT 'Admin',
+
+admin_password TEXT DEFAULT '1234',
+
+updated_at TIMESTAMP DEFAULT NOW()
+
+)
+`)
+.then(()=>{
+
+console.log("settings table ready");
+
+})
+.catch(console.log);
+pool.query(`
+INSERT INTO settings
+(id)
+
+SELECT 1
+
+WHERE NOT EXISTS (
+
+SELECT 1 FROM settings
+
+)
+`)
+.catch(console.log);
 app.post("/reset-password", async (req, res) => {
 
   try {
@@ -1334,7 +1376,101 @@ app.post("/campaigns", async (req, res) => {
   }
 
 });
+app.get("/settings", async (req,res)=>{
 
+try{
+
+const result=await pool.query(
+
+"SELECT * FROM settings LIMIT 1"
+
+);
+
+res.json(result.rows[0]);
+
+}catch(err){
+
+console.log(err);
+
+res.status(500).json({
+error:"Settings alınamadı"
+});
+
+}
+
+});
+app.put("/settings", async (req,res)=>{
+
+try{
+
+const{
+
+business_name,
+loyalty_target,
+reward_type,
+cashier_username,
+cashier_password,
+admin_username,
+admin_password
+
+}=req.body;
+
+const result=
+await pool.query(
+
+`
+UPDATE settings
+
+SET
+
+business_name=$1,
+
+loyalty_target=$2,
+
+reward_type=$3,
+
+cashier_username=$4,
+
+cashier_password=$5,
+
+admin_username=$6,
+
+admin_password=$7,
+
+updated_at=NOW()
+
+WHERE id=1
+
+RETURNING *
+`,
+
+[
+business_name,
+loyalty_target,
+reward_type,
+cashier_username,
+cashier_password,
+admin_username,
+admin_password
+]
+
+);
+
+res.json(result.rows[0]);
+
+}catch(err){
+
+console.log(err);
+
+res.status(500).json({
+
+error:"Settings güncellenemedi"
+
+});
+
+}
+
+});
 
 app.listen(
   5000,
