@@ -908,6 +908,29 @@ app.get("/recent-scans", async (req, res) => {
       error: "Server error",
     });
   }
+  app.get("/campaigns", async (req, res) => {
+
+  try {
+
+    const result = await pool.query(`
+      SELECT *
+      FROM campaigns
+      ORDER BY created_at DESC
+    `);
+
+    res.json(result.rows);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      error: "Campaigns alınamadı",
+    });
+
+  }
+
+});
 });
 
 /* =========================
@@ -991,6 +1014,39 @@ pool.query(`
   console.log(
     "push_token column ready"
   );
+
+})
+.catch((err) => {
+
+  console.log(err);
+
+});
+pool.query(`
+  CREATE TABLE IF NOT EXISTS campaigns (
+
+    id SERIAL PRIMARY KEY,
+
+    title TEXT NOT NULL,
+
+    description TEXT,
+
+    campaign_type TEXT NOT NULL,
+
+    reward_type TEXT NOT NULL,
+
+    reward_value INTEGER DEFAULT 0,
+
+    trigger_value INTEGER DEFAULT 0,
+
+    is_active BOOLEAN DEFAULT true,
+
+    created_at TIMESTAMP DEFAULT NOW()
+
+  )
+`)
+.then(() => {
+
+  console.log("campaigns table ready");
 
 })
 .catch((err) => {
@@ -1166,6 +1222,112 @@ app.post("/notifications/test", async (req, res) => {
 
     res.status(500).json({
       error: "Bildirim gönderilemedi",
+    });
+
+  }
+
+});
+app.post("/notifications/send-all", async (req, res) => {
+
+  try {
+
+    const { title, body } = req.body;
+
+    const result = await pool.query(`
+      SELECT push_token
+      FROM users
+      WHERE push_token IS NOT NULL
+    `);
+
+    const messages = [];
+
+    for (const row of result.rows) {
+
+      if (!Expo.isExpoPushToken(row.push_token)) {
+        continue;
+      }
+
+      messages.push({
+        to: row.push_token,
+        sound: "default",
+        title,
+        body,
+      });
+
+    }
+
+    const chunks =
+      expo.chunkPushNotifications(messages);
+
+    for (const chunk of chunks) {
+      await expo.sendPushNotificationsAsync(chunk);
+    }
+
+    res.json({
+      success: true,
+      sent: messages.length,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Bildirim gönderilemedi",
+    });
+
+  }
+
+});
+app.post("/campaigns", async (req, res) => {
+
+  try {
+
+    const {
+      title,
+      description,
+      campaign_type,
+      reward_type,
+      reward_value,
+      trigger_value,
+    } = req.body;
+
+    const result =
+      await pool.query(
+        `
+        INSERT INTO campaigns
+        (
+          title,
+          description,
+          campaign_type,
+          reward_type,
+          reward_value,
+          trigger_value
+        )
+
+        VALUES
+        ($1,$2,$3,$4,$5,$6)
+
+        RETURNING *
+        `,
+        [
+          title,
+          description,
+          campaign_type,
+          reward_type,
+          reward_value,
+          trigger_value,
+        ]
+      );
+
+    res.json(result.rows[0]);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      error: "Campaign oluşturulamadı",
     });
 
   }
