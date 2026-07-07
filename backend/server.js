@@ -1043,6 +1043,69 @@ pool.query(`
 
 });
 pool.query(`
+CREATE TABLE IF NOT EXISTS staff_accounts (
+
+id SERIAL PRIMARY KEY,
+
+name TEXT NOT NULL,
+
+username TEXT UNIQUE NOT NULL,
+
+password TEXT NOT NULL,
+
+role TEXT NOT NULL DEFAULT 'cashier',
+
+active BOOLEAN DEFAULT TRUE,
+
+created_at TIMESTAMP DEFAULT NOW()
+
+)
+`)
+.then(()=>{
+
+console.log("staff_accounts table ready");
+
+})
+.catch(console.log);
+pool.query(`
+INSERT INTO staff_accounts
+(name, username, password, role)
+
+SELECT
+'Admin',
+'admin',
+'1234',
+'admin'
+
+WHERE NOT EXISTS (
+
+SELECT 1
+FROM staff_accounts
+WHERE username='admin'
+
+)
+`)
+.catch(console.log);
+pool.query(`
+INSERT INTO staff_accounts
+(name, username, password, role)
+
+SELECT
+'Kasiyer',
+'cashier',
+'1234',
+'cashier'
+
+WHERE NOT EXISTS (
+
+SELECT 1
+FROM staff_accounts
+WHERE username='cashier'
+
+)
+`)
+.catch(console.log);
+pool.query(`
 CREATE TABLE IF NOT EXISTS settings (
 
 id SERIAL PRIMARY KEY,
@@ -1314,7 +1377,11 @@ app.post("/notifications/send-all", async (req, res) => {
     for (const chunk of chunks) {
       await expo.sendPushNotificationsAsync(chunk);
     }
-
+await createAuditLog(
+  "admin",
+  "notification_send",
+  `${title} bildirimi gönderildi`
+);
     res.json({
       success: true,
       sent: messages.length,
@@ -1352,6 +1419,35 @@ app.post("/notifications/send-all", async (req, res) => {
     });
 
   }
+
+});
+app.get("/staff", async (req,res)=>{
+
+try{
+
+const result=await pool.query(
+`
+SELECT *
+
+FROM staff_accounts
+
+ORDER BY id
+`
+);
+
+res.json(result.rows);
+
+}catch(err){
+
+console.log(err);
+
+res.status(500).json({
+
+error:"Personeller alınamadı"
+
+});
+
+}
 
 });
 app.post("/campaigns", async (req, res) => {
@@ -1517,7 +1613,11 @@ admin_password
 ]
 
 );
-
+await createAuditLog(
+  "admin",
+  "settings_update",
+  "Sistem ayarları güncellendi"
+);
 res.json(result.rows[0]);
 
 }catch(err){
