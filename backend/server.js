@@ -1706,6 +1706,51 @@ error:"Settings güncellenemedi"
 }
 
 });
+app.patch("/staff/:id/status", async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `
+      UPDATE staff_accounts
+      SET active = NOT active
+      WHERE id = $1
+      RETURNING *
+      `,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Personel bulunamadı",
+      });
+    }
+
+    const staff = result.rows[0];
+
+    await createAuditLog(
+      "admin",
+      "staff_status",
+      `${staff.name} ${
+        staff.active ? "aktif edildi" : "pasif yapıldı"
+      }`
+    );
+
+    res.json(staff);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Durum güncellenemedi",
+    });
+
+  }
+
+});
 app.post("/staff-login", async (req, res) => {
 
   try {
