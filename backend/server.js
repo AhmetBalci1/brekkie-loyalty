@@ -1842,6 +1842,63 @@ console.log(err);
 }
 
 }
+app.put("/staff/:id", async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+    const {
+      name,
+      username,
+      password,
+    } = req.body;
+
+    const result = await pool.query(
+      `
+      UPDATE staff_accounts
+      SET
+        name = $1,
+        username = $2,
+        password = $3
+      WHERE id = $4
+      RETURNING *
+      `,
+      [
+        name,
+        username,
+        password,
+        id,
+      ]
+    );
+
+    if (result.rows.length === 0) {
+
+      return res.status(404).json({
+        error: "Personel bulunamadı",
+      });
+
+    }
+
+    await createAuditLog(
+      "admin",
+      "staff_update",
+      `${name} personeli güncellendi`
+    );
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Personel güncellenemedi",
+    });
+
+  }
+
+});
 app.listen(
   5000,
   "0.0.0.0",
