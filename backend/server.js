@@ -401,8 +401,11 @@ app.post("/scan", async (req, res) => {
 
   try {
 
-    const { qr_code } =
-      req.body;
+    const {
+  qr_code,
+  staffId,
+  staffName,
+} = req.body;
 
     const userResult =
       await pool.query(
