@@ -1395,7 +1395,13 @@ app.post("/campaigns", async (req, res) => {
         ]
       );
 
-    res.json(result.rows[0]);
+    await createAuditLog(
+  "admin",
+  "campaign_create",
+  `${title} kampanyası oluşturuldu`
+);
+
+res.json(result.rows[0]);
 
   } catch (error) {
 
@@ -1403,6 +1409,30 @@ app.post("/campaigns", async (req, res) => {
 
     res.status(500).json({
       error: "Campaign oluşturulamadı",
+    });
+
+  }
+
+});
+app.get("/audit-logs", async (req, res) => {
+
+  try {
+
+    const result = await pool.query(`
+      SELECT *
+      FROM audit_logs
+      ORDER BY created_at DESC
+      LIMIT 20
+    `);
+
+    res.json(result.rows);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Loglar alınamadı",
     });
 
   }
