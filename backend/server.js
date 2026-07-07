@@ -1481,6 +1481,53 @@ error:"Settings güncellenemedi"
 }
 
 });
+app.post("/staff-login", async (req, res) => {
+
+  try {
+
+    const {
+      username,
+      password,
+    } = req.body;
+
+    const result = await pool.query(
+      "SELECT * FROM settings LIMIT 1"
+    );
+
+    const settings = result.rows[0];
+
+    const isAdmin =
+      username === settings.admin_username &&
+      password === settings.admin_password;
+
+    const isCashier =
+      username === settings.cashier_username &&
+      password === settings.cashier_password;
+
+    if (!isAdmin && !isCashier) {
+
+      return res.status(401).json({
+        error: "Kullanıcı adı veya şifre yanlış",
+      });
+
+    }
+
+    res.json({
+      success: true,
+      role: isAdmin ? "admin" : "cashier",
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Login başarısız",
+    });
+
+  }
+
+});
 
 app.listen(
   5000,
