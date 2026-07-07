@@ -1706,36 +1706,40 @@ app.post("/staff-login", async (req, res) => {
 
   try {
 
-    const {
-      username,
-      password,
-    } = req.body;
+    const { username, password } = req.body;
 
     const result = await pool.query(
-      "SELECT * FROM settings LIMIT 1"
+      `
+      SELECT *
+      FROM staff_accounts
+      WHERE username = $1
+      AND password = $2
+      AND active = true
+      `,
+      [username, password]
     );
 
-    const settings = result.rows[0];
-
-    const isAdmin =
-      username === settings.admin_username &&
-      password === settings.admin_password;
-
-    const isCashier =
-      username === settings.cashier_username &&
-      password === settings.cashier_password;
-
-    if (!isAdmin && !isCashier) {
+    if (result.rows.length === 0) {
 
       return res.status(401).json({
-        error: "Kullanıcı adı veya şifre yanlış",
+        error: "Kullanıcı adı veya şifre yanlış"
       });
 
     }
 
+    const staff = result.rows[0];
+
+    await createAuditLog(
+      staff.role,
+      "staff_login",
+      `${staff.name} giriş yaptı`
+    );
+
     res.json({
       success: true,
-      role: isAdmin ? "admin" : "cashier",
+      id: staff.id,
+      name: staff.name,
+      role: staff.role,
     });
 
   } catch (err) {
