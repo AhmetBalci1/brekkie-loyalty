@@ -908,29 +908,7 @@ app.get("/recent-scans", async (req, res) => {
       error: "Server error",
     });
   }
-  app.get("/campaigns", async (req, res) => {
 
-  try {
-
-    const result = await pool.query(`
-      SELECT *
-      FROM campaigns
-      ORDER BY created_at DESC
-    `);
-
-    res.json(result.rows);
-
-  } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-      error: "Campaigns alınamadı",
-    });
-
-  }
-
-});
 });
 
 /* =========================
@@ -1274,6 +1252,29 @@ app.post("/notifications/send-all", async (req, res) => {
 
     res.status(500).json({
       error: "Bildirim gönderilemedi",
+    });
+
+  }
+
+});
+  app.get("/campaigns", async (req, res) => {
+
+  try {
+
+    const result = await pool.query(`
+      SELECT *
+      FROM campaigns
+      ORDER BY created_at DESC
+    `);
+
+    res.json(result.rows);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      error: "Campaigns alınamadı",
     });
 
   }
