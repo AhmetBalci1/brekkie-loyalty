@@ -1450,6 +1450,75 @@ error:"Personeller alınamadı"
 }
 
 });
+app.post("/staff", async (req, res) => {
+
+  try {
+
+    const {
+      name,
+      username,
+      password,
+      role,
+    } = req.body;
+
+    const existing = await pool.query(
+      `
+      SELECT id
+      FROM staff_accounts
+      WHERE username = $1
+      `,
+      [username]
+    );
+
+    if (existing.rows.length > 0) {
+
+      return res.status(400).json({
+        error: "Bu kullanıcı adı zaten kullanılıyor",
+      });
+
+    }
+
+    const result = await pool.query(
+      `
+      INSERT INTO staff_accounts
+      (
+        name,
+        username,
+        password,
+        role
+      )
+
+      VALUES ($1,$2,$3,$4)
+
+      RETURNING *
+      `,
+      [
+        name,
+        username,
+        password,
+        role,
+      ]
+    );
+
+    await createAuditLog(
+      "admin",
+      "staff_create",
+      `${name} personeli oluşturuldu`
+    );
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Personel oluşturulamadı",
+    });
+
+  }
+
+});
 app.post("/campaigns", async (req, res) => {
 
   try {
