@@ -583,9 +583,10 @@ app.post("/use-reward", async (req, res) => {
         [userId]
       );
 
-    res.json(
-      fullUserResult.rows[0]
-    );
+    res.json({
+  success: true,
+  user: fullUserResult.rows[0],
+});
 
   } catch (error) {
 
