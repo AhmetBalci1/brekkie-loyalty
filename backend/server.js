@@ -1427,10 +1427,14 @@ try{
 
 const result=await pool.query(
 `
-SELECT *
-
+SELECT
+  id,
+  name,
+  username,
+  role,
+  active,
+  created_at
 FROM staff_accounts
-
 ORDER BY id
 `
 );
@@ -1464,8 +1468,8 @@ app.post("/staff", async (req, res) => {
     const existing = await pool.query(
       `
       SELECT id
-      FROM staff_accounts
-      WHERE username = $1
+FROM staff_accounts
+WHERE LOWER(username) = LOWER($1)
       `,
       [username]
     );
@@ -1711,10 +1715,10 @@ app.post("/staff-login", async (req, res) => {
     const result = await pool.query(
       `
       SELECT *
-      FROM staff_accounts
-      WHERE username = $1
-      AND password = $2
-      AND active = true
+FROM staff_accounts
+WHERE LOWER(username) = LOWER($1)
+AND password = $2
+AND active = true
       `,
       [username, password]
     );
