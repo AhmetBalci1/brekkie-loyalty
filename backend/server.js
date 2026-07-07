@@ -396,7 +396,45 @@ app.post("/login", async (req, res) => {
 /* =========================
    SCAN QR
 ========================= */
+app.post("/customer-by-qr", async (req, res) => {
 
+  try {
+
+    const { qr_code } = req.body;
+
+    const result = await pool.query(
+      `
+      SELECT *
+      FROM users
+      WHERE qr_code = $1
+      `,
+      [qr_code]
+    );
+
+    if (result.rows.length === 0) {
+
+      return res.status(404).json({
+        error: "Kullanıcı bulunamadı",
+      });
+
+    }
+
+    res.json({
+      success: true,
+      user: result.rows[0],
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Kullanıcı getirilemedi",
+    });
+
+  }
+
+});
 app.post("/scan", async (req, res) => {
 
   try {
@@ -1402,6 +1440,7 @@ await createAuditLog(
   }
 
 });
+
   app.get("/campaigns", async (req, res) => {
 
   try {
