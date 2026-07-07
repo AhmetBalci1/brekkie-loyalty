@@ -439,22 +439,22 @@ app.post("/scan", async (req, res) => {
 
   try {
 
-    const {
-  qr_code,
+ const {
+  userId,
   staffId,
   staffName,
 } = req.body;
 
-    const userResult =
-      await pool.query(
-        `
-        SELECT *
-        FROM users
+  const userResult =
+  await pool.query(
+    `
+    SELECT *
+    FROM users
 
-        WHERE qr_code = $1
-        `,
-        [qr_code]
-      );
+    WHERE id = $1
+    `,
+    [userId]
+  );
 
     const user =
       userResult.rows[0];
