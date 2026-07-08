@@ -539,10 +539,10 @@ const loyaltyTarget =
         [user.id]
       );
 
-    res.json(
-      fullUserResult.rows[0]
-    );
-
+   res.json({
+  success: true,
+  user: fullUserResult.rows[0],
+});
   } catch (error) {
 
     console.log(
