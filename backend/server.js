@@ -1092,6 +1092,87 @@ pool.query(`
 
 });
 pool.query(`
+CREATE TABLE IF NOT EXISTS stores (
+
+id SERIAL PRIMARY KEY,
+
+name TEXT NOT NULL,
+
+address TEXT,
+
+latitude DOUBLE PRECISION NOT NULL,
+
+longitude DOUBLE PRECISION NOT NULL,
+
+radius INTEGER DEFAULT 250,
+
+is_active BOOLEAN DEFAULT TRUE,
+
+created_at TIMESTAMP DEFAULT NOW()
+
+)
+`)
+.then(()=>{
+
+console.log("stores table ready");
+
+})
+.catch(console.log);
+pool.query(`
+INSERT INTO stores
+(
+name,
+address,
+latitude,
+longitude,
+radius
+)
+
+SELECT
+'Brekkie Suadiye',
+'İstanbul',
+40.957812,
+29.082341,
+250
+
+WHERE NOT EXISTS (
+
+SELECT 1
+FROM stores
+
+)
+`)
+.catch(console.log);
+app.get("/stores", async (req,res)=>{
+
+try{
+
+const result=await pool.query(
+`
+SELECT *
+FROM stores
+WHERE is_active=true
+ORDER BY id
+`
+);
+
+res.json({
+success:true,
+stores:result.rows
+});
+
+}catch(err){
+
+console.log(err);
+
+res.status(500).json({
+error:"Stores alınamadı"
+});
+
+}
+
+});
+pool.query(`
 CREATE TABLE IF NOT EXISTS staff_accounts (
 
 id SERIAL PRIMARY KEY,
