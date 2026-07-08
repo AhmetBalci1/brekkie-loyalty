@@ -1,6 +1,9 @@
+
 require("dotenv").config();
 const { Expo } = require("expo-server-sdk");
-
+const {
+  createAuditLog,
+} = require("./services/auditService");
 const expo = new Expo();
 const SibApiV3Sdk= require("sib-api-v3-sdk");
 const crypto = require("crypto");
@@ -1845,46 +1848,7 @@ AND active = true
   }
 
 });
-async function createAuditLog(
 
-role,
-action,
-description
-
-){
-
-try{
-
-await pool.query(
-
-`
-INSERT INTO audit_logs
-(
-user_role,
-action,
-description
-)
-
-VALUES
-
-($1,$2,$3)
-`,
-
-[
-role,
-action,
-description
-]
-
-);
-
-}catch(err){
-
-console.log(err);
-
-}
-
-}
 app.put("/staff/:id", async (req, res) => {
 
   try {
