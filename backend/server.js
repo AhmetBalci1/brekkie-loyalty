@@ -1710,6 +1710,44 @@ app.get("/audit-logs", async (req, res) => {
   }
 
 });
+/* =========================
+   STORES
+========================= */
+
+app.get("/stores", async (req, res) => {
+
+  try {
+
+    const result = await pool.query(`
+      SELECT
+        id,
+        name,
+        address,
+        latitude,
+        longitude,
+        radius
+      FROM stores
+      WHERE is_active = true
+      ORDER BY id
+    `);
+
+    res.json({
+      success: true,
+      stores: result.rows,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      error: "Şubeler alınamadı",
+    });
+
+  }
+
+});
 app.get("/settings", async (req,res)=>{
 
 try{
