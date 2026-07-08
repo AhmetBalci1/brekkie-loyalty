@@ -4,6 +4,10 @@ const { Expo } = require("expo-server-sdk");
 const {
   createAuditLog,
 } = require("./services/auditService");
+const {
+  sendNotification,
+  sendToMany,
+} = require("./services/notificationService");
 const expo = new Expo();
 const SibApiV3Sdk= require("sib-api-v3-sdk");
 const crypto = require("crypto");
@@ -1352,26 +1356,14 @@ app.post("/notifications/test", async (req, res) => {
         error: "Geçersiz Push Token",
       });
     }
-
-    const messages = [
-      {
-        to: pushToken,
-        sound: "default",
-        title: "☕ Brekkie",
-        body: "Tebrikler! İlk Push Notification başarıyla çalıştı. 🎉",
-        data: {
-          screen: "home",
-        },
-      },
-    ];
-
-    const chunks =
-      expo.chunkPushNotifications(messages);
-
-    for (const chunk of chunks) {
-      await expo.sendPushNotificationsAsync(chunk);
-    }
-
+await sendNotification(
+  pushToken,
+  "☕ Brekkie",
+  "Tebrikler! İlk Push Notification başarıyla çalıştı. 🎉",
+  {
+    screen: "home",
+  }
+);
     res.json({
       success: true,
     });
@@ -1399,29 +1391,13 @@ app.post("/notifications/send-all", async (req, res) => {
       WHERE push_token IS NOT NULL
     `);
 
-    const messages = [];
-
-    for (const row of result.rows) {
-
-      if (!Expo.isExpoPushToken(row.push_token)) {
-        continue;
-      }
-
-      messages.push({
-        to: row.push_token,
-        sound: "default",
-        title,
-        body,
-      });
-
-    }
-
-    const chunks =
-      expo.chunkPushNotifications(messages);
-
-    for (const chunk of chunks) {
-      await expo.sendPushNotificationsAsync(chunk);
-    }
+    await sendToMany(
+  result.rows.map(
+    row => row.push_token
+  ),
+  title,
+  body
+);
 await createAuditLog(
   "admin",
   "notification_send",
