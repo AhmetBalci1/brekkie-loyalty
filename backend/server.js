@@ -2090,6 +2090,44 @@ app.put("/stores/:id", async (req, res) => {
   }
 
 });
+app.delete("/stores/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `
+      DELETE FROM stores
+      WHERE id = $1
+      RETURNING *
+      `,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Şube bulunamadı",
+      });
+    }
+
+    await createAuditLog(
+      "admin",
+      "store_delete",
+      `${result.rows[0].name} şubesi silindi`
+    );
+
+    res.json({
+      success: true,
+      message: "Şube başarıyla silindi.",
+    });
+
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      error: "Şube silinemedi.",
+    });
+  }
+});
 app.listen(
   5000,
   "0.0.0.0",
