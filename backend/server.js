@@ -2015,6 +2015,8 @@ app.put("/staff/:id", async (req, res) => {
     });
 
   }
+
+});
 app.put("/stores/:id", async (req, res) => {
 
   try {
@@ -2080,7 +2082,6 @@ app.put("/stores/:id", async (req, res) => {
 
   }
 
-});
 });
 app.listen(
   5000,
