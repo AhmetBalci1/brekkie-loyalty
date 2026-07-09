@@ -2090,6 +2090,61 @@ app.put("/stores/:id", async (req, res) => {
   }
 
 });
+app.post("/stores", async (req, res) => {
+  try {
+    const {
+      name,
+      address,
+      latitude,
+      longitude,
+      radius,
+      is_active,
+    } = req.body;
+
+    const result = await pool.query(
+      `
+      INSERT INTO stores
+      (
+        name,
+        address,
+        latitude,
+        longitude,
+        radius,
+        is_active
+      )
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *
+      `,
+      [
+        name,
+        address,
+        latitude,
+        longitude,
+        radius,
+        is_active,
+      ]
+    );
+
+    await createAuditLog(
+      "admin",
+      "store_create",
+      `${name} şubesi oluşturuldu`
+    );
+
+    res.status(201).json({
+      success: true,
+      store: result.rows[0],
+    });
+
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      error: "Şube oluşturulamadı",
+    });
+  }
+});
 app.delete("/stores/:id", async (req, res) => {
   try {
     const { id } = req.params;
