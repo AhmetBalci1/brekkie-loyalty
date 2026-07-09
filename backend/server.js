@@ -1129,10 +1129,10 @@ radius
 )
 
 SELECT
-'Brekkie Suadiye',
-'İstanbul',
-40.957812,
-29.082341,
+'Brekkie Moda',
+'Kadıköy / İstanbul',
+40.98621240712826,
+29.033098618225903,
 250
 
 WHERE NOT EXISTS (
@@ -1142,6 +1142,21 @@ FROM stores
 
 )
 `)
+.catch(console.log);
+pool.query(`
+UPDATE stores
+SET
+  name = 'Brekkie Moda',
+  address = 'Kadıköy / İstanbul',
+  latitude = 40.98621240712826,
+  longitude = 29.033098618225903
+WHERE id = 1
+`)
+.then(() => {
+
+  console.log("Store updated");
+
+})
 .catch(console.log);
 app.get("/stores", async (req,res)=>{
 
@@ -1748,6 +1763,7 @@ app.get("/stores", async (req, res) => {
   }
 
 });
+
 app.get("/settings", async (req,res)=>{
 
 try{
@@ -1999,7 +2015,72 @@ app.put("/staff/:id", async (req, res) => {
     });
 
   }
+app.put("/stores/:id", async (req, res) => {
 
+  try {
+
+    const { id } = req.params;
+
+    const {
+      name,
+      address,
+      latitude,
+      longitude,
+      radius,
+      is_active,
+    } = req.body;
+
+    const result = await pool.query(
+      `
+      UPDATE stores
+
+      SET
+        name = $1,
+        address = $2,
+        latitude = $3,
+        longitude = $4,
+        radius = $5,
+        is_active = $6
+
+      WHERE id = $7
+
+      RETURNING *
+      `,
+      [
+        name,
+        address,
+        latitude,
+        longitude,
+        radius,
+        is_active,
+        id,
+      ]
+    );
+
+    if (result.rows.length === 0) {
+
+      return res.status(404).json({
+        error: "Şube bulunamadı",
+      });
+
+    }
+
+    res.json({
+      success: true,
+      store: result.rows[0],
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Şube güncellenemedi",
+    });
+
+  }
+
+});
 });
 app.listen(
   5000,
