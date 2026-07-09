@@ -15,11 +15,18 @@ const express = require("express");
 const pool = require("./config/db");
 const QRCode = require("qrcode");
 const bcrypt = require("bcrypt");
-
+const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
 const app = express();
-
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
