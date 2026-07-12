@@ -1761,6 +1761,25 @@ app.put("/campaigns/:id", async (req, res) => {
     });
   }
 });
+app.get("/campaigns/mobile", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT *
+      FROM campaigns
+      WHERE is_active = true
+      ORDER BY created_at DESC
+    `);
+
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Kampanyalar getirilemedi.",
+    });
+  }
+});
 app.get("/audit-logs", async (req, res) => {
 
   try {
