@@ -1708,6 +1708,59 @@ res.json(result.rows[0]);
   }
 
 });
+app.put("/campaigns/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      title,
+      description,
+      campaign_type,
+      reward_type,
+      reward_value,
+      trigger_value,
+      is_active,
+    } = req.body;
+
+    const result = await pool.query(
+      `
+      UPDATE campaigns
+      SET
+        title = $1,
+        description = $2,
+        campaign_type = $3,
+        reward_type = $4,
+        reward_value = $5,
+        trigger_value = $6,
+        is_active = $7
+      WHERE id = $8
+      RETURNING *;
+      `,
+      [
+        title,
+        description,
+        campaign_type,
+        reward_type,
+        reward_value,
+        trigger_value,
+        is_active,
+        id,
+      ]
+    );
+
+    res.json({
+      success: true,
+      campaign: result.rows[0],
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Kampanya güncellenemedi.",
+    });
+  }
+});
 app.get("/audit-logs", async (req, res) => {
 
   try {
