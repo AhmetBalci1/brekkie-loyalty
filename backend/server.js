@@ -1761,6 +1761,40 @@ app.put("/campaigns/:id", async (req, res) => {
     });
   }
 });
+app.delete("/campaigns/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      "DELETE FROM campaigns WHERE id = $1 RETURNING *",
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        error: "Kampanya bulunamadı.",
+      });
+    }
+
+    await createAuditLog(
+      "admin",
+      "campaign_delete",
+      `Kampanya silindi: ${result.rows[0].title}`
+    );
+
+    res.json({
+      success: true,
+      campaign: result.rows[0],
+    });
+
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      error: "Kampanya silinemedi.",
+    });
+  }
+});
 app.get("/campaigns/mobile", async (req, res) => {
   try {
     const result = await pool.query(`
@@ -1870,17 +1904,16 @@ app.put("/settings", async (req,res)=>{
 
 try{
 
-const{
-
-business_name,
-loyalty_target,
-reward_type,
-cashier_username,
-cashier_password,
-admin_username,
-admin_password
-
-}=req.body;
+const {
+  business_name,
+  loyalty_target,
+  reward_type,
+  admin_username,
+  admin_password,
+  push_notifications,
+  campaign_notifications,
+  geofence_notifications,
+} = req.body;
 
 const result=
 await pool.query(
@@ -1889,21 +1922,14 @@ await pool.query(
 UPDATE settings
 
 SET
-
 business_name=$1,
-
 loyalty_target=$2,
-
 reward_type=$3,
-
-cashier_username=$4,
-
-cashier_password=$5,
-
-admin_username=$6,
-
-admin_password=$7,
-
+admin_username=$4,
+admin_password=$5,
+push_notifications=$6,
+campaign_notifications=$7,
+geofence_notifications=$8,
 updated_at=NOW()
 
 WHERE id=1
@@ -1912,13 +1938,14 @@ RETURNING *
 `,
 
 [
-business_name,
-loyalty_target,
-reward_type,
-cashier_username,
-cashier_password,
-admin_username,
-admin_password
+  business_name,
+  loyalty_target,
+  reward_type,
+  admin_username,
+  admin_password,
+  push_notifications,
+  campaign_notifications,
+  geofence_notifications,
 ]
 
 );
