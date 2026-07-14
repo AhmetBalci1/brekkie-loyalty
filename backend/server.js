@@ -1606,7 +1606,7 @@ WHERE LOWER(username) = LOWER($1)
       });
 
     }
-
+const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
       `
       INSERT INTO staff_accounts
@@ -1624,7 +1624,7 @@ WHERE LOWER(username) = LOWER($1)
       [
         name,
         username,
-        password,
+        hashedPassword,
         role,
       ]
     );
@@ -2021,15 +2021,14 @@ app.post("/staff-login", async (req, res) => {
     const { username, password } = req.body;
 
     const result = await pool.query(
-      `
-      SELECT *
+`
+SELECT *
 FROM staff_accounts
-WHERE LOWER(username) = LOWER($1)
-AND password = $2
+WHERE LOWER(username)=LOWER($1)
 AND active = true
-      `,
-      [username, password]
-    );
+`,
+[username]
+);
 
     if (result.rows.length === 0) {
 
@@ -2040,6 +2039,19 @@ AND active = true
     }
 
     const staff = result.rows[0];
+    const validPassword =
+  await bcrypt.compare(
+    password,
+    staff.password
+  );
+
+if (!validPassword) {
+
+  return res.status(401).json({
+    error:"Kullanıcı adı veya şifre yanlış"
+  });
+
+}
 
     await createAuditLog(
       staff.role,
@@ -2079,7 +2091,9 @@ app.put("/staff/:id", async (req, res) => {
     let result;
 
     if (password && password.trim() !== "") {
-
+      
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
       result = await pool.query(
         `
         UPDATE staff_accounts
@@ -2093,7 +2107,7 @@ app.put("/staff/:id", async (req, res) => {
         [
           name,
           username,
-          password,
+          hashedPassword,
           id,
         ]
       );
