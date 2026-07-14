@@ -2315,6 +2315,59 @@ app.delete("/stores/:id", async (req, res) => {
     });
   }
 });
+app.post("/seed-admin", async (req, res) => {
+  try {
+    const existing = await pool.query(
+      "SELECT id FROM staff_accounts WHERE LOWER(username)=LOWER($1)",
+      ["admin"]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.json({
+        success: false,
+        message: "Admin zaten mevcut.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash("123456", 10);
+
+    const result = await pool.query(
+      `
+      INSERT INTO staff_accounts
+      (
+        name,
+        username,
+        password,
+        role,
+        active
+      )
+      VALUES ($1,$2,$3,$4,$5)
+      RETURNING id,name,username,role,active
+      `,
+      [
+        "Admin",
+        "admin",
+        hashedPassword,
+        "admin",
+        true,
+      ]
+    );
+
+    res.json({
+      success: true,
+      admin: result.rows[0],
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Admin oluşturulamadı.",
+    });
+
+  }
+});
 app.listen(
   5000,
   "0.0.0.0",
