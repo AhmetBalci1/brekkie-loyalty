@@ -2323,11 +2323,29 @@ app.post("/seed-admin", async (req, res) => {
     );
 
     if (existing.rows.length > 0) {
-      return res.json({
-        success: false,
-        message: "Admin zaten mevcut.",
-      });
-    }
+
+  const hashedPassword = await bcrypt.hash("123456", 10);
+
+  await pool.query(
+    `
+    UPDATE staff_accounts
+    SET
+      password = $1,
+      active = true
+    WHERE LOWER(username)=LOWER($2)
+    `,
+    [
+      hashedPassword,
+      "admin",
+    ]
+  );
+
+  return res.json({
+    success: true,
+    message: "Admin şifresi güncellendi.",
+  });
+
+}
 
     const hashedPassword = await bcrypt.hash("123456", 10);
 
