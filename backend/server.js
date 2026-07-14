@@ -2067,9 +2067,7 @@ AND active = true
 });
 
 app.put("/staff/:id", async (req, res) => {
-
   try {
-
     const { id } = req.params;
 
     const {
@@ -2078,30 +2076,52 @@ app.put("/staff/:id", async (req, res) => {
       password,
     } = req.body;
 
-    const result = await pool.query(
-      `
-      UPDATE staff_accounts
-      SET
-        name = $1,
-        username = $2,
-        password = $3
-      WHERE id = $4
-      RETURNING *
-      `,
-      [
-        name,
-        username,
-        password,
-        id,
-      ]
-    );
+    let result;
+
+    if (password && password.trim() !== "") {
+
+      result = await pool.query(
+        `
+        UPDATE staff_accounts
+        SET
+          name = $1,
+          username = $2,
+          password = $3
+        WHERE id = $4
+        RETURNING *
+        `,
+        [
+          name,
+          username,
+          password,
+          id,
+        ]
+      );
+
+    } else {
+
+      result = await pool.query(
+        `
+        UPDATE staff_accounts
+        SET
+          name = $1,
+          username = $2
+        WHERE id = $3
+        RETURNING *
+        `,
+        [
+          name,
+          username,
+          id,
+        ]
+      );
+
+    }
 
     if (result.rows.length === 0) {
-
       return res.status(404).json({
         error: "Personel bulunamadı",
       });
-
     }
 
     await createAuditLog(
@@ -2121,7 +2141,6 @@ app.put("/staff/:id", async (req, res) => {
     });
 
   }
-
 });
 app.put("/stores/:id", async (req, res) => {
 
