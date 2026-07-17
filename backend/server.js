@@ -2325,6 +2325,70 @@ app.delete("/stores/:id", async (req, res) => {
     });
   }
 });
+app.delete("/staff/:id", async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+    // Personeli bul
+    const staffResult = await pool.query(
+      `
+      SELECT *
+      FROM staff_accounts
+      WHERE id = $1
+      `,
+      [id]
+    );
+
+    if (staffResult.rows.length === 0) {
+
+      return res.status(404).json({
+        error: "Personel bulunamadı",
+      });
+
+    }
+
+    const staff = staffResult.rows[0];
+
+    // Admin hesabı silinemesin
+    if (staff.role === "admin") {
+
+      return res.status(400).json({
+        error: "Admin hesabı silinemez.",
+      });
+
+    }
+
+    await pool.query(
+      `
+      DELETE FROM staff_accounts
+      WHERE id = $1
+      `,
+      [id]
+    );
+
+    await createAuditLog(
+      "admin",
+      "staff_delete",
+      `${staff.name} personeli silindi`
+    );
+
+    res.json({
+      success: true,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Personel silinemedi",
+    });
+
+  }
+
+});
 app.post("/seed-admin", async (req, res) => {
   try {
     const existing = await pool.query(
