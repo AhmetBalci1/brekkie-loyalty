@@ -92,29 +92,80 @@ const [password, setPassword] =
       <TouchableOpacity
         style={styles.button}
 
-   onPress={async () => {
+onPress={async () => {
 
-  if (
-    username !== "Cashier" ||
-    password !== "1234"
-  ) {
+  try {
+
+    const response = await fetch(
+      "https://brekkie-api.onrender.com/staff-login",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+
+      Alert.alert(
+        "Hata",
+        data.error
+      );
+
+      return;
+
+    }
+
+    if (data.role !== "cashier") {
+
+      Alert.alert(
+        "Hata",
+        "Kasiyer hesabı ile giriş yapınız."
+      );
+
+      return;
+
+    }
+
+   await AsyncStorage.setItem("staff", "true");
+
+await AsyncStorage.setItem(
+  "staffId",
+  data.id.toString()
+);
+
+await AsyncStorage.setItem(
+  "staffName",
+  data.name
+);
+
+await AsyncStorage.setItem(
+  "staffRole",
+  data.role
+);
+
+router.replace(
+  "/staff/cashier" as any
+);
+  } catch {
 
     Alert.alert(
       "Hata",
-      "Bilgiler yanlış"
+      "Sunucuya bağlanılamadı."
     );
 
-    return;
   }
 
-  await AsyncStorage.setItem(
-    "staff",
-    "true"
-  );
-
-  router.replace(
-    "/staff/cashier" as any
-  );
 }}
       >
         <Text style={styles.buttonText}>
@@ -127,27 +178,79 @@ const [password, setPassword] =
 
  onPress={async () => {
 
-  if (
-    username !== "Admin" ||
-    password !== "1234"
-  ) {
+  try {
+
+    const response = await fetch(
+      "https://brekkie-api.onrender.com/staff-login",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+
+      Alert.alert(
+        "Hata",
+        data.error
+      );
+
+      return;
+
+    }
+
+    if (data.role !== "admin") {
+
+      Alert.alert(
+        "Hata",
+        "Admin hesabı ile giriş yapınız."
+      );
+
+      return;
+
+    }
+
+    await AsyncStorage.setItem("staff", "true");
+
+await AsyncStorage.setItem(
+  "staffId",
+  data.id.toString()
+);
+
+await AsyncStorage.setItem(
+  "staffName",
+  data.name
+);
+
+await AsyncStorage.setItem(
+  "staffRole",
+  data.role
+);
+
+router.replace(
+  "/admin" as any
+);
+
+  } catch {
 
     Alert.alert(
       "Hata",
-      "Bilgiler yanlış"
+      "Sunucuya bağlanılamadı."
     );
 
-    return;
   }
 
-  await AsyncStorage.setItem(
-    "staff",
-    "true"
-  );
-
-  router.replace(
-    "/admin" as any
-  );
 }}
       >
         <Text style={styles.buttonText}>

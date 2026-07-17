@@ -17,6 +17,9 @@ import { router }
 from "expo-router";
 import KPICard from "../components/admin/KPICard";
 import QuickActionCard from "../components/admin/QuickActionCard";
+import DashboardHeader from "../components/admin/DashboardHeader";
+import RecentActivity from "../components/admin/RecentActivity";
+import AuditLog from "../components/admin/AuditLog";
 
 export default function AdminScreen() {
    const [authorized,
@@ -84,30 +87,7 @@ if (!authorized) {
       }}
       showsVerticalScrollIndicator={false}
     >
-
-      <View style={styles.header}>
-
-  <View>
-
-    <Text style={styles.greeting}>
-      ☀️ Günaydın
-    </Text>
-
-    <Text style={styles.title}>
-      Brekkie Manager
-    </Text>
-
-    <Text style={styles.subtitle}>
-      Today is looking great.
-    </Text>
-
-  </View>
-
-  <View style={styles.logoContainer}>
-    <Text style={styles.logo}>🦝</Text>
-  </View>
-
-</View>
+      <DashboardHeader />
       <Text style={styles.subtitle}>
         Business Overview ☕
       </Text>
@@ -187,41 +167,25 @@ Quick Actions
     title="Ayarlar"
     onPress={() => router.push("/admin/settings")}
   />
-
+<QuickActionCard
+  icon="👨‍🍳"
+  title="Personeller"
+  onPress={() => router.push("/admin/staff")}
+/>
 </View>
       </View>
-
-      <View style={styles.activityCard}>
-
-        <Text style={styles.activityTitle}>
-          BUGÜNÜN AKTİVİTELERİ
-        </Text>
-<Text style={styles.activityText}>
-  ☕ Günlük Taratılan Qr:
-  {analytics?.todayActivity?.scans || 0}
-</Text>
-
-
-
-<Text style={styles.activityText}>
-  🎁 Günlük Verilen Ödüller:
-  {analytics?.todayActivity?.rewards || 0}
-</Text>
-
-
-
-<Text style={styles.activityText}>
-  👥 Günlük Yeni Kullanıcı:
-  {analytics?.todayActivity?.users || 0}
-</Text>
-      </View>
+<RecentActivity />
+<AuditLog />
       <TouchableOpacity
   style={styles.logoutButton}
   onPress={async () => {
 
-    await AsyncStorage.removeItem(
-      "staff"
-    );
+  await AsyncStorage.multiRemove([
+  "staff",
+  "staffId",
+  "staffName",
+  "staffRole",
+]);
 
     router.replace(
       "/staff-login" as any
@@ -244,18 +208,6 @@ const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: "#e9dfcf",
-  },
-
-  title: {
-    color: "#004225",
-
-    fontSize: 34,
-
-    fontWeight: "900",
-
-    letterSpacing: 2,
-
-    marginTop: 20,
   },
 
   subtitle: {
@@ -355,51 +307,7 @@ logoutText: {
 
   fontWeight: "900",
 },
-header:{
 
-flexDirection:"row",
-
-justifyContent:"space-between",
-
-alignItems:"center",
-
-marginTop:20,
-
-marginBottom:28,
-
-},
-
-greeting:{
-
-fontSize:16,
-
-color:"#7A7A7A",
-
-marginBottom:6,
-
-},
-
-logoContainer:{
-
-width:64,
-
-height:64,
-
-backgroundColor:"#004225",
-
-borderRadius:20,
-
-justifyContent:"center",
-
-alignItems:"center",
-
-},
-
-logo:{
-
-fontSize:34,
-
-},
 sectionTitle:{
 
 fontSize:22,

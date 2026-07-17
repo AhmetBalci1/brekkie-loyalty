@@ -15,16 +15,14 @@ import {
   ImageBackground,
   RefreshControl,
 } from "react-native";
-import * as Device from "expo-device";
-
 import * as Notifications from "expo-notifications";
-
-import Constants from "expo-constants";
-
+import { registerForPushNotifications } from "../../services/notificationService";
+import "../../tasks/geofenceTask";
+import {
+  initializeLocation,
+} from "../../services/locationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import QRCode from "react-native-qrcode-svg";
-
 import { router } from "expo-router";
 Notifications.setNotificationHandler({
 
@@ -41,93 +39,13 @@ Notifications.setNotificationHandler({
   }),
 
 });
-async function registerForPushNotificationsAsync() {
 
-  if (!Device.isDevice) {
-
-    alert("Gerçek bir cihaz kullanmalısın.");
-
-    return null;
-
-  }
-
-  const { status: existingStatus } =
-    await Notifications.getPermissionsAsync();
-
-  let finalStatus = existingStatus;
-
-  if (existingStatus !== "granted") {
-
-    const { status } =
-      await Notifications.requestPermissionsAsync();
-
-    finalStatus = status;
-
-  }
-
-  if (finalStatus !== "granted") {
-
-    alert("Bildirim izni verilmedi.");
-
-    return null;
-
-  }
-
-  const projectId =
-  Constants.easConfig?.projectId ??
-  Constants.expoConfig?.extra?.eas?.projectId;
-
-  const token =
-    await Notifications.getExpoPushTokenAsync({
-
-      projectId,
-
-    });
-
-  console.log("Push Token:", token.data);
-  const savedUser =
-  await AsyncStorage.getItem("user");
-
-if (savedUser) {
-
-  const user =
-    JSON.parse(savedUser);
-
-  await fetch(
-    "https://brekkie-api.onrender.com/users/push-token",
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-
-      body: JSON.stringify({
-
-        userId: user.id,
-
-        pushToken: token.data,
-
-      }),
-
-    }
-  );
-
-  console.log(
-    "✅ Push Token kaydedildi."
-  );
-
-}
-
-  return token.data;
-
-}
 
 export default function HomeScreen() {
 
   const [user, setUser] =
     useState<any>(null);
+    const [campaigns, setCampaigns] = useState<any[]>([]);
     const [loading, setLoading] =
   useState(true);
 
@@ -136,13 +54,34 @@ setRefreshing] =
 useState(false);
 useEffect(() => {
 
-  registerForPushNotificationsAsync();
+  registerForPushNotifications();
+
+  initializeLocation();
+
+  loadCampaigns();
 
 }, []);
+ const loadCampaigns = async () => {
+  try {
+    const response = await fetch(
+  "https://brekkie-api.onrender.com/campaigns/mobile"
+);
+
+    const data = await response.json();
+
+    console.log("Campaigns:", data);
+
+    setCampaigns(data);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
 const loadUser = async () => {
   
 
   try {
+   
 
     const savedUser =
       await AsyncStorage.getItem(
@@ -187,6 +126,7 @@ const loadUser = async () => {
       "user",
       JSON.stringify(freshUser)
     );
+    
 
   } catch (error) {
 
@@ -199,11 +139,13 @@ const loadUser = async () => {
   useCallback(() => {
 
     loadUser();
+    loadCampaigns;
       
     
   
 
   }, [])
+  
 );
   const onRefresh =
        async () => {
@@ -383,7 +325,7 @@ const loadUser = async () => {
  
 
         <Text style={styles.welcome}>
-          Hoş geldin, {user.name} ☕
+          Hoş geldin, {user.name} 
         </Text>
          <Text style={styles.totalCoffeeText}>
       ☕ Toplam Kahve:
@@ -460,9 +402,11 @@ const loadUser = async () => {
   <QRCode
     value={user.qr_code}
     size={180}
+    
   />
 
 )}
+
         </View>
 
        <Text style={styles.qrCodeText}>
@@ -473,7 +417,42 @@ const loadUser = async () => {
   Her kahvede puan kazanın ☕
 </Text>
 
+<View style={styles.campaignSection}>
 
+  <Text style={styles.campaignTitle}>
+    🎉 Güncel Kampanyalar
+  </Text>
+
+  {campaigns.length === 0 ? (
+
+    <Text style={styles.emptyCampaign}>
+      Şu anda aktif kampanya bulunmuyor.
+    </Text>
+
+  ) : (
+
+    campaigns.map((campaign) => (
+
+      <View
+        key={campaign.id}
+        style={styles.campaignCard}
+      >
+
+        <Text style={styles.campaignCardTitle}>
+          {campaign.title}
+        </Text>
+
+        <Text style={styles.campaignDescription}>
+          {campaign.description}
+        </Text>
+
+      </View>
+
+    ))
+
+  )}
+
+</View>
         
   <View style={styles.rewardCard}>
 
@@ -1104,5 +1083,42 @@ qrInfo: {
   marginBottom: 20,
   fontSize: 14,
   lineHeight: 22,
+},
+campaignSection: {
+  width: "100%",
+  marginBottom: 22,
+},
+
+campaignTitle: {
+  color: "#fff4e3",
+  fontSize: 20,
+  fontWeight: "800",
+  marginBottom: 14,
+},
+
+campaignCard: {
+  backgroundColor: "rgba(255,255,255,0.08)",
+  borderRadius: 20,
+  padding: 16,
+  marginBottom: 12,
+  borderWidth: 1,
+  borderColor: "rgba(212,175,55,0.20)",
+},
+
+campaignCardTitle: {
+  color: "#d4af37",
+  fontSize: 18,
+  fontWeight: "700",
+},
+
+campaignDescription: {
+  color: "#fff4e3",
+  marginTop: 6,
+  lineHeight: 20,
+},
+
+emptyCampaign: {
+  color: "#fff4e3",
+  opacity: 0.7,
 },
 });

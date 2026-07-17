@@ -31,22 +31,6 @@ export default function ScannerScreen() {
 
   const [scanned, setScanned] =
     useState(false);
-
-  const [successVisible, setSuccessVisible] =
-    useState(false);
-
-  const [rewardVisible, setRewardVisible] =
-    useState(false);
-
-  const [coffeeCount, setCoffeeCount] =
-    useState(0);
-
-  const [customerName, setCustomerName] =
-    useState("");
-
-  const [customerLevel, setCustomerLevel] =
-    useState("");
-
   const scanLineAnimation =
     useState(
       new Animated.Value(0)
@@ -103,10 +87,16 @@ if (!scannedCode) {
   scannedCode
 );
 console.log("FETCH START");
-      const response =
+const staffId =
+  await AsyncStorage.getItem("staffId");
+
+const staffName =
+  await AsyncStorage.getItem("staffName");      
+const response =
+
       
         await fetch(
-          "https://brekkie-api.onrender.com/scan",
+  "https://brekkie-api.onrender.com/customer-by-qr",
           {
             method: "POST",
 
@@ -115,15 +105,18 @@ console.log("FETCH START");
                 "application/json",
             },
 
-            body: JSON.stringify({
-              qr_code: data,
-            }),
+          body: JSON.stringify({
+  qr_code: data,
+  staffId,
+  staffName,
+}),
           }
         );
         console.log("FETCH END");
 
-      const result =
-        await response.json();
+      const result = await response.json();
+
+console.log("RESULT:", result);
 
       if (result.error) {
 
@@ -136,155 +129,56 @@ console.log("FETCH START");
         return;
       }
 
-     const updatedUser = {
+   const user = result.user;
 
-  id: result.id,
-
-  name: result.name,
-
-  email: result.email,
-
-  qr_code: result.qr_code,
-
-  coffee_count:
-    result.coffee_count,
-
-  free_coffee:
-    result.free_coffee,
+const updatedUser = {
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  qr_code: user.qr_code,
+  coffee_count: user.coffee_count,
+  free_coffee: user.free_coffee,
 };
 
-      if (cashierMode !== "true") {
-
+if (cashierMode !== "true") {
   await AsyncStorage.setItem(
     "user",
-    JSON.stringify(
-      updatedUser
-    )
+    JSON.stringify(updatedUser)
   );
-
 }
 
-      setCoffeeCount(
-        result.coffee_count
-      );
+const totalCoffee =
+  user.coffee_count +
+  user.free_coffee * 10;
 
-      setCustomerName(
-        updatedUser.name
-      );
+let loyaltyLevel = "Bronze ☕";
 
-      const totalCoffee =
-        result.coffee_count +
-        result.free_coffee * 10;
+if (totalCoffee >= 10)
+  loyaltyLevel = "Silver ✨";
 
-      let level =
-        "Bronze ☕";
+if (totalCoffee >= 25)
+  loyaltyLevel = "Gold 👑";
 
-      if (totalCoffee >= 10) {
-        level = "Silver ✨";
-      }
+if (totalCoffee >= 50)
+  loyaltyLevel = "Emerald 💎";
+  if (cashierMode === "true") {
 
-      if (totalCoffee >= 25) {
-        level = "Gold 👑";
-      }
-
-      if (totalCoffee >= 50) {
-        level = "Emerald 💎";
-      }
-
-      setCustomerLevel(level);
-
-      if (
-        result.coffee_count === 0 &&
-        result.free_coffee > 0
-      ) {
-
-        setRewardVisible(true);
-
-        setTimeout(() => {
-          router.dismissAll();
-if (cashierMode === "true") {
-
-router.replace({
-pathname: "/staff/cashier",
-
-
-params: {
-
-  userId:
-    updatedUser.id,
-
-  customerName:
-    updatedUser.name,
-
-  coffeeCount:
-    result.coffee_count,
-
-  freeCoffee:
-    result.free_coffee,
-
-  loyaltyLevel:
-    level,
-},
-
-
-} as any);
+  router.replace({
+    pathname: "/staff/cashier",
+    params: {
+      userId: user.id,
+      customerName: user.name,
+      coffeeCount: user.coffee_count,
+      freeCoffee: user.free_coffee,
+      loyaltyLevel,
+    },
+  } as any);
 
 } else {
 
-router.navigate(
-"/(tabs)" as any
-);
+  router.replace("/(tabs)" as any);
+
 }
-
-
-
-        }, 3500);
-
-        return;
-      }
-
-      setSuccessVisible(true);
-
-      setTimeout(() => {
-        router.dismissAll();
-
- if (cashierMode === "true") {
-
-router.replace({
-pathname: "/staff/cashier",
-
-
-params: {
-
-  userId:
-    updatedUser.id,
-
-  customerName:
-    updatedUser.name,
-
-  coffeeCount:
-    result.coffee_count,
-
-  freeCoffee:
-    result.free_coffee,
-
-  loyaltyLevel:
-    level,
-},
-
-
-} as any);
-
-} else {
-
-router.navigate(
-"/(tabs)" as any
-);
-}
-
-
-
-      }, 1800);
 
     } catch (error) {
 
@@ -364,100 +258,7 @@ router.navigate(
           />
 
         </View>
-
       </View>
-
-      {rewardVisible && (
-
-        <View
-          style={styles.rewardPopup}
-        >
-
-          <Text
-            style={styles.rewardEmoji}
-          >
-            🎉
-          </Text>
-
-          <Text
-            style={styles.rewardTitle}
-          >
-            ÜCRETSİZ KAHVE!
-          </Text>
-
-          <Text
-            style={styles.rewardText}
-          >
-            Ücretsiz kahve
-            kazandınız ☕
-          </Text>
-
-          <Text
-            style={
-              styles.rewardSubText
-            }
-          >
-            Hesabınıza 1 ödül
-            eklendi
-          </Text>
-
-        </View>
-      )}
-
-      {successVisible &&
-        !rewardVisible && (
-
-        <View
-          style={
-            styles.successPopup
-          }
-        >
-
-          <Text
-            style={
-              styles.successEmoji
-            }
-          >
-            ☕
-          </Text>
-
-          <Text
-            style={
-              styles.successTitle
-            }
-          >
-            Kahve Eklendi
-          </Text>
-
-          <Text
-            style={
-              styles.customerName
-            }
-          >
-            {customerName}
-          </Text>
-
-          <Text
-            style={
-              styles.customerLevel
-            }
-          >
-            {customerLevel}
-          </Text>
-
-          <Text
-            style={
-              styles.successText
-            }
-          >
-            Toplam Kahve:
-            {" "}
-            {coffeeCount}
-          </Text>
-
-        </View>
-      )}
-
     </View>
   );
 }

@@ -2086,6 +2086,7 @@ app.put("/staff/:id", async (req, res) => {
       name,
       username,
       password,
+      role,
     } = req.body;
 
     let result;
@@ -2098,15 +2099,17 @@ app.put("/staff/:id", async (req, res) => {
         `
         UPDATE staff_accounts
         SET
-          name = $1,
-          username = $2,
-          password = $3
-        WHERE id = $4
+  name = $1,
+  username = $2,
+  role = $3,
+  password = $4
+WHERE id = $5
         RETURNING *
         `,
         [
           name,
           username,
+          role,
           hashedPassword,
           id,
         ]
@@ -2117,15 +2120,17 @@ app.put("/staff/:id", async (req, res) => {
       result = await pool.query(
         `
         UPDATE staff_accounts
-        SET
-          name = $1,
-          username = $2
-        WHERE id = $3
+       SET
+  name = $1,
+  username = $2,
+  role = $3
+WHERE id = $4
         RETURNING *
         `,
         [
           name,
           username,
+          role,
           id,
         ]
       );
@@ -2141,10 +2146,15 @@ app.put("/staff/:id", async (req, res) => {
     await createAuditLog(
       "admin",
       "staff_update",
-      `${name} personeli güncellendi`
+      `${name} (${role}) personeli güncellendi`
     );
 
-    res.json(result.rows[0]);
+    const {
+  password: _,
+  ...staffData
+} = result.rows[0];
+
+res.json(staffData);
 
   } catch (err) {
 
