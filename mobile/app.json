@@ -4,7 +4,7 @@
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/brekkie-logo.png",
+    "icon": "./assets/images/brekkie-logo-adaptive-25.png",
     "scheme": "mobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,9 +12,9 @@
       "supportsTablet": true
     },
     "splash": {
-      "image": "./assets/images/brekkie-logo.png",
+      "image": "./assets/images/brekkie-logo-adaptive-25.png",
       "resizeMode": "contain",
-      "backgroundColor": "#004225"
+      "backgroundColor": "#F8F5F0"
     },
     "android": {
       "permissions": [
@@ -22,10 +22,10 @@
     "ACCESS_COARSE_LOCATION",
     "ACCESS_BACKGROUND_LOCATION"
   ],
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/brekkie-logo.png",
-        "backgroundColor": "#004225"
-      },
+     "adaptiveIcon": {
+  "foregroundImage": "./assets/images/brekkie-logo-adaptive-25.png",
+  "backgroundColor": "#F8F5F0"
+},
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -46,20 +46,20 @@
     }
   ],
 
-  [
-    "expo-splash-screen",
-    {
-      "image": "./assets/images/brekkie-logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#004225"
-    }
-  ],
+ [
+  "expo-splash-screen",
+  {
+    "image": "./assets/images/brekkie-logo.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#F8F5F0"
+  }
+],
 
   [
     "expo-notifications",
     {
       "icon": "./assets/images/brekkie-logo.png",
-      "color": "#004225"
+      "color": "#E8B07A"
     }
   ]
 ],

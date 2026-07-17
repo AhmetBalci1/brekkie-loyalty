@@ -175,13 +175,7 @@ const loadUser = async () => {
   source={require("../../assets/images/brekkie-logo.png")}
   style={styles.logo}
 />
-          <Text style={styles.title}>
-            BREKKIE
-          </Text>
 
-          <Text style={styles.club}>
-            CLUB
-          </Text>
 
           <Text style={styles.subtitle}>
             Hoşgeldiniz
@@ -303,27 +297,6 @@ const loadUser = async () => {
   source={require("../../assets/images/brekkie-logo.png")}
   style={styles.logo}
 />
-<View style={styles.titleWrapper}>
-
-  <Text style={styles.titleShadow}>
-    BREKKIE
-  </Text>
-
-  <Text style={styles.title}>
-    BREKKIE
-  </Text>
-
-  <Text style={styles.clubShadow}>
-    CLUB
-  </Text>
-
-  <Text style={styles.club}>
-    CLUB
-  </Text>
-
-</View>
- 
-
         <Text style={styles.welcome}>
           Hoş geldin, {user.name} 
         </Text>
@@ -413,7 +386,7 @@ const loadUser = async () => {
       Üyelik QR Kodunuz
      </Text>
      <Text style={styles.qrInfo}>
-  📱 Kasada bu QR kodu gösterin.
+   Kasada bu QR kodu gösterin.
   Her kahvede puan kazanın ☕
 </Text>
 
@@ -533,7 +506,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "#e9dfcf",
+    backgroundColor:"#F8F5F0",
    
     padding: 20,
   },
@@ -551,10 +524,10 @@ const styles = StyleSheet.create({
 
   authCard: {
      width: "100%",
-  backgroundColor: "rgba(0,66,37,0.82)",
+  backgroundColor:"rgba(248,245,240,0.72)",
 
   borderWidth: 1,
-  borderColor: "rgba(255,255,255,0.15)",
+  borderColor: "rgba(203,221,204,0.82)",
 
     borderRadius: 35,
 
@@ -567,7 +540,7 @@ const styles = StyleSheet.create({
  topCard: {
   width: "100%",
 
-   backgroundColor: "rgba(0,66,37,0.85)",
+   backgroundColor:"rgba(248,245,240,0.72)",
 
   borderWidth: 1,
   borderColor: "rgba(255,255,255,0.15)",
@@ -598,7 +571,7 @@ const styles = StyleSheet.create({
 bottomCard: {
   width: "100%",
 
-   backgroundColor: "rgba(0,66,37,0.85)",
+   backgroundColor:"rgba(248,245,240,0.72)",
 
   borderWidth: 1,
   borderColor: "rgba(255,255,255,0.15)",
@@ -625,7 +598,7 @@ bottomCard: {
 },
 
   title: {
-    color: "#fff4e3",
+    color:"#CBDDCC",
 
     fontSize: 30,
 
@@ -637,9 +610,9 @@ bottomCard: {
   club: {
 
     marginTop: -2,
-    color: "#d4af37",
+    color:"#F1B993",
 
-    fontSize: 14,
+    fontSize: 30,
 
     fontWeight: "900",
 
@@ -647,7 +620,7 @@ bottomCard: {
   },
 
   subtitle: {
-    color: "#d4af37",
+    color:"#262626",
 
     fontSize: 32,
 
@@ -655,7 +628,7 @@ bottomCard: {
   },
 
   welcome: {
-    color: "#fff4e3",
+    color:"#262626",
 
     fontSize: 18,
 
@@ -682,7 +655,7 @@ bottomCard: {
   },
 
   coffeeText: {
-    color: "#fff4e3",
+    color:"#262626",
 
     fontSize: 16,
 
@@ -696,7 +669,7 @@ bottomCard: {
 
     height: 18,
 
-    backgroundColor: "#d7d0c5",
+    backgroundColor:"#E7DDD0",
 
     borderRadius: 20,
 
@@ -708,13 +681,13 @@ bottomCard: {
   progressBarFill: {
     height: "100%",
 
-    backgroundColor: "#d4af37",
+    backgroundColor:"#F1B993",
 
     borderRadius: 20,
   },
 
   progressText: {
-    color: "#fff4e3",
+    color:"#262626",
 
     marginTop: 10,
     marginBottom: 18,
@@ -735,7 +708,7 @@ bottomCard: {
   },
 
   qrCodeText: {
-    color: "#fff4e3",
+    color:"#666",
 
     marginTop: 12,
     marginBottom: 4,
@@ -758,7 +731,7 @@ bottomCard: {
   button: {
     width: "100%",
 
-    backgroundColor: "#d4af37",
+    backgroundColor:"#F1B993",
 
     paddingVertical: 12,
 
@@ -768,7 +741,7 @@ bottomCard: {
   },
 
   buttonText: {
-    color: "#2a1d17",
+    color:"#262626",
 
     fontSize: 18,
     marginBottom:1,
@@ -779,7 +752,7 @@ bottomCard: {
   cashierButton: {
     width: "100%",
 
-    backgroundColor: "#0b5d38",
+    backgroundColor:"#EADBC8",
 
     paddingVertical: 12,
     marginTop: 2,
@@ -789,7 +762,7 @@ bottomCard: {
   },
 
   cashierButtonText: {
-    color: "#fff4e3",
+    color:"#262626",
 
     fontSize: 17,
     marginBottom:3,
@@ -880,7 +853,7 @@ clubShadow: {
 rewardCard: {
   width: "100%",
 
-  backgroundColor: "#d4af37",
+  backgroundColor:"#F1B993",
 
   borderRadius: 24,
 
@@ -904,7 +877,7 @@ rewardCard: {
 },
 
 rewardCardTitle: {
-  color: "#2a1d17",
+  color:"#262626",
 
   fontSize: 18,
 
@@ -916,7 +889,7 @@ rewardCardTitle: {
 },
 
 rewardSubtitle: {
-  color: "#2a1d17",
+  color:"#4B4B4B",
 
   fontSize: 14,
 
@@ -927,7 +900,7 @@ rewardSubtitle: {
 useRewardButton: {
   marginTop: 14,
 
-  backgroundColor: "#2a1d17",
+  backgroundColor:"#D8C3A8",
 
   paddingVertical: 14,
 
@@ -937,7 +910,7 @@ useRewardButton: {
 },
 
 rewardTitle: {
-  color: "#fff4e3",
+  color:"#262626",
 
   fontSize: 18,
 
@@ -947,7 +920,7 @@ rewardTitle: {
 rewardUsedPopup: {
   width: "100%",
 
-  backgroundColor: "#0b5d38",
+  backgroundColor:"#F6E8D5",
 
   borderRadius: 24,
 
@@ -971,7 +944,7 @@ rewardUsedEmoji: {
 },
 
 rewardUsedTitle: {
-  color: "#fff4e3",
+  color:"#262626",
 
   fontSize: 20,
 
@@ -981,7 +954,7 @@ rewardUsedTitle: {
 },
 
 rewardUsedText: {
-  color: "#d4af37",
+  color:"#C97C4A",
 
   fontSize: 14,
 
@@ -990,7 +963,7 @@ rewardUsedText: {
 adminButton: {
   width: "100%",
 
-  backgroundColor: "#2a1d17",
+  backgroundColor:"#D8C3A8",
   marginBottom: 2,
   paddingVertical: 12,
 
@@ -1000,7 +973,7 @@ adminButton: {
 },
 
 adminButtonText: {
-  color: "#fff4e3",
+  color:"#262626",
 
   fontSize: 16,
 
@@ -1011,7 +984,7 @@ adminButtonText: {
 
   width: "100%",
 
-  backgroundColor: "#2d2d2d",
+  color:"#1F1F1F",
 
   padding: 16,
 
@@ -1024,12 +997,12 @@ adminButtonText: {
 
   borderWidth: 1,
 
-  borderColor: "#c59d5f",
+  borderColor: "#1F1F1F",
 },
 
 staffButtonText: {
 
-  color: "#c59d5f",
+  color:"#262626",
 
   fontSize: 16,
 
@@ -1052,32 +1025,32 @@ statsRow: {
 
 smallStat: {
   width: "48%",
-  backgroundColor: "rgba(255,255,255,0.10)",
+  backgroundColor:"rgba(255,255,255,0.55)",
   borderRadius: 20,
   paddingVertical: 18,
   alignItems: "center",
 },
 
 smallNumber: {
-  color: "#d4af37",
+  color:"#F1B993",
   fontSize: 28,
   fontWeight: "900",
 },
 
 smallLabel: {
-  color: "#fff4e3",
+  color:"#262626",
   fontSize: 14,
   fontWeight: "600",
 },
 totalCoffeeText: {
-  color: "#d4af37",
+  color:"#262626",
   fontSize: 16,
   fontWeight: "700",
   marginTop: 12,
   marginBottom: 10,
 },
 qrInfo: {
-  color: "#fff4e3",
+  color:"#444",
   textAlign: "center",
   marginTop: 12,
   marginBottom: 20,
@@ -1090,35 +1063,35 @@ campaignSection: {
 },
 
 campaignTitle: {
-  color: "#fff4e3",
+  color:"#262626",
   fontSize: 20,
   fontWeight: "800",
   marginBottom: 14,
 },
 
 campaignCard: {
-  backgroundColor: "rgba(255,255,255,0.08)",
+  backgroundColor:"rgba(255,255,255,0.60)",
   borderRadius: 20,
   padding: 16,
   marginBottom: 12,
   borderWidth: 1,
-  borderColor: "rgba(212,175,55,0.20)",
+  borderColor:"rgba(241,185,147,0.35)",
 },
 
 campaignCardTitle: {
-  color: "#d4af37",
+  color:"#262626",
   fontSize: 18,
   fontWeight: "700",
 },
 
 campaignDescription: {
-  color: "#fff4e3",
+  color:"#555",
   marginTop: 6,
   lineHeight: 20,
 },
 
 emptyCampaign: {
-  color: "#fff4e3",
+  color:"#262626",
   opacity: 0.7,
 },
 });

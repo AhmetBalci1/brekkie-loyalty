@@ -85,25 +85,6 @@ export default function RegisterScreen() {
           style={styles.logo}
         />
 
-        <View style={styles.titleWrapper}>
-          
-          <Text style={styles.titleShadow}>
-            BREKKIE
-          </Text>
-
-          <Text style={styles.title}>
-            BREKKIE
-          </Text>
-
-          <Text style={styles.clubShadow}>
-            CLUB
-          </Text>
-
-          <Text style={styles.club}>
-            CLUB
-          </Text>
-        </View>
-
         <Text style={styles.subtitle}>
           Brekkie Club'a Katıl! ☕
 
@@ -169,10 +150,10 @@ const styles = StyleSheet.create({
 
   card: {
     width: "100%",
-    backgroundColor: "rgba(0,66,37,0.82)",
+    backgroundColor: "rgba(248,245,240,0.72)",
 
 borderWidth: 1,
-borderColor: "rgba(255,255,255,0.15)",
+borderColor: "rgba(255,255,255,0.45)",
     borderRadius: 35,
     padding: 28,
     alignItems: "center",
@@ -207,7 +188,7 @@ borderColor: "rgba(255,255,255,0.15)",
     top: 4,
     left: 3,
 
-    color: "#002814",
+    color: "rgba(0,0,0,0.18)",
 
     fontSize: 40,
     fontWeight: "900",
@@ -215,7 +196,7 @@ borderColor: "rgba(255,255,255,0.15)",
   },
 
   title: {
-    color: "#fff4e3",
+    color: "#262626",
 
     fontSize: 40,
     fontWeight: "900",
@@ -229,7 +210,7 @@ borderColor: "rgba(255,255,255,0.15)",
 
     alignSelf: "center",
 
-    color: "#002814",
+    color: "rgba(0,0,0,0.18)",
 
     fontSize: 35,
     fontWeight: "900",
@@ -249,7 +230,7 @@ borderColor: "rgba(255,255,255,0.15)",
   },
 
   subtitle: {
-    color: "#d4af37",
+    color: "#262626",
     marginBottom: 30,
     fontSize: 20,
   },
@@ -257,8 +238,11 @@ borderColor: "rgba(255,255,255,0.15)",
   input: {
     width: "100%",
 
-    backgroundColor: "#0b5d38",
-    color: "#fff4e3",
+    backgroundColor: "rgba(255,255,255,0.75)",
+color: "#262626",
+
+borderWidth: 1,
+borderColor: "#E5D7C7",
 
     padding: 18,
     borderRadius: 20,
@@ -271,7 +255,7 @@ borderColor: "rgba(255,255,255,0.15)",
   button: {
     width: "100%",
 
-    backgroundColor: "#d4af37",
+    backgroundColor: "#F1B993",
 
     paddingVertical: 18,
 
@@ -281,7 +265,7 @@ borderColor: "rgba(255,255,255,0.15)",
   },
 
   buttonText: {
-    color: "#2a1d17",
+    color: "#262626",
 
     fontSize: 18,
     fontWeight: "bold",
@@ -293,6 +277,6 @@ borderColor: "rgba(255,255,255,0.15)",
 
 overlay: {
   flex: 1,
-  backgroundColor: "rgba(0,0,0,0.35)",
+  backgroundColor: "rgba(0,0,0,0.22)",
 },
 });

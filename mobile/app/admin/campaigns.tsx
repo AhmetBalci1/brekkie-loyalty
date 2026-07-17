@@ -119,7 +119,7 @@ useEffect(() => {
     >
 
       <Text style={styles.title}>
-        🎁 Campaign Center
+        🎁 Kampanya Merkezi
       </Text>
 
       <TouchableOpacity
@@ -160,26 +160,36 @@ useEffect(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#F8F5F0", // Eski: #F5F5F5
   },
 
   title: {
     fontSize: 28,
     fontWeight: "900",
-    color: "#004225",
+    color: "#262626", // Eski: #004225
     marginBottom: 20,
   },
 
   addButton: {
-    backgroundColor: "#004225",
+    backgroundColor: "#E8B07A", // Eski: #004225
     paddingVertical: 16,
     borderRadius: 18,
     alignItems: "center",
     marginBottom: 24,
+
+    shadowColor: "#E8B07A",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+
+    elevation: 5,
   },
 
   addButtonText: {
-    color: "#fff",
+    color: "#262626", // Eski: #fff
     fontSize: 17,
     fontWeight: "700",
   },

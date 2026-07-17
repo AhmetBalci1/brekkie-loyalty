@@ -91,28 +91,41 @@ export default function CustomerCard({
 const styles = StyleSheet.create({
 
   card:{
-    backgroundColor:"#ffffff",
+    backgroundColor:"#FFFFFF",
     borderRadius:24,
     padding:22,
     marginBottom:20,
+
+    borderWidth:1,
+    borderColor:"#EADBC8",
+
+    shadowColor:"#000",
+    shadowOffset:{
+      width:0,
+      height:4,
+    },
+    shadowOpacity:0.05,
+    shadowRadius:8,
+
+    elevation:3,
   },
 
   title:{
     fontSize:20,
     fontWeight:"800",
-    color:"#004225",
+    color:"#262626",          // Eski: #004225
     marginBottom:14,
   },
 
   name:{
     fontSize:24,
     fontWeight:"900",
-    color:"#222",
+    color:"#262626",          // Aynı kalabilir
   },
 
   membership:{
     marginTop:6,
-    color:"#d4af37",
+    color:"#C97C4A",          // Eski: #d4af37
     fontWeight:"700",
     fontSize:16,
   },
@@ -120,50 +133,75 @@ const styles = StyleSheet.create({
   progressBackground:{
     marginTop:18,
     height:12,
-    backgroundColor:"#ececec",
+    backgroundColor:"#EEE5DA", // Eski: #ececec
     borderRadius:8,
     overflow:"hidden",
   },
 
   progressFill:{
     height:12,
-    backgroundColor:"#004225",
+    backgroundColor:"#E8B07A", // Eski: #004225
   },
 
   coffee:{
     marginTop:14,
     fontWeight:"700",
-    color:"#004225",
+    color:"#262626",          // Eski: #004225
   },
 
   reward:{
     marginTop:8,
-    color:"#666",
+    color:"#8A8178",          // Eski: #666
   },
-rewardButton:{
-  marginTop:18,
-  backgroundColor:"#d4af37",
-  paddingVertical:16,
-  borderRadius:18,
-  alignItems:"center",
-},
 
-rewardButtonText:{
-  color:"#004225",
-  fontWeight:"900",
-  fontSize:16,
-},
-coffeeButton: {
-  marginTop: 18,
-  backgroundColor: "#004225",
-  paddingVertical: 16,
-  borderRadius: 18,
-  alignItems: "center",
-},
+  rewardButton:{
+    marginTop:18,
 
-coffeeButtonText: {
-  color: "#fff4e3",
-  fontWeight: "900",
-  fontSize: 16,
-},
+    backgroundColor:"#E8B07A", // Eski: #d4af37
+
+    paddingVertical:16,
+
+    borderRadius:18,
+
+    alignItems:"center",
+
+    shadowColor:"#E8B07A",
+    shadowOffset:{
+      width:0,
+      height:4,
+    },
+    shadowOpacity:0.20,
+    shadowRadius:8,
+
+    elevation:4,
+  },
+
+  rewardButtonText:{
+    color:"#262626",          // Eski: #004225
+
+    fontWeight:"900",
+
+    fontSize:16,
+  },
+
+  coffeeButton:{
+    marginTop:18,
+
+    backgroundColor:"#DCC8B4", // Eski: #004225
+
+    paddingVertical:16,
+
+    borderRadius:18,
+
+    alignItems:"center",
+  },
+
+  coffeeButtonText:{
+    color:"#262626",          // Eski: #fff4e3
+
+    fontWeight:"900",
+
+    fontSize:16,
+  },
+
 });

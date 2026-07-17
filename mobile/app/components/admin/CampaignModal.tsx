@@ -191,42 +191,66 @@ const styles = StyleSheet.create({
 
   overlay:{
     flex:1,
-    backgroundColor:"rgba(0,0,0,.4)",
+    backgroundColor:"rgba(0,0,0,0.22)", // Eski: 0.4
     justifyContent:"center",
     padding:20,
   },
 
   modal:{
-    backgroundColor:"white",
-    borderRadius:20,
-    padding:20,
+    backgroundColor:"#FFFFFF",
+    borderRadius:24,
+    padding:22,
+
+    borderWidth:1,
+    borderColor:"#EADBC8",
+
+    shadowColor:"#000",
+    shadowOffset:{
+      width:0,
+      height:6,
+    },
+    shadowOpacity:0.08,
+    shadowRadius:12,
+    elevation:5,
   },
 
   title:{
     fontSize:24,
     fontWeight:"800",
-    color:"#004225",
+    color:"#262626", // Eski: #004225
     marginBottom:20,
   },
 
   input:{
     borderWidth:1,
-    borderColor:"#ddd",
-    borderRadius:12,
+    borderColor:"#EADBC8", // Eski: #ddd
+    borderRadius:14,
     padding:14,
     marginBottom:14,
+
+    backgroundColor:"#FDFBF8",
+    color:"#262626",
   },
 
   button:{
-    backgroundColor:"#004225",
+    backgroundColor:"#E8B07A", // Eski: #004225
     padding:16,
     borderRadius:14,
     alignItems:"center",
     marginTop:10,
+
+    shadowColor:"#E8B07A",
+    shadowOffset:{
+      width:0,
+      height:4,
+    },
+    shadowOpacity:0.20,
+    shadowRadius:8,
+    elevation:4,
   },
 
   buttonText:{
-    color:"white",
+    color:"#262626", // Eski: white
     fontWeight:"700",
     fontSize:16,
   },
@@ -234,7 +258,8 @@ const styles = StyleSheet.create({
   cancel:{
     marginTop:18,
     textAlign:"center",
-    color:"#666",
+    color:"#8A8178", // Eski: #666
+    fontWeight:"600",
   }
 
 });

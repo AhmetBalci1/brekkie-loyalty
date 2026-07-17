@@ -106,66 +106,94 @@ const styles = StyleSheet.create({
 
   container: {
     padding: 20,
+    backgroundColor: "#F8F5F0", // yeni
   },
 
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     borderRadius: 18,
     padding: 18,
     marginBottom: 16,
+
+    borderWidth: 1,
+    borderColor: "#EADBC8",
+
     elevation: 3,
+
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
   },
 
   name: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#004225",
+    color: "#262626", // Eski: #004225
     marginBottom: 8,
   },
 
   info: {
     fontSize: 15,
-    color: "#555",
+    color: "#8A8178", // Eski: #555
     marginTop: 4,
   },
+
   searchInput: {
-  backgroundColor: "#fff",
-  borderRadius: 16,
-  paddingHorizontal: 18,
-  paddingVertical: 14,
-  marginBottom: 20,
-  fontSize: 16,
-  borderWidth: 1,
-  borderColor: "#ddd",
-},
-cardHeader: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: 14,
-},
+    backgroundColor: "#FFFFFF",
 
-activeBadge: {
-  backgroundColor: "#DDF5E5",
-  paddingHorizontal: 12,
-  paddingVertical: 5,
-  borderRadius: 20,
-},
+    borderRadius: 16,
 
-activeText: {
-  color: "#1F8A4C",
-  fontWeight: "700",
-  fontSize: 13,
-},
+    paddingHorizontal: 18,
+    paddingVertical: 14,
 
-detailButton: {
-  alignSelf: "flex-end",
-  marginTop: 18,
-},
+    marginBottom: 20,
 
-detailText: {
-  color: "#004225",
-  fontWeight: "700",
-  fontSize: 15,
-},
+    fontSize: 16,
+
+    borderWidth: 1,
+    borderColor: "#EADBC8",
+
+    color: "#262626",
+  },
+
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 14,
+  },
+
+  activeBadge: {
+    backgroundColor: "#F7E7D4", // Eski: #DDF5E5
+
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+
+    borderRadius: 20,
+  },
+
+  activeText: {
+    color: "#C97C4A", // Eski: #1F8A4C
+
+    fontWeight: "700",
+
+    fontSize: 13,
+  },
+
+  detailButton: {
+    alignSelf: "flex-end",
+    marginTop: 18,
+  },
+
+  detailText: {
+    color: "#C97C4A", // Eski: #004225
+
+    fontWeight: "700",
+
+    fontSize: 15,
+  },
 });

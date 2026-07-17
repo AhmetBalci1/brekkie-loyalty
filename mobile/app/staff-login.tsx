@@ -61,7 +61,7 @@ const [password, setPassword] =
     marginBottom: 30,
   }}
 >
-  Cashier & Admin Access
+  Kasiyer % Admin Girişi
 </Text>
       <TextInput
   placeholder="Kullanıcı Adı"
@@ -169,7 +169,7 @@ router.replace(
 }}
       >
         <Text style={styles.buttonText}>
-          Cashier Mode
+          Kasiyer
         </Text>
       </TouchableOpacity>
 
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "white",
+    color: "#262626",
 
     fontSize: 30,
 
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
 
-    backgroundColor: "#c59d5f",
+    backgroundColor: "#E8B07A",
 
     padding: 18,
 
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   adminButton: {
     width: "100%",
 
-    backgroundColor: "#004225",
+    backgroundColor: "#EADBC8",
 
     padding: 18,
 
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: "white",
+    color: "#262626",
 
     fontSize: 18,
 
@@ -329,9 +329,9 @@ const styles = StyleSheet.create({
 
   width: "100%",
 
-  backgroundColor: "rgba(0,66,37,0.75)",
+  backgroundColor: "rgba(255,255,255,0.75)",
 
-  color: "white",
+  color: "#262626",
 
   padding: 16,
 
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
 
   borderWidth: 1,
 
-  borderColor: "#444",
+  borderColor: "#E5D7C7",
 },
 background: {
   flex: 1,
@@ -349,6 +349,6 @@ background: {
 
 overlay: {
   flex: 1,
-  backgroundColor: "rgba(0,0,0,0.45)",
+  backgroundColor: "rgba(0,0,0,0.22)",
 },
 });

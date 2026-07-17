@@ -264,29 +264,26 @@ if (totalCoffee >= 50)
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "#000000",
   },
 
   overlay: {
     position: "absolute",
-
     top: 80,
-
     width: "100%",
-
     alignItems: "center",
   },
 
   scanText: {
-    color: "#fff4e3",
+    color: "#262626",
 
     fontSize: 20,
     fontWeight: "bold",
 
-    backgroundColor:
-      "rgba(0,66,37,0.9)",
+    backgroundColor: "#E8B07A",
 
     paddingHorizontal: 24,
     paddingVertical: 14,
@@ -298,27 +295,26 @@ const styles = StyleSheet.create({
 
   scanContainer: {
     flex: 1,
-
     justifyContent: "center",
     alignItems: "center",
   },
 
- scanFrame: {
-  width: 280,
-  height: 280,
+  scanFrame: {
+    width: 280,
+    height: 280,
 
-  position: "relative",
+    position: "relative",
 
-  justifyContent: "center",
-  alignItems: "center",
+    justifyContent: "center",
+    alignItems: "center",
 
-  backgroundColor: "rgba(255,255,255,0.03)",
+    backgroundColor: "rgba(255,255,255,0.04)",
 
-  borderRadius: 30,
+    borderRadius: 30,
 
-  borderWidth: 1.5,
-  borderColor: "rgba(255,255,255,0.08)",
-},
+    borderWidth: 1.5,
+    borderColor: "rgba(232,176,122,0.20)",
+  },
 
   cornerTopLeft: {
     position: "absolute",
@@ -332,20 +328,17 @@ const styles = StyleSheet.create({
     borderTopWidth: 6,
     borderLeftWidth: 6,
 
-    borderColor: "#d4af37",
+    borderColor: "#E8B07A",
 
     borderTopLeftRadius: 22,
-    shadowColor: "#d4af37",
 
+    shadowColor: "#E8B07A",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-
     shadowOpacity: 1,
-
     shadowRadius: 10,
-
     elevation: 10,
   },
 
@@ -361,21 +354,17 @@ const styles = StyleSheet.create({
     borderTopWidth: 6,
     borderRightWidth: 6,
 
-    borderColor: "#d4af37",
+    borderColor: "#E8B07A",
 
     borderTopRightRadius: 22,
 
-    shadowColor: "#d4af37",
-
+    shadowColor: "#E8B07A",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-
     shadowOpacity: 1,
-
     shadowRadius: 10,
-
     elevation: 10,
   },
 
@@ -391,21 +380,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 6,
     borderLeftWidth: 6,
 
-    borderColor: "#d4af37",
+    borderColor: "#E8B07A",
 
     borderBottomLeftRadius: 22,
 
-    shadowColor: "#d4af37",
-
+    shadowColor: "#E8B07A",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-
     shadowOpacity: 1,
-
     shadowRadius: 10,
-
     elevation: 10,
   },
 
@@ -421,21 +406,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 6,
     borderRightWidth: 6,
 
-    borderColor: "#d4af37",
+    borderColor: "#E8B07A",
 
     borderBottomRightRadius: 22,
 
-    shadowColor: "#d4af37",
-
+    shadowColor: "#E8B07A",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-
     shadowOpacity: 1,
-
     shadowRadius: 10,
-
     elevation: 10,
   },
 
@@ -445,69 +426,60 @@ const styles = StyleSheet.create({
     width: 220,
     height: 3,
 
-    backgroundColor: "#d4af37",
+    backgroundColor: "#E8B07A",
 
     borderRadius: 10,
 
-    shadowColor: "#d4af37",
-
+    shadowColor: "#E8B07A",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-
     shadowOpacity: 1,
-
     shadowRadius: 12,
-
     elevation: 10,
 
     top: 50,
   },
 
- successPopup: {
-  position: "absolute",
+  successPopup: {
+    position: "absolute",
 
-  bottom: 70,
+    bottom: 70,
 
-  alignSelf: "center",
+    alignSelf: "center",
 
-  width: "88%",
+    width: "88%",
 
-  backgroundColor: "#004225",
+    backgroundColor: "#FFFFFF",
 
-  paddingVertical: 28,
-  paddingHorizontal: 24,
+    paddingVertical: 28,
+    paddingHorizontal: 24,
 
-  borderRadius: 34,
+    borderRadius: 34,
 
-  alignItems: "center",
+    alignItems: "center",
 
-  shadowColor: "#000",
+    borderWidth: 1,
+    borderColor: "#EADBC8",
 
-  shadowOffset: {
-    width: 0,
-    height: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 20,
+    elevation: 10,
   },
 
-  shadowOpacity: 0.3,
-
-  shadowRadius: 20,
-
-  elevation: 14,
-
-  borderWidth: 1.5,
-  borderColor: "rgba(212,175,55,0.3)",
-},
-
-successEmoji: {
-  fontSize: 46,
-
-  marginBottom: 10,
-},
+  successEmoji: {
+    fontSize: 46,
+    marginBottom: 10,
+  },
 
   successTitle: {
-    color: "#fff4e3",
+    color: "#262626",
 
     fontSize: 24,
     fontWeight: "900",
@@ -516,7 +488,7 @@ successEmoji: {
   },
 
   successText: {
-    color: "#d4af37",
+    color: "#C97C4A",
 
     fontSize: 16,
     fontWeight: "700",
@@ -530,8 +502,7 @@ successEmoji: {
     right: 0,
     bottom: 0,
 
-    backgroundColor:
-      "rgba(0,0,0,0.8)",
+    backgroundColor: "rgba(0,0,0,0.82)",
 
     justifyContent: "center",
     alignItems: "center",
@@ -548,7 +519,7 @@ successEmoji: {
   },
 
   rewardTitle: {
-    color: "#d4af37",
+    color: "#E8B07A",
 
     fontSize: 36,
     fontWeight: "900",
@@ -559,7 +530,7 @@ successEmoji: {
   },
 
   rewardText: {
-    color: "#fff4e3",
+    color: "#FFFFFF",
 
     fontSize: 22,
     fontWeight: "bold",
@@ -568,30 +539,31 @@ successEmoji: {
   },
 
   rewardSubText: {
-    color: "#d4af37",
+    color: "#E8B07A",
 
     fontSize: 16,
   },
 
   customerName: {
-  color: "#fff4e3",
+    color: "#FFFFFF",
 
-  fontSize: 26,
+    fontSize: 26,
 
-  fontWeight: "900",
+    fontWeight: "900",
 
-  marginTop: 10,
-},
+    marginTop: 10,
+  },
 
-customerLevel: {
-  color: "#d4af37",
+  customerLevel: {
+    color: "#E8B07A",
 
-  fontSize: 16,
+    fontSize: 16,
 
-  fontWeight: "700",
+    fontWeight: "700",
 
-  marginTop: 5,
+    marginTop: 5,
 
-  marginBottom: 12,
-},
+    marginBottom: 12,
+  },
+
 });

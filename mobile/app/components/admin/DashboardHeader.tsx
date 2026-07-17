@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet,Image, } from "react-native";
 
 export default function DashboardHeader() {
   return (
@@ -18,9 +18,10 @@ export default function DashboardHeader() {
         </Text>
       </View>
 
-      <View style={styles.logoContainer}>
-        <Text style={styles.logo}>🦝</Text>
-      </View>
+     <Image
+  source={require("../../../assets/images/brekkie-logo.png")}
+  style={styles.logo}
+/>
 
     </View>
   );
@@ -37,19 +38,19 @@ const styles = StyleSheet.create({
 
   greeting: {
     fontSize: 16,
-    color: "#7A7A7A",
+    color: "#8A8178", // Eski: #7A7A7A
     marginBottom: 6,
   },
 
   title: {
-    color: "#004225",
-    fontSize: 34,
+    color: "#262626", // Eski: #004225
+    fontSize: 25,
     fontWeight: "900",
     letterSpacing: 2,
   },
 
   subtitle: {
-    color: "#0b5d38",
+    color: "#C97C4A", // Eski: #0b5d38
     fontSize: 16,
     marginTop: 6,
   },
@@ -57,13 +58,29 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: 64,
     height: 64,
-    backgroundColor: "#004225",
+
+    backgroundColor: "#E8B07A", // Eski: #004225
+
     borderRadius: 20,
+
     justifyContent: "center",
     alignItems: "center",
+
+    borderWidth: 1,
+    borderColor: "#EADBC8",
+
+    shadowColor: "#E8B07A",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 8,
+    elevation: 4,
   },
 
   logo: {
-    fontSize: 34,
-  },
+  width: 100,
+  height: 100,
+},
 });

@@ -65,23 +65,46 @@ const styles = StyleSheet.create({
 
   statCard:{
     flex:1,
-    backgroundColor:"#0b5d38",
+
+    backgroundColor:"#FFFFFF",      // Eski: #0b5d38
+
     marginHorizontal:4,
+
     borderRadius:20,
+
     paddingVertical:18,
+
     alignItems:"center",
+
+    borderWidth:1,
+    borderColor:"#EADBC8",
+
+    shadowColor:"#000",
+    shadowOffset:{
+      width:0,
+      height:4,
+    },
+    shadowOpacity:0.05,
+    shadowRadius:8,
+
+    elevation:3,
   },
 
   statNumber:{
-    color:"#d4af37",
+    color:"#E8B07A",                // Eski: #d4af37
+
     fontSize:22,
+
     fontWeight:"900",
   },
 
   statLabel:{
-    color:"white",
+    color:"#8A8178",                // Eski: white
+
     marginTop:4,
+
     fontSize:13,
+
     fontWeight:"600",
   },
 

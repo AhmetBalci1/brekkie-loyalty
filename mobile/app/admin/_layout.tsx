@@ -5,15 +5,19 @@ export default function AdminLayout() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#004225",
-        },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "700",
-        },
-        contentStyle: {
-          backgroundColor: "#f5f5f5",
-        },
+  backgroundColor: "#EADBC8",
+},
+
+headerTintColor: "#262626",
+
+headerTitleStyle: {
+  fontWeight: "700",
+  color: "#262626",
+},
+
+contentStyle: {
+  backgroundColor: "#F8F5F0",
+},
       }}
     >
       <Stack.Screen

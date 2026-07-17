@@ -88,9 +88,7 @@ if (!authorized) {
       showsVerticalScrollIndicator={false}
     >
       <DashboardHeader />
-      <Text style={styles.subtitle}>
-        Business Overview ☕
-      </Text>
+      
 <View style={styles.statsRow}>
   <KPICard
     value={analytics?.users || 0}
@@ -207,11 +205,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "#e9dfcf",
+    backgroundColor: "#F8F5F0", // Eski: #e9dfcf
   },
 
   subtitle: {
-    color: "#0b5d38",
+    color: "#8A8178", // Eski: #0b5d38
 
     fontSize: 16,
 
@@ -229,13 +227,16 @@ const styles = StyleSheet.create({
   },
 
   activityCard: {
-    backgroundColor: "#004225",
+    backgroundColor: "#FFFFFF", // Eski: #004225
 
     borderRadius: 28,
 
     padding: 24,
 
     marginTop: 12,
+
+    borderWidth: 1,
+    borderColor: "#EADBC8",
 
     shadowColor: "#000",
 
@@ -244,15 +245,15 @@ const styles = StyleSheet.create({
       height: 8,
     },
 
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.08,
 
     shadowRadius: 12,
 
-    elevation: 8,
+    elevation: 6,
   },
 
   activityTitle: {
-    color: "#d4af37",
+    color: "#C97C4A", // Eski: #d4af37
 
     fontSize: 18,
 
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
   },
 
   customerName: {
-    color: "#fff4e3",
+    color: "#262626", // Eski: #fff4e3
 
     fontSize: 28,
 
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
   },
 
   customerStats: {
-    color: "#d4af37",
+    color: "#8A8178", // Eski: #d4af37
 
     fontSize: 16,
 
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
   },
 
   activityText: {
-    color: "#fff4e3",
+    color: "#555555", // Eski: #fff4e3
 
     fontSize: 15,
 
@@ -288,48 +289,49 @@ const styles = StyleSheet.create({
 
     lineHeight: 22,
   },
+
   logoutButton: {
-  marginTop: 20,
+    marginTop: 20,
 
-  backgroundColor: "#7a1f1f",
+    backgroundColor: "#D9534F", // Eski: #7a1f1f
 
-  paddingVertical: 18,
+    paddingVertical: 18,
 
-  borderRadius: 22,
+    borderRadius: 22,
 
-  alignItems: "center",
-},
+    alignItems: "center",
+  },
 
-logoutText: {
-  color: "#fff",
+  logoutText: {
+    color: "#FFFFFF",
 
-  fontSize: 16,
+    fontSize: 16,
 
-  fontWeight: "900",
-},
+    fontWeight: "900",
+  },
 
-sectionTitle:{
+  sectionTitle: {
 
-fontSize:22,
+    fontSize: 22,
 
-fontWeight:"800",
+    fontWeight: "800",
 
-color:"#004225",
+    color: "#262626", // Eski: #004225
 
-marginTop:30,
+    marginTop: 30,
 
-marginBottom:18,
+    marginBottom: 18,
 
-},
+  },
 
-quickGrid:{
+  quickGrid: {
 
-flexDirection:"row",
+    flexDirection: "row",
 
-flexWrap:"wrap",
+    flexWrap: "wrap",
 
-justifyContent:"space-between",
+    justifyContent: "space-between",
 
-},
+  },
 
 });

@@ -74,16 +74,36 @@ const styles = StyleSheet.create({
 
   card:{
     width:"100%",
-    backgroundColor:"#0b5d38",
+
+    backgroundColor:"#FFFFFF",      // Eski: #0b5d38
+
     borderRadius:28,
+
     padding:20,
+
     marginBottom:18,
+
+    borderWidth:1,
+    borderColor:"#EADBC8",
+
+    shadowColor:"#000",
+    shadowOffset:{
+      width:0,
+      height:4,
+    },
+    shadowOpacity:0.05,
+    shadowRadius:8,
+
+    elevation:3,
   },
 
   title:{
-    color:"#d4af37",
+    color:"#262626",                // Eski: #d4af37
+
     fontSize:20,
+
     fontWeight:"900",
+
     marginBottom:16,
   },
 
@@ -93,23 +113,30 @@ const styles = StyleSheet.create({
 
   item:{
     borderBottomWidth:1,
-    borderBottomColor:"rgba(255,255,255,.08)",
+
+    borderBottomColor:"#F0E6DA",    // Eski: rgba(255,255,255,.08)
+
     paddingVertical:12,
   },
 
   name:{
-    color:"white",
+    color:"#262626",                // Eski: white
+
     fontSize:16,
+
     fontWeight:"700",
   },
 
   action:{
-    color:"#d4af37",
+    color:"#C97C4A",                // Eski: #d4af37
+
     marginTop:4,
+
+    fontWeight:"600",
   },
 
   empty:{
-    color:"#ddd",
+    color:"#8A8178",                // Eski: #ddd
   },
 
 });

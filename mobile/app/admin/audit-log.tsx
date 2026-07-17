@@ -134,33 +134,36 @@ const styles = StyleSheet.create({
 
 container:{
 flex:1,
-backgroundColor:"#F5F5F5",
+backgroundColor:"#F8F5F0",   // Eski: #F5F5F5
 padding:20,
 },
 
 title:{
 fontSize:28,
 fontWeight:"900",
-color:"#004225",
+color:"#262626",             // Eski: #004225
 marginBottom:20,
 },
 
 card:{
-backgroundColor:"white",
+backgroundColor:"#FFFFFF",
 padding:18,
 borderRadius:18,
 marginBottom:14,
+
+borderWidth:1,
+borderColor:"#EADBC8",        // Kartlara hafif premium çerçeve
 },
 
 description:{
 fontSize:15,
 fontWeight:"700",
-color:"#333",
+color:"#262626",              // Eski: #333
 },
 
 role:{
 marginTop:6,
-color:"#888",
+color:"#8A8178",              // Eski: #888
 },
 
 loading:{

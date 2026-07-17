@@ -42,21 +42,33 @@ export default function ScanCard({
 const styles = StyleSheet.create({
 
   card:{
-    backgroundColor:"#d4af37",
+    backgroundColor:"#E8B07A",      // Eski: #d4af37
+
     borderRadius:30,
+
     paddingVertical:34,
+
     alignItems:"center",
+
     justifyContent:"center",
+
     marginBottom:20,
 
-    shadowColor:"#000",
+    borderWidth:1,
+    borderColor:"#EADBC8",
+
+    shadowColor:"#E8B07A",
+
     shadowOffset:{
       width:0,
       height:8,
     },
-    shadowOpacity:0.22,
+
+    shadowOpacity:0.20,
+
     shadowRadius:12,
-    elevation:10,
+
+    elevation:8,
   },
 
   icon:{
@@ -65,18 +77,28 @@ const styles = StyleSheet.create({
 
   title:{
     marginTop:12,
-    color:"#004225",
+
+    color:"#262626",      // Eski: #004225
+
     fontSize:30,
+
     fontWeight:"900",
+
     letterSpacing:1,
   },
 
   subtitle:{
     marginTop:8,
-    color:"#2b2b2b",
+
+    color:"#5E554B",      // Eski: #2b2b2b
+
     fontSize:15,
+
     textAlign:"center",
+
     paddingHorizontal:30,
+
+    lineHeight:22,
   },
 
 });

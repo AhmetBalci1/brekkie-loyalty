@@ -30,12 +30,29 @@ export default function QuickActionCard({
 const styles = StyleSheet.create({
   card: {
     width: "48%",
+
     backgroundColor: "#FFFFFF",
+
     paddingVertical: 24,
+
     borderRadius: 22,
+
     alignItems: "center",
+
     marginBottom: 16,
-    elevation: 4,
+
+    borderWidth: 1,
+    borderColor: "#EADBC8",
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+
+    elevation: 3,
   },
 
   icon: {
@@ -46,6 +63,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#004225",
+    color: "#262626", // Eski: #004225
   },
 });

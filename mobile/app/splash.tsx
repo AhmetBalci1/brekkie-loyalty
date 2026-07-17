@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
 
     flex: 1,
 
-    backgroundColor: "#004225",
+    backgroundColor: "#F8F5F0", // Eski: #004225
 
     justifyContent: "center",
 
@@ -163,11 +163,24 @@ const styles = StyleSheet.create({
     marginBottom: 25,
 
     alignSelf: "center",
+
+    shadowColor: "#E8B07A",
+
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+
+    shadowOpacity: 0.20,
+
+    shadowRadius: 12,
+
+    elevation: 8,
   },
 
   title: {
 
-    color: "#fff4e3",
+    color: "#262626", // Eski: #fff4e3
 
     fontSize: 42,
 
@@ -180,7 +193,7 @@ const styles = StyleSheet.create({
 
   club: {
 
-    color: "#d4af37",
+    color: "#C97C4A", // Eski: #d4af37
 
     fontSize: 34,
 
@@ -190,4 +203,5 @@ const styles = StyleSheet.create({
 
     textAlign: "center",
   },
+
 });

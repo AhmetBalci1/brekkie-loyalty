@@ -69,39 +69,64 @@ export default function RecentActivity() {
 const styles = StyleSheet.create({
 
   card:{
-    backgroundColor:"#004225",
+    backgroundColor:"#FFFFFF",      // Eski: #004225
+
     borderRadius:24,
+
     padding:20,
+
     marginTop:20,
+
+    borderWidth:1,
+    borderColor:"#EADBC8",
+
+    shadowColor:"#000",
+    shadowOffset:{
+      width:0,
+      height:4,
+    },
+    shadowOpacity:0.05,
+    shadowRadius:8,
+
+    elevation:3,
   },
 
   title:{
-    color:"#d4af37",
+    color:"#262626",                // Eski: #d4af37
+
     fontSize:20,
+
     fontWeight:"800",
+
     marginBottom:18,
   },
 
   item:{
     marginBottom:16,
+
     borderBottomWidth:1,
-    borderBottomColor:"rgba(255,255,255,.1)",
+
+    borderBottomColor:"#F0E6DA",    // Eski: rgba(255,255,255,.1)
+
     paddingBottom:12,
   },
 
   name:{
-    color:"white",
+    color:"#262626",                // Eski: white
+
     fontSize:16,
+
     fontWeight:"700",
   },
 
   detail:{
-    color:"#ddd",
+    color:"#8A8178",                // Eski: #ddd
+
     marginTop:4,
   },
 
   empty:{
-    color:"#ddd",
+    color:"#8A8178",                // Eski: #ddd
   }
 
 });

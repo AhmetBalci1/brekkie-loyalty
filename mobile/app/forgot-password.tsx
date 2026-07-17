@@ -206,34 +206,84 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
+
     justifyContent: "center",
+
     padding: 24,
-    backgroundColor: "#004225",
+
+    backgroundColor: "#F8F5F0", // Eski: #004225
   },
 
   title: {
-    color: "#fff4e3",
+    color: "#262626", // Eski: #fff4e3
+
     fontSize: 28,
+
     fontWeight: "bold",
+
     marginBottom: 20,
+
     textAlign: "center",
   },
 
   input: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
+    backgroundColor: "#FFFFFF",
+
+    borderRadius: 14,
+
     padding: 15,
+
     marginBottom: 20,
+
+    borderWidth: 1,
+
+    borderColor: "#EADBC8",
+
+    color: "#262626",
+
+    shadowColor: "#000",
+
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+
+    shadowOpacity: 0.04,
+
+    shadowRadius: 4,
+
+    elevation: 2,
   },
 
   button: {
-    backgroundColor: "#d4af37",
+    backgroundColor: "#E8B07A", // Eski: #d4af37
+
     padding: 18,
-    borderRadius: 12,
+
+    borderRadius: 14,
+
+    shadowColor: "#E8B07A",
+
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+
+    shadowOpacity: 0.20,
+
+    shadowRadius: 8,
+
+    elevation: 4,
   },
 
   buttonText: {
     textAlign: "center",
+
+    color: "#262626",
+
     fontWeight: "bold",
+
+    fontSize: 16,
   },
+
 });

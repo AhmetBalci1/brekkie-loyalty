@@ -97,21 +97,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
   },
-emptyEmoji: {
-  fontSize: 60,
-  marginBottom: 20,
-},
 
-emptyTitle: {
-  fontSize: 20,
-  fontWeight: "700",
-  color: "#004225",
-},
+  emptyEmoji: {
+    fontSize: 60,
+    marginBottom: 20,
+  },
 
-emptyDescription: {
-  marginTop: 10,
-  color: "#666",
-  textAlign: "center",
-  lineHeight: 22,
-},
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#262626", // Eski: #004225
+  },
+
+  emptyDescription: {
+    marginTop: 10,
+    color: "#8A8178", // Eski: #666
+    textAlign: "center",
+    lineHeight: 22,
+  },
+
 });

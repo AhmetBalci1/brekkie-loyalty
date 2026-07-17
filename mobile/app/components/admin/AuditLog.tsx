@@ -159,16 +159,28 @@ return "📌";
 const styles = StyleSheet.create({
 
 card:{
-backgroundColor:"#004225",
+backgroundColor:"#FFFFFF",          // Eski: #004225
 borderRadius:24,
 padding:20,
 marginTop:20,
 
-height: 340
+height:340,
+
+borderWidth:1,
+borderColor:"#EADBC8",
+
+shadowColor:"#000",
+shadowOffset:{
+  width:0,
+  height:4,
+},
+shadowOpacity:0.05,
+shadowRadius:8,
+elevation:3,
 },
 
 title:{
-color:"#d4af37",
+color:"#262626",                    // Eski: #d4af37
 fontSize:20,
 fontWeight:"800",
 marginBottom:18,
@@ -177,18 +189,18 @@ marginBottom:18,
 item:{
 marginBottom:16,
 borderBottomWidth:1,
-borderBottomColor:"rgba(255,255,255,.1)",
+borderBottomColor:"#F0E6DA",        // Eski: rgba(255,255,255,.1)
 paddingBottom:12,
 },
 
 description:{
-color:"white",
+color:"#262626",                    // Eski: white
 fontSize:15,
 fontWeight:"700",
 },
 
 role:{
-color:"#d4af37",
+color:"#C97C4A",                    // Eski: #d4af37
 marginTop:4,
 },
 
@@ -197,11 +209,13 @@ paddingVertical:40,
 },
 
 empty:{
-color:"#ddd",
+color:"#8A8178",                    // Eski: #ddd
 },
-logContainer: {
-  flex: 1,
+
+logContainer:{
+flex:1,
 },
+
 header:{
 flexDirection:"row",
 justifyContent:"space-between",
@@ -210,7 +224,8 @@ marginBottom:18,
 },
 
 more:{
-color:"#d4af37",
+color:"#C97C4A",                    // Eski: #d4af37
 fontWeight:"700",
 },
+
 });

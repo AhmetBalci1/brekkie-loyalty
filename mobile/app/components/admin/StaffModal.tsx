@@ -315,41 +315,69 @@ const styles = StyleSheet.create({
 
 overlay:{
 flex:1,
-backgroundColor:"rgba(0,0,0,.45)",
+backgroundColor:"rgba(0,0,0,0.22)", // Eski: 0.45
 justifyContent:"center",
 padding:20,
 },
 
 modal:{
-backgroundColor:"white",
+backgroundColor:"#FFFFFF",
 borderRadius:24,
 padding:24,
+
+borderWidth:1,
+borderColor:"#EADBC8",
+
+shadowColor:"#000",
+shadowOffset:{
+  width:0,
+  height:6,
+},
+shadowOpacity:0.08,
+shadowRadius:12,
+elevation:5,
 },
 
 title:{
 fontSize:24,
 fontWeight:"800",
-color:"#004225",
+color:"#262626", // Eski: #004225
 marginBottom:20,
 },
 
 input:{
 borderWidth:1,
-borderColor:"#ddd",
+borderColor:"#EADBC8", // Eski: #ddd
 borderRadius:16,
 padding:14,
 marginBottom:14,
+
+backgroundColor:"#FDFBF8",
+
+color:"#262626",
 },
 
 saveButton:{
-backgroundColor:"#004225",
+backgroundColor:"#E8B07A", // Eski: #004225
+
 padding:16,
+
 borderRadius:16,
+
 alignItems:"center",
+
+shadowColor:"#E8B07A",
+shadowOffset:{
+  width:0,
+  height:4,
+},
+shadowOpacity:0.20,
+shadowRadius:8,
+elevation:4,
 },
 
 saveText:{
-color:"white",
+color:"#262626", // Eski: white
 fontWeight:"700",
 fontSize:16,
 },
@@ -357,54 +385,72 @@ fontSize:16,
 cancel:{
 marginTop:18,
 textAlign:"center",
-color:"#888",
+color:"#8A8178", // Eski: #888
+fontWeight:"600",
 },
+
 label:{
 fontWeight:"700",
 marginBottom:8,
-color:"#555",
+color:"#262626", // Eski: #555
 },
 
 roleButton:{
 borderWidth:1,
-borderColor:"#ddd",
+borderColor:"#EADBC8", // Eski: #ddd
+
 padding:16,
+
 borderRadius:16,
+
 marginBottom:16,
-backgroundColor:"#fff",
+
+backgroundColor:"#FDFBF8",
 },
 
 roleText:{
 fontSize:16,
-color:"#333",
+color:"#262626", // Eski: #333
 },
 
 roleOverlay:{
 flex:1,
 justifyContent:"flex-end",
-backgroundColor:"rgba(0,0,0,.35)",
+backgroundColor:"rgba(0,0,0,0.22)", // Eski: 0.35
 },
 
 roleModal:{
-backgroundColor:"#fff",
+backgroundColor:"#FFFFFF",
+
 padding:24,
+
 borderTopLeftRadius:28,
 borderTopRightRadius:28,
+
+borderTopWidth:1,
+borderLeftWidth:1,
+borderRightWidth:1,
+borderColor:"#EADBC8",
 },
 
 roleTitle:{
 fontSize:22,
 fontWeight:"800",
 marginBottom:20,
-color:"#004225",
+color:"#262626", // Eski: #004225
 textAlign:"center",
 },
 
 roleItem:{
 fontSize:18,
+
 paddingVertical:18,
+
 textAlign:"center",
-color:"#004225",
+
+color:"#C97C4A", // Eski: #004225
+
 fontWeight:"700",
 },
+
 });

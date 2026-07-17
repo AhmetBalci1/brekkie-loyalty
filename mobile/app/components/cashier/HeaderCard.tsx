@@ -75,8 +75,10 @@ export default function HeaderCard({
 const styles = StyleSheet.create({
 
   card:{
-    backgroundColor:"#004225",
+    backgroundColor:"#FFFFFF",      // Eski: #004225
+
     borderRadius:26,
+
     padding:22,
 
     flexDirection:"row",
@@ -86,35 +88,49 @@ const styles = StyleSheet.create({
     alignItems:"center",
 
     marginBottom:20,
+
+    borderWidth:1,
+    borderColor:"#EADBC8",
+
+    shadowColor:"#000",
+    shadowOffset:{
+      width:0,
+      height:4,
+    },
+    shadowOpacity:0.05,
+    shadowRadius:8,
+
+    elevation:3,
   },
 
   logo:{
-    color:"#d4af37",
+    color:"#E8B07A",                // Eski: #d4af37
     fontSize:24,
     fontWeight:"900",
   },
 
   name:{
-    color:"white",
+    color:"#262626",                // Eski: white
     fontSize:20,
     fontWeight:"800",
     marginTop:12,
   },
 
   role:{
-    color:"#d4af37",
+    color:"#C97C4A",                // Eski: #d4af37
     marginTop:4,
     fontSize:15,
+    fontWeight:"700",
   },
 
   online:{
-    color:"#8BFF91",
+    color:"#4CAF50",                // Online için yeşili koruyoruz
     fontWeight:"700",
     textAlign:"right",
   },
 
   time:{
-    color:"white",
+    color:"#262626",                // Eski: white
     fontSize:28,
     fontWeight:"900",
     marginTop:16,

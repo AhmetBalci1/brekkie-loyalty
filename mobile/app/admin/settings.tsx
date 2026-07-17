@@ -172,11 +172,12 @@ const styles = StyleSheet.create({
 
 container:{
 flex:1,
-backgroundColor:"#F5F5F5",
+backgroundColor:"#F8F5F0", // Eski: #F5F5F5
 },
+
 saveButton: {
 
-  backgroundColor:"#004225",
+  backgroundColor:"#E8B07A", // Eski: #004225
 
   padding:18,
 
@@ -188,15 +189,29 @@ saveButton: {
 
   marginBottom:40,
 
+  shadowColor:"#E8B07A",
+
+  shadowOffset:{
+    width:0,
+    height:4,
+  },
+
+  shadowOpacity:0.20,
+
+  shadowRadius:8,
+
+  elevation:4,
+
 },
 
 saveButtonText:{
 
-  color:"#fff",
+  color:"#262626", // Eski: #fff
 
   fontSize:17,
 
   fontWeight:"700",
 
 },
+
 });

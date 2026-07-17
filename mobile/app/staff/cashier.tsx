@@ -322,17 +322,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "#004225",
-
+    backgroundColor: "#F8F5F0", // Eski: #004225
 
     padding: 24,
-    
   },
 
   title: {
-    color: "#fff4e3",
+    color: "#262626", // Eski: #fff4e3
 
     fontSize: 34,
+
     fontWeight: "900",
 
     marginTop: 20,
@@ -341,66 +340,88 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    color: "#d4af37",
+    color: "#C97C4A", // Eski: #d4af37
 
     fontSize: 18,
 
     marginBottom: 2,
   },
+
   scanButton: {
-  width: "100%",
-  backgroundColor: "#d4af37",
-  paddingVertical: 32,
-  borderRadius: 26,
-  alignItems: "center",
-  marginVertical: 18,
+    width: "100%",
 
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 6,
+    backgroundColor: "#E8B07A", // Eski: #d4af37
+
+    paddingVertical: 32,
+
+    borderRadius: 26,
+
+    alignItems: "center",
+
+    marginVertical: 18,
+
+    shadowColor: "#E8B07A",
+
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+
+    shadowOpacity: 0.20,
+
+    shadowRadius: 8,
+
+    elevation: 6,
   },
-  shadowOpacity: 0.25,
-  shadowRadius: 8,
-  elevation: 8,
-},
 
-scanButtonText: {
-  color: "#2a1d17",
-  fontSize: 28,
-  fontWeight: "900",
-  letterSpacing: 1,
-},
+  scanButtonText: {
+    color: "#262626", // Eski: #2a1d17
+
+    fontSize: 28,
+
+    fontWeight: "900",
+
+    letterSpacing: 1,
+  },
+
   logoutButton: {
-  width: "100%",
-  marginBottom: 5,
+    width: "100%",
 
-  paddingVertical: 16,
+    marginBottom: 5,
 
-  borderRadius: 20,
+    paddingVertical: 16,
 
-  backgroundColor: "#7a1f1f",
+    borderRadius: 20,
 
-  alignItems: "center",
-},
+    backgroundColor: "#D9534F", // Eski: #7a1f1f
 
-logoutText: {
-  color: "#fff",
+    alignItems: "center",
+  },
 
-  fontWeight: "800",
+  logoutText: {
+    color: "#FFFFFF",
 
-  fontSize: 16,
-},
-staffName: {
-  color: "#fff4e3",
-  fontSize: 18,
-  fontWeight: "700",
-  marginTop: 8,
-},
+    fontWeight: "800",
 
-staffRole: {
-  color: "#d4af37",
-  fontSize: 15,
-  marginBottom: 16,
-},
+    fontSize: 16,
+  },
+
+  staffName: {
+    color: "#262626", // Eski: #fff4e3
+
+    fontSize: 18,
+
+    fontWeight: "700",
+
+    marginTop: 8,
+  },
+
+  staffRole: {
+    color: "#8A8178", // Eski: #d4af37
+
+    fontSize: 15,
+
+    marginBottom: 16,
+  },
+
 });

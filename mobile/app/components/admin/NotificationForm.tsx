@@ -144,39 +144,70 @@ export default function NotificationForm() {
 const styles = StyleSheet.create({
 
 card:{
-backgroundColor:"#fff",
+backgroundColor:"#FFFFFF",
 padding:20,
 borderRadius:20,
-elevation:4,
+
+borderWidth:1,
+borderColor:"#EADBC8",
+
+shadowColor:"#000",
+shadowOffset:{
+  width:0,
+  height:4,
+},
+shadowOpacity:0.05,
+shadowRadius:8,
+
+elevation:3,
 },
 
 title:{
 fontSize:24,
 fontWeight:"800",
-color:"#004225",
+color:"#262626",      // Eski: #004225
 marginBottom:20,
 },
 
 input:{
 borderWidth:1,
-borderColor:"#ddd",
+borderColor:"#EADBC8", // Eski: #ddd
+
 borderRadius:14,
+
 padding:14,
+
 marginBottom:14,
-backgroundColor:"#fff",
-color:"#222",
+
+backgroundColor:"#FDFBF8",
+
+color:"#262626",
 },
 
 button:{
-backgroundColor:"#004225",
+backgroundColor:"#E8B07A", // Eski: #004225
+
 padding:18,
+
 borderRadius:14,
+
 alignItems:"center",
+
+shadowColor:"#E8B07A",
+shadowOffset:{
+  width:0,
+  height:4,
+},
+shadowOpacity:0.20,
+shadowRadius:8,
+elevation:4,
 },
 
 buttonText:{
-color:"#fff",
+color:"#262626",      // Eski: #fff
+
 fontSize:16,
+
 fontWeight:"700",
 },
 

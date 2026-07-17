@@ -110,7 +110,7 @@ setErrorMessage(
   >
 
     <ImageBackground
-      source={require("../assets/images/brekkie-foto1.jpg")}
+      source={require("../assets/images/brekkie-foto2.jpg")}
       style={styles.background}
       resizeMode="cover"
     >
@@ -130,26 +130,6 @@ setErrorMessage(
           source={require("../assets/images/brekkie-logo.png")}
           style={styles.logo}
         />
-
-        <View style={styles.titleWrapper}>
-          
-          
-          <Text style={styles.titleShadow}>
-            BREKKIE
-          </Text>
-
-          <Text style={styles.title}>
-            BREKKIE
-          </Text>
-
-          <Text style={styles.clubShadow}>
-            CLUB
-          </Text>
-
-          <Text style={styles.club}>
-            CLUB
-          </Text>
-        </View>
 
         <Text style={styles.subtitle}>
           Hoşgeldiniz ☕
@@ -231,7 +211,7 @@ setErrorMessage(
 >
   <Text
     style={{
-      color: "#d4af37",
+      color: "#262626",
       marginTop: 15,
       textAlign: "center",
       fontWeight: "700",
@@ -263,9 +243,9 @@ const styles = StyleSheet.create({
 
   card: {
     width: "100%",
-    backgroundColor: "rgba(0,66,37,0.82)",
+    backgroundColor: "rgba(248,245,240,0.72)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
+    borderColor: "rgba(255,255,255,0.45)",
     borderRadius: 35,
     padding: 28,
     alignItems: "center",
@@ -300,7 +280,7 @@ const styles = StyleSheet.create({
     top: 4,
     left: 3,
 
-    color: "#1e140f",
+    color: "rgba(0,0,0,0.18)",
 
     fontSize: 40,
     fontWeight: "900",
@@ -308,41 +288,15 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#fff4e3",
+    color: "#262626",
 
     fontSize: 40,
     fontWeight: "900",
     letterSpacing: 4,
   },
 
-  clubShadow: {
-    position: "absolute",
-
-    top: 48,
-
-    alignSelf: "center",
-
-    color: "#1e140f",
-
-    fontSize: 35,
-    fontWeight: "900",
-    letterSpacing: 8,
-  },
-
-  club: {
-    marginTop: -2,
-
-    color: "#fff4e3",
-
-    fontSize: 35,
-    fontWeight: "900",
-    letterSpacing: 8,
-
-    textAlign: "center",
-  },
-
   subtitle: {
-    color: "#d4af37",
+    color: "#262626",
     marginBottom: 30,
     fontSize: 22,
   },
@@ -350,8 +304,11 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
 
-    backgroundColor: "#0b5d38",
-    color: "#fff4e3",
+    backgroundColor: "rgba(255,255,255,0.75)",
+color: "#262626",
+
+borderWidth: 1,
+borderColor: "#E5D7C7",
 
     padding: 18,
     borderRadius: 20,
@@ -364,7 +321,7 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
 
-    backgroundColor: "#d4af37",
+    backgroundColor: "#F1B993",
 
     paddingVertical: 18,
 
@@ -374,7 +331,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: "#2a1d17",
+    color: "#262626",
 
     fontSize: 18,
     fontWeight: "bold",
@@ -383,7 +340,7 @@ const styles = StyleSheet.create({
 
   width: "100%",
 
-  backgroundColor: "#5c1f1f",
+  backgroundColor: "#E8A6A0",
 
   padding: 16,
 
@@ -396,7 +353,7 @@ const styles = StyleSheet.create({
 
 errorText: {
 
-  color: "#fff",
+  color: "#7A1F1F",
 
   fontWeight: "700",
 
@@ -407,7 +364,7 @@ successPopup: {
 
   width: "100%",
 
-  backgroundColor: "#0b5d38",
+  backgroundColor: "#EADBC8",
 
   padding: 22,
 
@@ -427,7 +384,7 @@ successEmoji: {
 
 successTitle: {
 
-  color: "#fff",
+  color: "#262626",
 
   fontSize: 22,
 
@@ -438,7 +395,7 @@ successTitle: {
 
 successText: {
 
-  color: "#d4af37",
+  color: "#C97C4A",
 
   fontSize: 15,
 },
@@ -448,6 +405,6 @@ background: {
 
 overlay: {
   flex: 1,
-  backgroundColor: "rgba(0,0,0,0.35)",
+  backgroundColor: "rgba(0,0,0,0.22)",
 },
 });

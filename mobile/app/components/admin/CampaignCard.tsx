@@ -38,8 +38,8 @@ export default function CampaignCard({
           <Text
             style={{
               color: campaign.is_active
-                ? "#1F8A4C"
-                : "#B02A37",
+  ? "#C97C4A"
+  : "#C0392B",
               fontWeight: "700",
             }}
           >
@@ -65,8 +65,8 @@ export default function CampaignCard({
     styles.toggleButton,
     {
       backgroundColor: campaign.is_active
-        ? "#B02A37"
-        : "#1F8A4C",
+  ? "#F7E7D4"
+  : "#FDE2E2",
     },
   ]}
 >
@@ -92,10 +92,21 @@ export default function CampaignCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     borderRadius: 20,
     padding: 18,
     marginBottom: 16,
+
+    borderWidth: 1,
+    borderColor: "#EADBC8",
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
     elevation: 3,
   },
 
@@ -108,12 +119,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#004225",
+    color: "#262626", // Eski: #004225
   },
 
   description: {
     marginTop: 10,
-    color: "#666",
+    color: "#8A8178", // Eski: #666
     lineHeight: 20,
   },
 
@@ -122,43 +133,53 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 20,
   },
+
   toggleButton: {
-  marginTop: 16,
-  borderRadius: 12,
-  paddingVertical: 12,
-  alignItems: "center",
-},
+    marginTop: 16,
 
-toggleButtonText: {
-  color: "#fff",
-  fontWeight: "700",
-  fontSize: 15,
-},
-editButton: {
-  marginTop: 16,
-  backgroundColor: "#004225",
-  borderRadius: 12,
-  paddingVertical: 12,
-  alignItems: "center",
-},
+    backgroundColor: "#DCC8B4", // Durum değiştir
 
-editButtonText: {
-  color: "#fff",
-  fontWeight: "700",
-  fontSize: 15,
-  textAlign: "center",
-},
-deleteButton: {
-  marginTop: 12,
-  backgroundColor: "#D64545",
-  borderRadius: 12,
-  paddingVertical: 12,
-  alignItems: "center",
-},
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
 
-deleteButtonText: {
-  color: "#fff",
-  fontWeight: "700",
-  fontSize: 15,
-},
+  toggleButtonText: {
+    color: "#262626",
+    fontWeight: "700",
+    fontSize: 15,
+  },
+
+  editButton: {
+    marginTop: 16,
+
+    backgroundColor: "#E8B07A", // Düzenle
+
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
+
+  editButtonText: {
+    color: "#262626",
+    fontWeight: "700",
+    fontSize: 15,
+    textAlign: "center",
+  },
+
+  deleteButton: {
+    marginTop: 12,
+
+    backgroundColor: "#D9534F", // Sil
+
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
+
+  deleteButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "700",
+    fontSize: 15,
+  },
 });
