@@ -109,7 +109,7 @@ export default function SplashScreen() {
 
         <Image
           source={require(
-            "../assets/images/brekkie-logo.png"
+            "../assets/images/brekkie-logo-adaptive-25.png"
           )}
 
           style={styles.logo}

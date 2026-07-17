@@ -11,11 +11,6 @@
     "ios": {
       "supportsTablet": true
     },
-    "splash": {
-      "image": "./assets/images/brekkie-logo-adaptive-25.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F8F5F0"
-    },
     "android": {
       "permissions": [
     "ACCESS_FINE_LOCATION",
@@ -49,7 +44,7 @@
  [
   "expo-splash-screen",
   {
-    "image": "./assets/images/brekkie-logo.png",
+    "image": "./assets/images/brekkie-logo-adaptive-25.png",
     "resizeMode": "contain",
     "backgroundColor": "#F8F5F0"
   }
@@ -58,7 +53,7 @@
   [
     "expo-notifications",
     {
-      "icon": "./assets/images/brekkie-logo.png",
+      "icon": "./assets/images/brekkie-logo.-adaptive-25.png",
       "color": "#E8B07A"
     }
   ]
