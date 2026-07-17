@@ -110,7 +110,7 @@ setErrorMessage(
   >
 
     <ImageBackground
-      source={require("../assets/images/brekkie-foto2.jpg")}
+      source={require("../assets/images/brekkie-foto2.png")}
       style={styles.background}
       resizeMode="cover"
     >

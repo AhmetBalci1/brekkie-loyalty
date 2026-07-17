@@ -38,7 +38,7 @@ const [password, setPassword] =
 >
 
 <ImageBackground
-  source={require("../assets/images/brekkie-foto1.jpg")}
+  source={require("../assets/images/brekkie-foto1.png")}
   style={styles.background}
   resizeMode="cover"
 >

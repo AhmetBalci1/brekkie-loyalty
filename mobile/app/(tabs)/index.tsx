@@ -163,7 +163,7 @@ const loadUser = async () => {
   if (!user) {
   return (
     <ImageBackground
-      source={require("../../assets/images/brekkie-foto2.jpg")}
+      source={require("../../assets/images/brekkie-foto2.png")}
       style={styles.background}
       resizeMode="cover"
     >
@@ -268,7 +268,7 @@ const loadUser = async () => {
   return (
 
   <ImageBackground
-  source={require("../../assets/images/brekkie-foto1.jpg")}
+  source={require("../../assets/images/brekkie-foto1.png")}
   style={styles.background}
   resizeMode="cover"
 >

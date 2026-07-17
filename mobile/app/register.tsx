@@ -67,7 +67,7 @@ export default function RegisterScreen() {
     }
   >
     <ImageBackground
-  source={require("../assets/images/brekkie-foto3.jpg")}
+  source={require("../assets/images/brekkie-foto3.png")}
   style={styles.background}
   resizeMode="cover"
 >
