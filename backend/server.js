@@ -670,12 +670,19 @@ app.get("/analytics", async (req, res) => {
     WHERE DATE(created_at) = CURRENT_DATE
     `
   );
-    const scansResult =
-      await pool.query(
-        `SELECT COUNT(*)
-        FROM scan_logs
-        WHERE DATE(created_at) = CURRENT_DATE`
-      );
+   const salesResult =
+await pool.query(`
+SELECT COUNT(*)
+FROM sales
+WHERE DATE(created_at)=CURRENT_DATE
+`);
+const revenueResult =
+await pool.query(`
+SELECT
+COALESCE(SUM(total_price),0) AS revenue
+FROM sales
+WHERE DATE(created_at)=CURRENT_DATE
+`);
 
     const rewardsResult =
       await pool.query(
@@ -724,10 +731,8 @@ app.get("/analytics", async (req, res) => {
           usersResult.rows[0].count
         ),
 
-      scans:
-        Number(
-          scansResult.rows[0].count
-        ),
+     sales:
+Number(salesResult.rows[0].count),
 
       rewards:
         Number(
@@ -735,27 +740,24 @@ app.get("/analytics", async (req, res) => {
         ),
 
       revenue:
-        Number(
-          scansResult.rows[0].count
-        ) * 120,
+Number(revenueResult.rows[0].revenue),
 
-      todayActivity: {
+     todayActivity:{
+    sales:
+      Number(
+        salesResult.rows[0].count
+      ),
 
-        scans:
-          Number(
-            scansResult.rows[0].count
-          ),
+    rewards:
+      Number(
+        rewardsResult.rows[0].count
+      ),
 
-        rewards:
-          Number(
-            rewardsResult.rows[0].count
-          ),
-
-        customers:
-          Number(
-            todayCustomersResult.rows[0].count
-          ),
-      },
+    customers:
+      Number(
+        todayCustomersResult.rows[0].count
+      ),
+},
 
       topCustomer:
         topCustomerResult.rows[0] ||
@@ -2263,6 +2265,123 @@ app.put("/stores/:id", async (req, res) => {
   }
 
 });
+app.put("/products/:id", async (req, res) => {
+  try {
+
+    const { id } = req.params;
+
+    const {
+      name,
+      category,
+      temperature,
+      price,
+      loyalty_value,
+    } = req.body;
+
+    const result = await pool.query(
+      `
+      UPDATE products
+      SET
+        name = $1,
+        category = $2,
+        temperature = $3,
+        price = $4,
+        loyalty_value = $5
+      WHERE id = $6
+      RETURNING *
+      `,
+      [
+        name,
+        category,
+        temperature,
+        price,
+        loyalty_value,
+        id,
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Ürün bulunamadı",
+      });
+    }
+
+    await createAuditLog(
+      "admin",
+      "product_updated",
+      `${name} ürünü güncellendi`
+    );
+
+    res.json({
+      success: true,
+      product: result.rows[0],
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      error: "Ürün güncellenemedi",
+    });
+
+  }
+});
+app.put("/products/:id/status", async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+    const { is_active } = req.body;
+
+    const result = await pool.query(
+      `
+      UPDATE products
+      SET is_active = $1
+      WHERE id = $2
+      RETURNING *
+      `,
+      [
+        is_active,
+        id,
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Ürün bulunamadı",
+      });
+    }
+
+    await createAuditLog(
+      "admin",
+      is_active ? "product_enabled" : "product_disabled",
+      `${result.rows[0].name} ${
+        is_active ? "aktif edildi" : "pasif edildi"
+      }`
+    );
+
+    res.json({
+      success: true,
+      product: result.rows[0],
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      error: "Durum güncellenemedi",
+    });
+
+  }
+
+});
 app.post("/stores", async (req, res) => {
   try {
     const {
@@ -2420,6 +2539,70 @@ app.delete("/staff/:id", async (req, res) => {
   }
 
 });
+app.delete("/products/:id", async (req, res) => {
+  try {
+
+    const { id } = req.params;
+
+    // Bu ürün satılmış mı?
+    const salesResult = await pool.query(
+      `
+      SELECT COUNT(*) AS total
+      FROM sales
+      WHERE product_id = $1
+      `,
+      [id]
+    );
+
+    if (Number(salesResult.rows[0].total) > 0) {
+
+      return res.status(400).json({
+        success: false,
+        error:
+          "Bu ürün geçmiş satışlarda kullanıldığı için silinemez. Pasif yapabilirsiniz.",
+      });
+
+    }
+
+    const result = await pool.query(
+      `
+      DELETE FROM products
+      WHERE id = $1
+      RETURNING *
+      `,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+
+      return res.status(404).json({
+        success: false,
+        error: "Ürün bulunamadı",
+      });
+
+    }
+
+    await createAuditLog(
+      "admin",
+      "product_deleted",
+      `${result.rows[0].name} ürünü silindi`
+    );
+
+    res.json({
+      success: true,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      error: "Ürün silinemedi",
+    });
+
+  }
+});
 app.post("/seed-admin", async (req, res) => {
   try {
     const existing = await pool.query(
@@ -2487,6 +2670,200 @@ app.post("/seed-admin", async (req, res) => {
 
     res.status(500).json({
       error: "Admin oluşturulamadı.",
+    });
+
+  }
+});
+app.post("/products", async (req, res) => {
+  try {
+
+    const {
+      store_id,
+      name,
+      price,
+      category,
+      temperature,
+      loyalty_value,
+    } = req.body;
+
+    const result = await pool.query(
+      `
+      INSERT INTO products
+      (
+        store_id,
+        name,
+        price,
+        category,
+        temperature,
+        loyalty_value
+      )
+      VALUES($1,$2,$3,$4,$5,$6)
+      RETURNING *
+      `,
+      [
+        store_id,
+        name,
+        price,
+        category,
+        temperature,
+        loyalty_value,
+      ]
+    );
+
+    // Audit log
+    await createAuditLog(
+      "admin",
+      "product_created",
+      `${name} ürünü oluşturuldu`
+    );
+
+    res.json({
+      success: true,
+      product: result.rows[0],
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      error: "Ürün eklenemedi",
+    });
+
+  }
+});
+app.post("/sale", async (req, res) => {
+  try {
+
+    const {
+      userId,
+      productId,
+      staffId,
+    } = req.body;
+
+    // Ürünü getir
+    const productResult = await pool.query(
+      `
+      SELECT *
+      FROM products
+      WHERE id = $1
+      `,
+      [productId]
+    );
+
+    if (productResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Ürün bulunamadı",
+      });
+    }
+
+    const product = productResult.rows[0];
+
+    // Satışı kaydet
+   await pool.query(
+`
+INSERT INTO sales
+(
+  user_id,
+  staff_id,
+  store_id,
+  product_id,
+  quantity,
+  unit_price,
+  total_price,
+  loyalty_points
+)
+VALUES($1,$2,$3,$4,$5,$6,$7,$8)
+`,
+[
+  userId,
+  staffId,
+  product.store_id,
+  productId,
+  1,
+  product.price,
+  product.price,
+  product.loyalty_value,
+]
+);
+
+    // Eski scan mantığını çalıştır
+    const userResult = await pool.query(
+      `
+      SELECT *
+      FROM users
+      WHERE id = $1
+      `,
+      [userId]
+    );
+
+    const user = userResult.rows[0];
+    if (!user) {
+  return res.status(404).json({
+    success: false,
+    error: "Kullanıcı bulunamadı",
+  });
+}
+
+    let coffeeCount =
+  user.coffee_count +
+  product.loyalty_value;
+    let freeCoffee = user.free_coffee;
+
+    const settings = await pool.query(
+      `
+      SELECT loyalty_target
+      FROM settings
+      LIMIT 1
+      `
+    );
+
+    const target =
+      settings.rows[0].loyalty_target;
+
+    if (coffeeCount >= target) {
+
+      coffeeCount = 0;
+      freeCoffee++;
+
+    }
+
+    const updated =
+      await pool.query(
+        `
+        UPDATE users
+        SET
+        coffee_count = $1,
+        free_coffee = $2
+        WHERE id = $3
+        RETURNING *
+        `,
+        [
+          coffeeCount,
+          freeCoffee,
+          userId,
+        ]
+      );
+await createAuditLog(
+  staffId || "staff",
+  "sale_completed",
+  `${product.name} satıldı - ₺${product.price}`
+);
+    res.json({
+      success: true,
+      user: updated.rows[0],
+      product,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      error: "Satış yapılamadı",
     });
 
   }
