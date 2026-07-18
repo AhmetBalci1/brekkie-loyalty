@@ -1900,6 +1900,40 @@ error:"Settings alınamadı"
 }
 
 });
+app.get("/products", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `
+      SELECT
+        id,
+        store_id,
+        name,
+        price,
+        category,
+        temperature,
+        loyalty_value,
+        is_active
+      FROM products
+      WHERE is_active = true
+      ORDER BY
+        category,
+        name,
+        temperature;
+      `
+    );
+
+    res.json(result.rows);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: "Ürünler alınamadı",
+    });
+
+  }
+});
 app.put("/settings", async (req,res)=>{
 
 try{
@@ -1920,21 +1954,18 @@ await pool.query(
 
 `
 UPDATE settings
-
 SET
-business_name=$1,
-loyalty_target=$2,
-reward_type=$3,
-admin_username=$4,
-admin_password=$5,
-push_notifications=$6,
-campaign_notifications=$7,
-geofence_notifications=$8,
-updated_at=NOW()
-
-WHERE id=1
-
-RETURNING *
+business_name = $1,
+loyalty_target = $2,
+reward_type = $3,
+admin_username = $4,
+admin_password = $5,
+push_notifications = COALESCE($6, push_notifications),
+campaign_notifications = COALESCE($7, campaign_notifications),
+geofence_notifications = COALESCE($8, geofence_notifications),
+updated_at = NOW()
+WHERE id = 1
+RETURNING *;
 `,
 
 [
@@ -1958,7 +1989,7 @@ res.json(result.rows[0]);
 
 }catch(err){
 
-console.log(err);
+console.error("SETTINGS ERROR:", err);
 
 res.status(500).json({
 
