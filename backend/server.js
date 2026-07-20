@@ -1496,22 +1496,24 @@ app.post("/notifications/send-all", async (req, res) => {
       WHERE push_token IS NOT NULL
     `);
 
-    await sendToMany(
+  const messages = await sendToMany(
   result.rows.map(
     row => row.push_token
   ),
   title,
   body
 );
+
 await createAuditLog(
   "admin",
   "notification_send",
   `${title} bildirimi gönderildi`
 );
-    res.json({
-      success: true,
-      sent: messages.length,
-    });
+
+res.json({
+  success: true,
+  sent: messages.length,
+});
 
   } catch (err) {
 

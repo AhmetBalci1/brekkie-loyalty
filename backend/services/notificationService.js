@@ -68,7 +68,7 @@ async function sendToMany(
     );
 
   }
-
+return messages;
 }
 
 module.exports = {
