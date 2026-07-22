@@ -2738,33 +2738,44 @@ app.post("/products", async (req, res) => {
 app.post("/sale", async (req, res) => {
   try {
 
-    const {
-      userId,
-      productId,
-      staffId,
-    } = req.body;
+   const {
+  userId,
+  items,
+  staffId,
+} = req.body;
 
-    // Ürünü getir
-    const productResult = await pool.query(
-      `
-      SELECT *
-      FROM products
-      WHERE id = $1
-      `,
-      [productId]
-    );
+let totalPrice = 0;
+let loyaltyPoints = 0;
+if (!items || items.length === 0) {
+  return res.status(400).json({
+    success: false,
+    error: "Sepet boş.",
+  });
+}
+for (const item of items) {
 
-    if (productResult.rows.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: "Ürün bulunamadı",
-      });
-    }
+  const productResult = await pool.query(
+    `
+    SELECT *
+    FROM products
+    WHERE id = $1
+    `,
+    [item.productId]
+  );
 
-    const product = productResult.rows[0];
+  if (productResult.rows.length === 0) {
+    continue;
+  }
 
-    // Satışı kaydet
-   await pool.query(
+  const product = productResult.rows[0];
+
+  totalPrice +=
+    Number(product.price) * item.quantity;
+
+  loyaltyPoints +=
+    product.loyalty_value * item.quantity;
+
+  await pool.query(
 `
 INSERT INTO sales
 (
@@ -2783,13 +2794,16 @@ VALUES($1,$2,$3,$4,$5,$6,$7,$8)
   userId,
   staffId,
   product.store_id,
-  productId,
-  1,
+  product.id,
+  item.quantity,
   product.price,
-  product.price,
-  product.loyalty_value,
+  product.price * item.quantity,
+  product.loyalty_value * item.quantity,
 ]
 );
+
+}
+
 
     // Eski scan mantığını çalıştır
     const userResult = await pool.query(
@@ -2809,9 +2823,9 @@ VALUES($1,$2,$3,$4,$5,$6,$7,$8)
   });
 }
 
-    let coffeeCount =
-  user.coffee_count +
-  product.loyalty_value;
+  let coffeeCount =
+user.coffee_count +
+loyaltyPoints;
     let freeCoffee = user.free_coffee;
 
     const settings = await pool.query(
@@ -2825,12 +2839,13 @@ VALUES($1,$2,$3,$4,$5,$6,$7,$8)
     const target =
       settings.rows[0].loyalty_target;
 
-    if (coffeeCount >= target) {
+    while (coffeeCount >= target) {
 
-      coffeeCount = 0;
-      freeCoffee++;
+  coffeeCount -= target;
 
-    }
+  freeCoffee++;
+
+}
 
     const updated =
       await pool.query(
@@ -2851,12 +2866,13 @@ VALUES($1,$2,$3,$4,$5,$6,$7,$8)
 await createAuditLog(
   staffId || "staff",
   "sale_completed",
-  `${product.name} satıldı - ₺${product.price}`
+  `${items.length} ürün satıldı - ₺${totalPrice}`
 );
     res.json({
       success: true,
       user: updated.rows[0],
-      product,
+      totalPrice,
+loyaltyPoints,
     });
 
   } catch (err) {
