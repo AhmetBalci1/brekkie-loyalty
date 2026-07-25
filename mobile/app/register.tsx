@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { router } from "expo-router";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -20,8 +20,45 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] =
   useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleRegister = async () => {
+    if (!name.trim()) {
+  Alert.alert("Eksik Bilgi", "Lütfen isminizi giriniz.");
+  return;
+}
+
+if (!email.trim()) {
+  Alert.alert("Eksik Bilgi", "Lütfen e-posta adresinizi giriniz.");
+  return;
+}
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email)) {
+  Alert.alert(
+    "Geçersiz E-posta",
+    "Lütfen geçerli bir e-posta adresi giriniz."
+  );
+  return;
+}
+
+if (password.length < 8) {
+  Alert.alert(
+    "Geçersiz Şifre",
+    "Şifre en az 8 karakter olmalıdır."
+  );
+  return;
+}
+
+if (password !== confirmPassword) {
+  Alert.alert(
+    "Şifre Hatası",
+    "Şifreler birbiriyle uyuşmuyor."
+  );
+  return;
+}
     try {
       const response = await fetch(
         "https://brekkie-api.onrender.com/users",
@@ -44,9 +81,15 @@ export default function RegisterScreen() {
       await response.json();
 
       Alert.alert(
-        "Başarılı 🎉",
-        "Hesabınız oluşturuldu"
-      );
+  "Başarılı 🎉",
+  "Hesabınız oluşturuldu.",
+  [
+    {
+      text: "Tamam",
+      onPress: () => router.replace("/login"),
+    },
+  ]
+);
     } catch (error) {
       console.log(error);
 
@@ -105,19 +148,63 @@ export default function RegisterScreen() {
           value={email}
           onChangeText={setEmail}
         />
-        <TextInput
-  placeholder="Şifreniz"
+        <View style={styles.passwordContainer}>
 
-  placeholderTextColor="#cbb9a7"
+  <TextInput
+    placeholder="Şifreniz"
+    placeholderTextColor="#cbb9a7"
+    secureTextEntry={!showPassword}
+    style={styles.passwordInput}
+    value={password}
+    onChangeText={setPassword}
+  />
 
-  secureTextEntry
+  <TouchableOpacity
+    onPress={() => setShowPassword(!showPassword)}
+  >
+    <MaterialCommunityIcons
+      name={showPassword ? "eye-off" : "eye"}
+      size={24}
+      color="#777"
+    />
+  </TouchableOpacity>
 
-  style={styles.input}
+</View>
+<View style={styles.passwordContainer}>
 
-  value={password}
+  <TextInput
+    placeholder="Şifrenizi tekrar girin"
+    placeholderTextColor="#cbb9a7"
+    secureTextEntry={!showConfirmPassword}
+    style={styles.passwordInput}
+    value={confirmPassword}
+    onChangeText={setConfirmPassword}
+  />
 
-  onChangeText={setPassword}
-/>
+  <TouchableOpacity
+    onPress={() =>
+      setShowConfirmPassword(!showConfirmPassword)
+    }
+  >
+    <MaterialCommunityIcons
+      name={
+        showConfirmPassword
+          ? "eye-off"
+          : "eye"
+      }
+      size={24}
+      color="#777"
+    />
+  </TouchableOpacity>
+
+</View>
+
+{confirmPassword.length > 0 &&
+  password !== confirmPassword && (
+    <Text style={styles.errorText}>
+      Şifreler eşleşmiyor.
+    </Text>
+)}
 
         <TouchableOpacity
           style={styles.button}
@@ -278,5 +365,31 @@ borderColor: "#E5D7C7",
 overlay: {
   flex: 1,
   backgroundColor: "rgba(0,0,0,0.22)",
+},
+errorText: {
+  width: "100%",
+  color: "#D9534F",
+  fontSize: 13,
+  fontWeight: "600",
+  marginTop: -14,
+  marginBottom: 16,
+},
+passwordContainer: {
+  width: "100%",
+  flexDirection: "row",
+  alignItems: "center",
+  backgroundColor: "rgba(255,255,255,0.75)",
+  borderWidth: 1,
+  borderColor: "#E5D7C7",
+  borderRadius: 20,
+  paddingHorizontal: 18,
+  marginBottom: 20,
+},
+
+passwordInput: {
+  flex: 1,
+  color: "#262626",
+  fontSize: 16,
+  paddingVertical: 18,
 },
 });

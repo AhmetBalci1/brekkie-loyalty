@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { router } from "expo-router";
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  
 } from "react-native";
 
 export default function ForgotPassword() {
@@ -21,13 +23,33 @@ export default function ForgotPassword() {
 
   const [password, setPassword] =
     useState("");
+  
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [mailSent, setMailSent] =
     useState(false);
 
+
+    
   const handleSendMail =
     async () => {
+if (!email.trim()) {
+  Alert.alert(
+    "Eksik Bilgi",
+    "Lütfen e-posta adresinizi girin."
+  );
+  return;
+}
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email)) {
+  Alert.alert(
+    "Geçersiz E-posta",
+    "Lütfen geçerli bir e-posta adresi girin."
+  );
+  return;
+}
       try {
 
         const response =
@@ -77,7 +99,37 @@ export default function ForgotPassword() {
     };
 
   const handleResetPassword =
+  
     async () => {
+      if (!token.trim()) {
+  Alert.alert(
+    "Eksik Bilgi",
+    "Lütfen doğrulama kodunu girin."
+  );
+  return;
+}
+if (!password.trim()) {
+  Alert.alert(
+    "Eksik Bilgi",
+    "Lütfen yeni şifrenizi girin."
+  );
+  return;
+}
+      if (password.length < 8) {
+  Alert.alert(
+    "Hata",
+    "Şifre en az 8 karakter olmalıdır."
+  );
+  return;
+}
+
+if (password !== confirmPassword) {
+  Alert.alert(
+    "Hata",
+    "Şifreler eşleşmiyor."
+  );
+  return;
+}
 
       try {
 
@@ -104,10 +156,16 @@ export default function ForgotPassword() {
 
         if (result.success) {
 
-          Alert.alert(
-            "Başarılı",
-            "Şifreniz güncellendi."
-          );
+         Alert.alert(
+  "Başarılı",
+  "Şifreniz güncellendi.",
+  [
+    {
+      text: "Giriş Yap",
+      onPress: () => router.replace("/login"),
+    },
+  ]
+);
 
         } else {
 
@@ -152,6 +210,8 @@ export default function ForgotPassword() {
         <>
           <TextInput
             placeholder="Email"
+            placeholderTextColor="#999"
+            selectionColor="#F1B993"
             value={email}
             onChangeText={setEmail}
             style={styles.input}
@@ -171,19 +231,34 @@ export default function ForgotPassword() {
 
         <>
           <TextInput
-            placeholder="Maildeki Kod"
-            value={token}
-            onChangeText={setToken}
-            style={styles.input}
-          />
+  placeholder="6 haneli doğrulama kodu"
+  placeholderTextColor="#999"
+  selectionColor="#F1B993"
+  value={token}
+  onChangeText={setToken}
+  style={styles.input}
+  keyboardType="number-pad"
+  maxLength={6}
+/>
 
           <TextInput
             placeholder="Yeni Şifre"
+            placeholderTextColor="#999"
+            selectionColor="#F1B993"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
             style={styles.input}
           />
+          <TextInput
+  placeholder="Yeni Şifreyi Tekrar Girin"
+  placeholderTextColor="#999"
+  selectionColor="#F1B993"
+  secureTextEntry
+  value={confirmPassword}
+  onChangeText={setConfirmPassword}
+  style={styles.input}
+/>
 
           <TouchableOpacity
             style={styles.button}

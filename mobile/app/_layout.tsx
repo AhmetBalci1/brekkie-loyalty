@@ -27,7 +27,12 @@ export default function RootLayout() {
       name="(tabs)"
       options={{ headerShown: false }}
     />
-
+    <Stack.Screen
+      name="admin"
+      options={{
+      headerShown: false,
+      }}
+/>
     <Stack.Screen
       name="login"
       options={{ headerShown: false }}
@@ -50,6 +55,24 @@ export default function RootLayout() {
         title: "Modal",
       }}
     />
+    <Stack.Screen
+  name="staff/cashier"
+  options={{
+    headerShown: false,
+  }}
+/>
+    <Stack.Screen
+  name="forgot-password"
+  options={{
+    headerShown: false,
+  }}
+/>
+<Stack.Screen
+  name="scanner"
+  options={{
+    headerShown: false,
+  }}
+/>
 
   </Stack>
 

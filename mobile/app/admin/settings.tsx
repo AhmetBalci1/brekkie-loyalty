@@ -28,6 +28,9 @@ export default function SettingsScreen() {
 
   const [adminPassword, setAdminPassword] =
     useState("");
+    const [pushNotifications, setPushNotifications] = useState(true);
+    const [campaignNotifications, setCampaignNotifications] = useState(true);
+    const [geofenceNotifications, setGeofenceNotifications] = useState(true);
 
   useEffect(() => {
 
@@ -52,6 +55,9 @@ export default function SettingsScreen() {
         setAdminPassword(
           data.admin_password
         );
+        setPushNotifications(data.push_notifications);
+  setCampaignNotifications(data.campaign_notifications);
+  setGeofenceNotifications(data.geofence_notifications);
 
       })
       .catch(console.log);
@@ -86,6 +92,9 @@ export default function SettingsScreen() {
 
           admin_password:
             adminPassword,
+            push_notifications: pushNotifications,
+campaign_notifications: campaignNotifications,
+geofence_notifications: geofenceNotifications,
 
         }),
 
@@ -142,7 +151,14 @@ export default function SettingsScreen() {
         setRewardType={setRewardType}
 
       />
-<SettingsNotifications />
+<SettingsNotifications
+  pushNotifications={pushNotifications}
+  setPushNotifications={setPushNotifications}
+  campaignNotifications={campaignNotifications}
+  setCampaignNotifications={setCampaignNotifications}
+  geofenceNotifications={geofenceNotifications}
+  setGeofenceNotifications={setGeofenceNotifications}
+/>
      <SettingsSecurity
   adminUsername={adminUsername}
   setAdminUsername={setAdminUsername}

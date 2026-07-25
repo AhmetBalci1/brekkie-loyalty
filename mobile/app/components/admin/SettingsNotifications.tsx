@@ -1,84 +1,81 @@
 import { View, Text, StyleSheet, Switch } from "react-native";
-import { useState } from "react";
 
-export default function SettingsNotifications() {
+type Props = {
+  pushNotifications: boolean;
+  setPushNotifications: (value: boolean) => void;
 
-  const [pushEnabled, setPushEnabled] = useState(true);
-  const [campaignEnabled, setCampaignEnabled] = useState(true);
-  const [geofenceEnabled, setGeofenceEnabled] = useState(true);
+  campaignNotifications: boolean;
+  setCampaignNotifications: (value: boolean) => void;
 
+  geofenceNotifications: boolean;
+  setGeofenceNotifications: (value: boolean) => void;
+};
+
+export default function SettingsNotifications({
+  pushNotifications,
+  setPushNotifications,
+  campaignNotifications,
+  setCampaignNotifications,
+  geofenceNotifications,
+  setGeofenceNotifications,
+}: Props) {
   return (
     <View style={styles.card}>
-
-      <Text style={styles.title}>
-        🔔 Bildirimler
-      </Text>
+      <Text style={styles.title}>🔔 Bildirimler</Text>
 
       <View style={styles.row}>
-        <Text style={styles.label}>
-          Push Bildirimleri
-        </Text>
-
+        <Text style={styles.label}>Push Bildirimleri</Text>
         <Switch
-          value={pushEnabled}
-          onValueChange={setPushEnabled}
+          value={pushNotifications}
+          onValueChange={setPushNotifications}
         />
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>
-          Kampanya Bildirimleri
-        </Text>
-
+        <Text style={styles.label}>Kampanya Bildirimleri</Text>
         <Switch
-          value={campaignEnabled}
-          onValueChange={setCampaignEnabled}
+          value={campaignNotifications}
+          onValueChange={setCampaignNotifications}
         />
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>
-          Geofence Bildirimleri
-        </Text>
-
+        <Text style={styles.label}>Geofence Bildirimleri</Text>
         <Switch
-          value={geofenceEnabled}
-          onValueChange={setGeofenceEnabled}
+          value={geofenceNotifications}
+          onValueChange={setGeofenceNotifications}
         />
       </View>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
-  card:{
-    backgroundColor:"#fff",
-    padding:20,
-    borderRadius:20,
-    marginBottom:20,
-    elevation:4,
+  card: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 20,
+    marginBottom: 20,
+    elevation: 4,
   },
 
-  title:{
-    fontSize:22,
-    fontWeight:"800",
-    color:"#004225",
-    marginBottom:20,
+  title: {
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#004225",
+    marginBottom: 20,
   },
 
-  row:{
-    flexDirection:"row",
-    justifyContent:"space-between",
-    alignItems:"center",
-    marginBottom:18,
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 18,
   },
 
-  label:{
-    fontSize:16,
-    color:"#444",
-    fontWeight:"600",
+  label: {
+    fontSize: 16,
+    color: "#444",
+    fontWeight: "600",
   },
-
 });

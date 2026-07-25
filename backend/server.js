@@ -13,6 +13,10 @@ const SibApiV3Sdk= require("sib-api-v3-sdk");
 const crypto = require("crypto");
 const express = require("express");
 const pool = require("./config/db");
+    const {
+  oneCoffeeLeft,
+  rewardEarned,
+} = require("./utils/notificationMessages");
 const QRCode = require("qrcode");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
@@ -2738,6 +2742,7 @@ app.post("/products", async (req, res) => {
 app.post("/sale", async (req, res) => {
   try {
 
+
    const {
   userId,
   items,
@@ -2822,28 +2827,95 @@ VALUES($1,$2,$3,$4,$5,$6,$7,$8)
     error: "Kullanıcı bulunamadı",
   });
 }
+const previousCoffeeCount =
+  user.coffee_count;
 
-  let coffeeCount =
-user.coffee_count +
-loyaltyPoints;
-    let freeCoffee = user.free_coffee;
+let coffeeCount =
+  user.coffee_count +
+  loyaltyPoints;
 
-    const settings = await pool.query(
-      `
-      SELECT loyalty_target
-      FROM settings
-      LIMIT 1
-      `
-    );
+let freeCoffee =
+  user.free_coffee;
 
-    const target =
-      settings.rows[0].loyalty_target;
+const settings = await pool.query(
+`
+SELECT loyalty_target
+FROM settings
+LIMIT 1
+`
+);
+
+const target =
+  settings.rows[0].loyalty_target;
+
+const earnedReward =
+  previousCoffeeCount + loyaltyPoints >= target;
 
     while (coffeeCount >= target) {
 
   coffeeCount -= target;
 
   freeCoffee++;
+
+}
+
+const reachedOneCoffeeLeft =
+  previousCoffeeCount < target - 1 &&
+  previousCoffeeCount + loyaltyPoints === target - 1;
+
+if (
+  reachedOneCoffeeLeft &&
+  !earnedReward &&
+  user.push_token
+) {
+
+  try {
+
+    const message = oneCoffeeLeft(
+  user.name,
+  target - 1,
+  target
+);
+
+await sendNotification(
+  user.push_token,
+  message.title,
+  message.body
+);
+
+  } catch (err) {
+
+    console.log(
+      "One coffee left bildirimi gönderilemedi:",
+      err
+    );
+
+  }
+
+}
+if (
+  earnedReward &&
+  user.push_token
+) {
+
+  try {
+
+   const reward = rewardEarned(user.name);
+
+await sendNotification(
+  user.push_token,
+  reward.title,
+  reward.body
+);
+
+  } catch (err) {
+
+    console.log(
+      "Reward bildirimi gönderilemedi:",
+      err
+    );
+
+  }
 
 }
 

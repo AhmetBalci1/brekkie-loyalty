@@ -61,7 +61,7 @@ const [password, setPassword] =
     marginBottom: 30,
   }}
 >
-  Kasiyer % Admin Girişi
+  Kasiyer & Yönetici Girişi
 </Text>
       <TextInput
   placeholder="Kullanıcı Adı"

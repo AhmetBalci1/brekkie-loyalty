@@ -9,16 +9,16 @@ type Props = {
   coffeeCount: number;
   freeCoffee: number;
   membership: string;
-  onAddCoffee: () => void;
   onUseReward: () => void;
 };
 export default function CustomerCard({
+
   name,
   coffeeCount,
   freeCoffee,
   membership,
-  onAddCoffee,
   onUseReward,
+
 }: Props) {
 
   const progress =
@@ -60,14 +60,6 @@ export default function CustomerCard({
       <Text style={styles.reward}>
         🎁 Ücretsiz Kahve: {freeCoffee}
       </Text>
-      <TouchableOpacity
-  style={styles.coffeeButton}
-  onPress={onAddCoffee}
->
-  <Text style={styles.coffeeButtonText}>
-    ☕ KAHVE SAT
-  </Text>
-</TouchableOpacity>
 {freeCoffee > 0 && (
 
   <TouchableOpacity
@@ -178,26 +170,6 @@ const styles = StyleSheet.create({
 
   rewardButtonText:{
     color:"#262626",          // Eski: #004225
-
-    fontWeight:"900",
-
-    fontSize:16,
-  },
-
-  coffeeButton:{
-    marginTop:18,
-
-    backgroundColor:"#DCC8B4", // Eski: #004225
-
-    paddingVertical:16,
-
-    borderRadius:18,
-
-    alignItems:"center",
-  },
-
-  coffeeButtonText:{
-    color:"#262626",          // Eski: #fff4e3
 
     fontWeight:"900",
 

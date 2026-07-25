@@ -20,17 +20,16 @@ TaskManager.defineTask(
 
    if (eventType === Location.GeofencingEventType.Enter) {
   console.log("✅ MAĞAZAYA GİRİLDİ");
-const lastNotification =
-  await AsyncStorage.getItem("lastGeofenceNotification");
+const key = `store_entered_${region.identifier}`;
+
+const alreadyEntered =
+  await AsyncStorage.getItem(key);
 
 const now = Date.now();
 
 const THIRTY_MINUTES = 30 * 60 * 1000;
 
-if (
-  !lastNotification ||
-  now - Number(lastNotification) > THIRTY_MINUTES
-) {
+if (!alreadyEntered) {
   // 📍 Telefona kaydettiğimiz şubeleri oku
   const storesJson = await AsyncStorage.getItem(
     "brekkie_stores"
@@ -55,17 +54,23 @@ if (
     trigger: null,
   });
 
-  await AsyncStorage.setItem(
-    "lastGeofenceNotification",
-    now.toString()
-  );
+ await AsyncStorage.setItem(
+  key,
+  "true"
+);
 } else {
   console.log("🔕 Bildirim gönderilmedi (30 dakika dolmadı).");
 }
 }
 
     if (eventType === Location.GeofencingEventType.Exit) {
-      console.log("🚪 MAĞAZADAN ÇIKILDI");
-    }
+
+  console.log("🚪 MAĞAZADAN ÇIKILDI");
+
+  const key = `store_entered_${region.identifier}`;
+
+  await AsyncStorage.removeItem(key);
+
+}
   }
 );

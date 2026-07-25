@@ -92,24 +92,24 @@ if (!authorized) {
 <View style={styles.statsRow}>
   <KPICard
     value={analytics?.users || 0}
-    label="👥 Kullanıcılar"
+    label="👥 Toplam Üye"
   />
 
   <KPICard
     value={analytics?.scans || 0}
-    label="☕ Scans"
+    label="☕ Toplam Satış"
   />
 </View>
 
 <View style={styles.statsRow}>
   <KPICard
     value={analytics?.rewards || 0}
-    label="🎁 Ödüller"
+    label="🎁 Kullanılan Ödül"
   />
 
   <KPICard
     value={`₺${analytics?.revenue || 0}`}
-    label="💰 Hasılat"
+    label="💰 Toplam Ciro"
   />
 </View>
       <View style={styles.activityCard}>
@@ -123,9 +123,7 @@ if (!authorized) {
            "No Customer"}
         </Text>
 
-        <Text style={styles.customerStats}>
-      <View style={{ marginTop: 12 }}>
-
+    <View style={{ marginTop: 12 }}>
   <Text style={styles.customerStats}>
     ☕ {analytics?.topCustomer?.coffee_count || 0} Kahveler
   </Text>
@@ -133,9 +131,7 @@ if (!authorized) {
   <Text style={styles.customerStats}>
     🎁 {analytics?.topCustomer?.free_coffee || 0} Ödüller
   </Text>
-
 </View>
-        </Text>
 <Text style={styles.sectionTitle}>
 Quick Actions
 </Text>
@@ -170,6 +166,11 @@ Quick Actions
   title="Personeller"
   onPress={() => router.push("/admin/staff")}
 />
+  <QuickActionCard
+  icon="📦"
+  title="Ürünler"
+  onPress={() => router.push("../admin/products")}
+  />
 </View>
       </View>
 <RecentActivity />

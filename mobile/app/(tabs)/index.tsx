@@ -45,6 +45,7 @@ export default function HomeScreen() {
 
   const [user, setUser] =
     useState<any>(null);
+    const [loyaltyTarget, setLoyaltyTarget] = useState(10);
     const [campaigns, setCampaigns] = useState<any[]>([]);
     const [loading, setLoading] =
   useState(true);
@@ -59,7 +60,7 @@ useEffect(() => {
   initializeLocation();
 
   loadCampaigns();
-
+  loadSettings();
 }, []);
  const loadCampaigns = async () => {
   try {
@@ -72,6 +73,20 @@ useEffect(() => {
     console.log("Campaigns:", data);
 
     setCampaigns(data);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+const loadSettings = async () => {
+  try {
+    const response = await fetch(
+      "https://brekkie-api.onrender.com/settings"
+    );
+
+    const data = await response.json();
+
+    setLoyaltyTarget(data.loyalty_target || 10);
 
   } catch (err) {
     console.log(err);
@@ -137,15 +152,10 @@ const loadUser = async () => {
 
   useFocusEffect(
   useCallback(() => {
-
     loadUser();
-    loadCampaigns;
-      
-    
-  
-
+    loadCampaigns();
+    loadSettings();
   }, [])
-  
 );
   const onRefresh =
        async () => {
@@ -239,9 +249,9 @@ const loadUser = async () => {
   );
   }
 
-  const totalCoffee =
-  (user?.coffee_count || 0) +
-  (user?.free_coffee || 0) * 10;
+const totalCoffee =
+(user?.coffee_count || 0) +
+(user?.free_coffee || 0) * loyaltyTarget;
 
   let loyaltyLevel = "Bronze ☕";
   let loyaltyColor = "#cd7f32";
@@ -354,17 +364,14 @@ const loadUser = async () => {
             style={[
               styles.progressBarFill,
               {
-                width: `${
-                  user.coffee_count * 10
-                }%`,
+                width: `${Math.min((user.coffee_count / loyaltyTarget) * 100, 100)}%`,
               },
             ]}
           />
         </View>
 
         <Text style={styles.progressText}>
-          {user.coffee_count} / 10
-          Kahve
+          {user.coffee_count} / {loyaltyTarget} Kahve
         </Text>
         </View>
 

@@ -54,6 +54,12 @@ contentStyle: {
           title: "Settings",
         }}
       />
+      <Stack.Screen
+  name="products"
+  options={{
+    title: "Products",
+  }}
+/>
     </Stack>
   );
 }
