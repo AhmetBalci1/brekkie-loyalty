@@ -1,5 +1,6 @@
 
 require("dotenv").config();
+const authenticateToken = require("./middleware/auth");
 const { Expo } = require("expo-server-sdk");
 const {
   createAuditLog,
@@ -364,18 +365,15 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    const token =
-      jwt.sign(
-        {
-          id: user.id,
-        },
-
-        "SECRET_KEY",
-
-        {
-          expiresIn: "7d",
-        }
-      );
+    const token = jwt.sign(
+  {
+    id: user.id,
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "7d",
+  }
+);
 
     res.json({
 
@@ -2609,6 +2607,59 @@ app.delete("/products/:id", async (req, res) => {
 
   }
 });
+app.delete(
+  "/users/me",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const result = await pool.query(
+        "DELETE FROM users WHERE id = $1 RETURNING id",
+        [req.user.id]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({
+          success: false,
+          error: "Kullanıcı bulunamadı.",
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Hesap başarıyla silindi.",
+      });
+
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        success: false,
+        error: "Hesap silinemedi.",
+      });
+    }
+  }
+);
+/* app.delete("/users/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query(
+      "DELETE FROM users WHERE id = $1",
+      [id]
+    );
+
+    res.json({
+      success: true,
+      message: "Account deleted successfully.",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete account.",
+    });
+  }
+}); */
 app.post("/seed-admin", async (req, res) => {
   try {
     const existing = await pool.query(
