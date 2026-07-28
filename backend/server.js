@@ -1,6 +1,8 @@
 
 require("dotenv").config();
 const authenticateToken = require("./middleware/auth");
+const authenticateAdmin =
+require("./middleware/authenticateAdmin");
 const { Expo } = require("expo-server-sdk");
 const {
   createAuditLog,
@@ -660,7 +662,10 @@ app.post("/use-reward", async (req, res) => {
    ANALYTICS
 ========================= */
 
-app.get("/analytics", async (req, res) => {
+app.get(
+  "/analytics",
+  authenticateAdmin,
+  async (req, res) => {
 
   try {
 
@@ -1486,7 +1491,10 @@ await sendNotification(
   }
 
 });
-app.post("/notifications/send-all", async (req, res) => {
+app.post(
+  "/notifications/send-all",
+  authenticateAdmin,
+  async (req, res) => {
 
   try {
 
@@ -1654,7 +1662,10 @@ const hashedPassword = await bcrypt.hash(password, 10);
   }
 
 });
-app.post("/campaigns", async (req, res) => {
+app.post(
+  "/campaigns",
+  authenticateAdmin,
+  async (req, res) => {
 
   try {
 
@@ -1714,7 +1725,10 @@ res.json(result.rows[0]);
   }
 
 });
-app.put("/campaigns/:id", async (req, res) => {
+app.put(
+  "/campaigns/:id",
+  authenticateAdmin,
+  async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -1767,7 +1781,10 @@ app.put("/campaigns/:id", async (req, res) => {
     });
   }
 });
-app.delete("/campaigns/:id", async (req, res) => {
+app.delete(
+  "/campaigns/:id",
+  authenticateAdmin,
+  async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -1940,7 +1957,10 @@ app.get("/products", async (req, res) => {
 
   }
 });
-app.put("/settings", async (req,res)=>{
+app.put(
+  "/settings",
+  authenticateAdmin,
+  async (req, res) => {
 
 try{
 
@@ -2095,13 +2115,28 @@ if (!validPassword) {
       "staff_login",
       `${staff.name} giriş yaptı`
     );
+    const token = jwt.sign(
+  {
+    id: staff.id,
+    role: staff.role,
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "7d",
+  }
+);
 
-    res.json({
-      success: true,
-      id: staff.id,
-      name: staff.name,
-      role: staff.role,
-    });
+   res.json({
+  success: true,
+
+  token,
+
+  staff: {
+    id: staff.id,
+    name: staff.name,
+    role: staff.role,
+  },
+});
 
   } catch (err) {
 
@@ -2203,7 +2238,10 @@ res.json(staffData);
 
   }
 });
-app.put("/stores/:id", async (req, res) => {
+app.put(
+  "/stores/:id",
+  authenticateAdmin,
+  async (req, res) => {
 
   try {
 
@@ -2269,7 +2307,10 @@ app.put("/stores/:id", async (req, res) => {
   }
 
 });
-app.put("/products/:id", async (req, res) => {
+app.put(
+  "/products/:id",
+  authenticateAdmin,
+  async (req, res) => {
   try {
 
     const { id } = req.params;
@@ -2386,7 +2427,10 @@ app.put("/products/:id/status", async (req, res) => {
   }
 
 });
-app.post("/stores", async (req, res) => {
+app.post(
+  "/stores",
+  authenticateAdmin,
+  async (req, res) => {
   try {
     const {
       name,
@@ -2441,7 +2485,10 @@ app.post("/stores", async (req, res) => {
     });
   }
 });
-app.delete("/stores/:id", async (req, res) => {
+app.delete(
+  "/stores/:id",
+  authenticateAdmin,
+  async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -2543,7 +2590,10 @@ app.delete("/staff/:id", async (req, res) => {
   }
 
 });
-app.delete("/products/:id", async (req, res) => {
+app.delete(
+  "/products/:id",
+  authenticateAdmin,
+  async (req, res) => {
   try {
 
     const { id } = req.params;
@@ -2639,6 +2689,51 @@ app.delete(
     }
   }
 );
+app.delete(
+  "/admin/users/:id",
+  authenticateAdmin,
+  async (req, res) => {
+
+    try {
+
+      const { id } = req.params;
+
+      const result = await pool.query(
+        `
+        DELETE FROM users
+        WHERE id = $1
+        RETURNING id
+        `,
+        [id]
+      );
+
+      if (result.rowCount === 0) {
+
+        return res.status(404).json({
+          success: false,
+          error: "Kullanıcı bulunamadı.",
+        });
+
+      }
+
+      res.json({
+        success: true,
+        message: "Kullanıcı silindi.",
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+        success: false,
+        error: "Silme işlemi başarısız.",
+      });
+
+    }
+
+  }
+);
 /* app.delete("/users/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -2731,7 +2826,10 @@ app.post("/seed-admin", async (req, res) => {
 
   }
 });
-app.post("/products", async (req, res) => {
+app.post(
+  "/products",
+  authenticateAdmin,
+  async (req, res) => {
   try {
 
     const {
